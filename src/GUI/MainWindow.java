@@ -22,6 +22,7 @@ public class MainWindow extends javax.swing.JFrame {
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
+        
         // Add login and dashboard panel to main panel
         MainFrame.add(LoginPanel, "login");
         MainFrame.add(DashboardPanel, "dashboard");
@@ -73,16 +74,38 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        genderGroup = new javax.swing.ButtonGroup();
+        AddEmployeeForm = new javax.swing.JDialog();
+        femaleButton1 = new javax.swing.JRadioButton();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        payLevelForEmployeeCombo1 = new javax.swing.JComboBox<>();
+        jLabel21 = new javax.swing.JLabel();
+        addEmployeeConfirmButton1 = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
+        cancelButton1 = new javax.swing.JButton();
+        jLabel23 = new javax.swing.JLabel();
+        firstNameField1 = new javax.swing.JTextField();
+        jLabel24 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        addressField1 = new javax.swing.JTextArea();
+        jLabel25 = new javax.swing.JLabel();
+        lastNameField1 = new javax.swing.JTextField();
+        idField2 = new javax.swing.JTextField();
+        jLabel26 = new javax.swing.JLabel();
+        departmentForEmployeeCombo1 = new javax.swing.JComboBox<>();
+        maleButton1 = new javax.swing.JRadioButton();
         MainFrame = new javax.swing.JPanel();
         DashboardPanel = new javax.swing.JPanel();
         sidemenuPanel = new javax.swing.JPanel();
         employeesButton = new javax.swing.JButton();
         departmentsButton = new javax.swing.JButton();
         payrollReportButton = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
         headerPanel = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        employeesPanel = new javax.swing.JPanel();
         searchEmployeesTextField = new javax.swing.JTextField();
         departmentsListSelect = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -104,6 +127,150 @@ public class MainWindow extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
 
+        genderGroup.add(femaleButton1);
+        femaleButton1.setText("Female");
+
+        jLabel19.setText("Pay Level");
+
+        jLabel20.setText("ID");
+
+        payLevelForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select pay level", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel21.setText("Address");
+
+        addEmployeeConfirmButton1.setText("Add Employee");
+        addEmployeeConfirmButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addEmployeeConfirmButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel22.setText("First Name");
+
+        cancelButton1.setText("Cancel");
+        cancelButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel23.setFont(new java.awt.Font("Helvetica Neue", 0, 10)); // NOI18N
+        jLabel23.setText("ID is automatically assigned sequentially");
+
+        firstNameField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                firstNameField1ActionPerformed(evt);
+            }
+        });
+
+        jLabel24.setText("Last Name");
+
+        addressField1.setColumns(20);
+        addressField1.setRows(5);
+        jScrollPane3.setViewportView(addressField1);
+
+        jLabel25.setText("Department");
+
+        lastNameField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lastNameField1ActionPerformed(evt);
+            }
+        });
+
+        jLabel26.setText("Gender");
+
+        departmentForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department", "Item 2", "Item 3", "Item 4" }));
+
+        genderGroup.add(maleButton1);
+        maleButton1.setText("Male");
+        maleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                maleButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout AddEmployeeFormLayout = new javax.swing.GroupLayout(AddEmployeeForm.getContentPane());
+        AddEmployeeForm.getContentPane().setLayout(AddEmployeeFormLayout);
+        AddEmployeeFormLayout.setHorizontalGroup(
+            AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AddEmployeeFormLayout.createSequentialGroup()
+                .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(AddEmployeeFormLayout.createSequentialGroup()
+                        .addGap(268, 268, 268)
+                        .addComponent(cancelButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(addEmployeeConfirmButton1))
+                    .addGroup(AddEmployeeFormLayout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(AddEmployeeFormLayout.createSequentialGroup()
+                                .addComponent(jLabel22)
+                                .addGap(146, 146, 146)
+                                .addComponent(jLabel24))
+                            .addComponent(jLabel26)
+                            .addGroup(AddEmployeeFormLayout.createSequentialGroup()
+                                .addComponent(maleButton1)
+                                .addGap(18, 18, 18)
+                                .addComponent(femaleButton1))
+                            .addComponent(idField2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel25)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel21)
+                            .addComponent(departmentForEmployeeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(AddEmployeeFormLayout.createSequentialGroup()
+                                .addComponent(lastNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(firstNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(payLevelForEmployeeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel20)
+                            .addComponent(jLabel23))))
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+        AddEmployeeFormLayout.setVerticalGroup(
+            AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AddEmployeeFormLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(idField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addComponent(jLabel23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(firstNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lastNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(AddEmployeeFormLayout.createSequentialGroup()
+                        .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel22))
+                        .addGap(29, 29, 29)))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(maleButton1)
+                    .addComponent(femaleButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel25)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(departmentForEmployeeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(payLevelForEmployeeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelButton1)
+                    .addComponent(addEmployeeConfirmButton1))
+                .addGap(23, 23, 23))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         MainFrame.setLayout(new java.awt.CardLayout());
@@ -114,6 +281,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         payrollReportButton.setText("Payroll Report");
 
+        exitButton.setText("Exit");
+
         javax.swing.GroupLayout sidemenuPanelLayout = new javax.swing.GroupLayout(sidemenuPanel);
         sidemenuPanel.setLayout(sidemenuPanelLayout);
         sidemenuPanelLayout.setHorizontalGroup(
@@ -121,6 +290,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(sidemenuPanelLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(sidemenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(exitButton)
                     .addComponent(payrollReportButton)
                     .addComponent(departmentsButton)
                     .addComponent(employeesButton))
@@ -135,7 +305,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(departmentsButton)
                 .addGap(18, 18, 18)
                 .addComponent(payrollReportButton)
-                .addContainerGap(521, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(exitButton)
+                .addGap(22, 22, 22))
         );
 
         jLabel10.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
@@ -209,45 +381,38 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+        javax.swing.GroupLayout employeesPanelLayout = new javax.swing.GroupLayout(employeesPanel);
+        employeesPanel.setLayout(employeesPanelLayout);
+        employeesPanelLayout.setHorizontalGroup(
+            employeesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(employeesPanelLayout.createSequentialGroup()
+                .addGroup(employeesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(addEmployeeButton)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGap(30, 30, 30)
+                    .addGroup(employeesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(employeesPanelLayout.createSequentialGroup()
                             .addComponent(searchEmployeesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(443, 443, 443)
                             .addComponent(departmentsListSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGap(14, 14, 14)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(paginationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(searchEmployeesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(addEmployeeButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(departmentsListSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+        employeesPanelLayout.setVerticalGroup(
+            employeesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(employeesPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(addEmployeeButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(employeesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(departmentsListSelect, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchEmployeesTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(employeesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, employeesPanelLayout.createSequentialGroup()
                         .addComponent(paginationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(50, 50, 50))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, employeesPanelLayout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
@@ -261,15 +426,14 @@ public class MainWindow extends javax.swing.JFrame {
             DashboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(DashboardPanelLayout.createSequentialGroup()
                 .addComponent(sidemenuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
                 .addGroup(DashboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(DashboardPanelLayout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jLabel7)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(employeesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(DashboardPanelLayout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel7)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(DashboardPanelLayout.createSequentialGroup()
                 .addGap(218, 218, 218)
                 .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -282,8 +446,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(employeesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 28, Short.MAX_VALUE))
         );
 
         MainFrame.add(DashboardPanel, "dashboard");
@@ -402,8 +566,36 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_searchEmployeesTextFieldFocusGained
 
     private void addEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeButtonActionPerformed
-        // TODO add your handling code here:
+    // TODO add your handling code here:
+    AddEmployeeForm.setTitle("Add Employee");
+    AddEmployeeForm.setSize(500, 550);
+    AddEmployeeForm.setLocationRelativeTo(null); // center it
+    AddEmployeeForm.setModal(true); // block interaction with other windows until closed
+    AddEmployeeForm.setVisible(true);
+        
     }//GEN-LAST:event_addEmployeeButtonActionPerformed
+
+    private void addEmployeeConfirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeConfirmButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
+
+    private void cancelButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton1ActionPerformed
+        // TODO add your handling code here:
+        AddEmployeeForm.setModal(false); 
+        AddEmployeeForm.setVisible(false);
+    }//GEN-LAST:event_cancelButton1ActionPerformed
+
+    private void firstNameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_firstNameField1ActionPerformed
+
+    private void lastNameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lastNameField1ActionPerformed
+
+    private void maleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maleButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_maleButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -441,33 +633,55 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog AddEmployeeForm;
     private javax.swing.JPanel DashboardPanel;
     private javax.swing.JPanel LoginPanel;
     private javax.swing.JPanel MainFrame;
     private javax.swing.JButton addEmployeeButton;
+    private javax.swing.JButton addEmployeeConfirmButton1;
+    private javax.swing.JTextArea addressField1;
+    private javax.swing.JButton cancelButton1;
+    private javax.swing.JComboBox<String> departmentForEmployeeCombo1;
     private javax.swing.JButton departmentsButton;
     private javax.swing.JComboBox<String> departmentsListSelect;
     private javax.swing.JButton employeesButton;
+    private javax.swing.JPanel employeesPanel;
+    private javax.swing.JButton exitButton;
+    private javax.swing.JRadioButton femaleButton1;
+    private javax.swing.JTextField firstNameField1;
+    private javax.swing.ButtonGroup genderGroup;
     private javax.swing.JPanel headerPanel;
+    private javax.swing.JTextField idField2;
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField lastNameField1;
     private javax.swing.JButton loginButton;
+    private javax.swing.JRadioButton maleButton1;
     private javax.swing.JPanel paginationPanel;
+    private javax.swing.JComboBox<String> payLevelForEmployeeCombo1;
     private javax.swing.JButton payrollReportButton;
     private javax.swing.JTextField searchEmployeesTextField;
     private javax.swing.JPanel sidemenuPanel;
