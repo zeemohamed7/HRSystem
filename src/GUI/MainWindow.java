@@ -957,6 +957,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void searchDepartmentsFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchDepartmentsFieldFocusGained
         // TODO add your handling code here:
+        searchDepartmentsField.setText("");
     }//GEN-LAST:event_searchDepartmentsFieldFocusGained
 
     private void departmentNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentNameFieldActionPerformed
