@@ -87,6 +87,30 @@ public class MainWindow extends javax.swing.JFrame {
 }
 
     
+public void showToast(JFrame parent, String message) {
+    JWindow toast = new JWindow(parent); // tie the toast to your main window
+    toast.setLayout(new BorderLayout());
+
+    JLabel label = new JLabel(message, SwingConstants.CENTER);
+    label.setOpaque(true);
+    label.setBackground(new Color(60, 179, 113)); // green success color
+    label.setForeground(Color.WHITE);
+    label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+    toast.add(label, BorderLayout.CENTER);
+    toast.pack();
+
+    // Get location relative to parent window
+    int x = parent.getX() + parent.getWidth() - toast.getWidth() - 20;
+    int y = parent.getY() + parent.getHeight() - toast.getHeight() - 50;
+    toast.setLocation(x, y);
+
+    toast.setVisible(true);
+
+    // Auto-close after 3 seconds
+    new Timer(3000, e -> toast.dispose()).start();
+}
+
+    
     
         /**
      * This method is called from within the constructor to initialize the form.
@@ -842,6 +866,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void addEmployeeConfirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeConfirmButton1ActionPerformed
         // TODO add your handling code here:
+        showToast(this,"Employee added successfully!");
+
     }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
 
     private void cancelButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton1ActionPerformed
