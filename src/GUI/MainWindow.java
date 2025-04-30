@@ -4,6 +4,7 @@
  */
 package GUI;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 /**
@@ -50,11 +51,42 @@ public class MainWindow extends javax.swing.JFrame {
         contentPanel.add(employeesPanel, "employees");
         contentPanel.add(departmentsPanel, "departments");
 
+        
+        // Fake table
+        String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Anuual Pay"};
+
+        
+        // Sample data for testing before adding functionality
+        // create table with model
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+        // disable editing for all cells
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        // add sample data to table
+        Object[][] sampleData = {
+            {1, "Alice Johnson", "HR", "Female", 5000},
+            {2, "Bob Smith", "IT", "Male", 4000},
+            {3, "Charlie Brown", "Sales", "Female", 3500}
+        };
+    
+        // add data to model
+        for (Object[] row : sampleData) {
+            model.addRow(row);
+        }
+        
+        // add model to employees table
+        employeesTable.setModel(model);
 
     }
 
-    
 
+
+    
+    
     // Pagination function
     public void updatePagination(int totalPages, int currentPage) {
     paginationPanel.removeAll();
@@ -174,6 +206,10 @@ public class MainWindow extends javax.swing.JFrame {
         departmentHeadSelect = new javax.swing.JComboBox<>();
         cancelButton2 = new javax.swing.JButton();
         addDepartmentConfirmButton = new javax.swing.JButton();
+        ConfirmDelete = new javax.swing.JDialog();
+        jLabel16 = new javax.swing.JLabel();
+        cancelButton3 = new javax.swing.JButton();
+        confirmDeleteButton = new javax.swing.JButton();
         MainFrame = new javax.swing.JPanel();
         LoginPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -437,6 +473,44 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
+        jLabel16.setText("Are you sure you want to delete this? This action cannot be undone.");
+
+        cancelButton3.setText("Cancel");
+        cancelButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButton3ActionPerformed(evt);
+            }
+        });
+
+        confirmDeleteButton.setText("Delete");
+
+        javax.swing.GroupLayout ConfirmDeleteLayout = new javax.swing.GroupLayout(ConfirmDelete.getContentPane());
+        ConfirmDelete.getContentPane().setLayout(ConfirmDeleteLayout);
+        ConfirmDeleteLayout.setHorizontalGroup(
+            ConfirmDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmDeleteLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel16)
+                .addContainerGap(25, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ConfirmDeleteLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cancelButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(confirmDeleteButton)
+                .addGap(25, 25, 25))
+        );
+        ConfirmDeleteLayout.setVerticalGroup(
+            ConfirmDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmDeleteLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(ConfirmDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelButton3)
+                    .addComponent(confirmDeleteButton))
+                .addContainerGap(10, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         MainFrame.setPreferredSize(new java.awt.Dimension(1380, 1000));
@@ -597,23 +671,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         departmentsListSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All Departments", "Item 2", "Item 3", "Item 4" }));
 
-        employeesTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "ID", "Full Name", "Department", "Gender", "Annual Pay"
-            }
-        ));
         jScrollPane.setViewportView(employeesTable);
-        if (employeesTable.getColumnModel().getColumnCount() > 0) {
-            employeesTable.getColumnModel().getColumn(3).setResizable(false);
-            employeesTable.getColumnModel().getColumn(4).setResizable(false);
-            employeesTable.getColumnModel().getColumn(4).setHeaderValue("Annual Pay");
-        }
 
         addEmployeeButton.setText("+ Add Employee");
         addEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -983,6 +1041,10 @@ public class MainWindow extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitButtonActionPerformed
 
+    private void cancelButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cancelButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1021,6 +1083,7 @@ public class MainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog AddDepartmentForm;
     private javax.swing.JDialog AddEmployeeForm;
+    private javax.swing.JDialog ConfirmDelete;
     private javax.swing.JPanel DashboardPanel;
     private javax.swing.JPanel LoginPanel;
     private javax.swing.JPanel MainFrame;
@@ -1031,6 +1094,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextArea addressField1;
     private javax.swing.JButton cancelButton1;
     private javax.swing.JButton cancelButton2;
+    private javax.swing.JButton cancelButton3;
+    private javax.swing.JButton confirmDeleteButton;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JComboBox<String> departmentForEmployeeCombo1;
     private javax.swing.JComboBox<String> departmentHeadSelect;
@@ -1057,6 +1122,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
