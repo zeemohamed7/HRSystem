@@ -107,6 +107,11 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         });
 
         idEditField.setEditable(false);
+        idEditField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idEditFieldActionPerformed(evt);
+            }
+        });
 
         femaleEditButton.setText("Female");
 
@@ -234,6 +239,10 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         showSuccessToast(this,"Employee added successfully!");
     }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
+
+    private void idEditFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idEditFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idEditFieldActionPerformed
 
     
     

@@ -27,6 +27,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         this.setLocation(x, y);
         
         // initialise departments
+        departmentNameField.setText(dept.getName());
     }
 
     /**
