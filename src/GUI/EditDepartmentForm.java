@@ -4,6 +4,10 @@
  */
 package GUI;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import Logic.*;
+
 /**
  *
  * @author zainab
@@ -14,7 +18,15 @@ public class EditDepartmentForm extends javax.swing.JFrame {
      * Creates new form EditDepartmentForm
      */
     public EditDepartmentForm() {
+    }
+    public EditDepartmentForm(Department dept) {
         initComponents();
+                        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+        this.setLocation(x, y);
+        
+        // initialise departments
     }
 
     /**
@@ -26,21 +38,113 @@ public class EditDepartmentForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel9 = new javax.swing.JLabel();
+        departmentNameField = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        locationField = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        departmentHeadSelect = new javax.swing.JComboBox<>();
+        cancelButton2 = new javax.swing.JButton();
+        addDepartmentConfirmButton = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel9.setText("Department Name");
+
+        departmentNameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                departmentNameFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("Location");
+
+        locationField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                locationFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setText("Department Head");
+
+        departmentHeadSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department head", "Item 2", "Item 3", "Item 4" }));
+
+        cancelButton2.setText("Cancel");
+        cancelButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButton2ActionPerformed(evt);
+            }
+        });
+
+        addDepartmentConfirmButton.setText("Save Changes");
+        addDepartmentConfirmButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addDepartmentConfirmButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cancelButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(addDepartmentConfirmButton))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel9)
+                        .addComponent(departmentNameField)
+                        .addComponent(jLabel10)
+                        .addComponent(locationField, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+                        .addComponent(jLabel15)
+                        .addComponent(departmentHeadSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(departmentNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(locationField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(departmentHeadSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelButton2)
+                    .addComponent(addDepartmentConfirmButton))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void departmentNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentNameFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_departmentNameFieldActionPerformed
+
+    private void locationFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_locationFieldActionPerformed
+
+    private void cancelButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton2ActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_cancelButton2ActionPerformed
+
+    private void addDepartmentConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentConfirmButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addDepartmentConfirmButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +182,13 @@ public class EditDepartmentForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addDepartmentConfirmButton;
+    private javax.swing.JButton cancelButton2;
+    private javax.swing.JComboBox<String> departmentHeadSelect;
+    private javax.swing.JTextField departmentNameField;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField locationField;
     // End of variables declaration//GEN-END:variables
 }

@@ -245,7 +245,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="addEmployeeConfirmButton1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Add Employee"/>
+        <Property name="text" type="java.lang.String" value="Save Changes"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addEmployeeConfirmButton1ActionPerformed"/>

@@ -120,7 +120,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
 
         jLabel21.setText("Address");
 
-        addEmployeeConfirmButton1.setText("Add Employee");
+        addEmployeeConfirmButton1.setText("Save Changes");
         addEmployeeConfirmButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addEmployeeConfirmButton1ActionPerformed(evt);

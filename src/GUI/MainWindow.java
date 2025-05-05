@@ -52,13 +52,12 @@ public class MainWindow extends javax.swing.JFrame {
         contentPanel.add(employeesPanel, "employees");
         contentPanel.add(employeeDetailPanel, "employeeDetail");
         contentPanel.add(departmentsPanel, "departments");
+        contentPanel.add(departmentDetailPanel, "departmentDetail");
+
 
         
-        // Fake table
+        // Fake employee table
         String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Anuual Pay"};
-
-        
-        // Sample data for testing before adding functionality
         // create table with model
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
         // disable editing for all cells
@@ -82,6 +81,36 @@ public class MainWindow extends javax.swing.JFrame {
         
         // add model to employees table
         employeesTable.setModel(model);
+        
+        
+        // Fake Department table
+        // Fake column headers for the department table
+        String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
+
+        // Create the table model
+        DefaultTableModel deptModel = new DefaultTableModel(departmentColumnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make all cells non-editable
+            }
+        };
+
+        // Sample data for departments
+        Object[][] sampleDepartments = {
+            {1, "HR", "Main Office", "Alice Johnson"},
+            {2, "IT", "Building A", "Bob Smith"},
+            {3, "Sales", "Remote Office", "Charlie Brown"},
+            {4, "Marketing", "HQ - 3rd Floor", null}, 
+        };
+
+        // Add each row to the model
+        for (Object[] row : sampleDepartments) {
+            deptModel.addRow(row);
+        }
+
+        // Set model to the department table
+        departmentsTable.setModel(deptModel);
+
 
     }
     
@@ -103,6 +132,20 @@ public class MainWindow extends javax.swing.JFrame {
         
         
 
+    }
+    
+    
+    // show department detail 
+    private void showDepartmentDetails(Department dept) {
+        
+        // show employee detail page
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "departmentDetail");
+        
+        // display data
+        departmentNameDetailPage.setText(dept.getName());
+        idDepartmentDetailPage.setText(Integer.toString(dept.getId()));
+        
     }
     
 
@@ -297,6 +340,21 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         paginationPanel1 = new javax.swing.JPanel();
+        departmentDetailPanel = new javax.swing.JPanel();
+        backToEmployeesButton1 = new javax.swing.JButton();
+        editButton1 = new javax.swing.JButton();
+        deleteButton1 = new javax.swing.JButton();
+        jLabel18 = new javax.swing.JLabel();
+        imageDepartmentPanel = new javax.swing.JPanel();
+        idDepartmentDetailPage = new javax.swing.JTextField();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        locationDetailPage = new javax.swing.JTextField();
+        jLabel38 = new javax.swing.JLabel();
+        deptHeadDetail = new javax.swing.JTextField();
+        departmentNameDetailPage = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        employeesInDeptTable = new javax.swing.JTable();
 
         genderGroup.add(femaleButton1);
         femaleButton1.setText("Female");
@@ -738,7 +796,7 @@ public class MainWindow extends javax.swing.JFrame {
         );
 
         jLabel17.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel17.setText("Employees");
+        jLabel17.setText("Employee Detail");
 
         editButton.setText("Edit");
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -953,12 +1011,12 @@ public class MainWindow extends javax.swing.JFrame {
                                     .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(employeeDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(755, Short.MAX_VALUE))
+                .addContainerGap(1191, Short.MAX_VALUE))
             .addGroup(employeesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(employeesPanelLayout.createSequentialGroup()
                     .addGap(477, 477, 477)
                     .addComponent(jLabel11)
-                    .addContainerGap(1576, Short.MAX_VALUE)))
+                    .addContainerGap(2012, Short.MAX_VALUE)))
         );
         employeesPanelLayout.setVerticalGroup(
             employeesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -986,7 +1044,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(employeesPanelLayout.createSequentialGroup()
                     .addGap(254, 254, 254)
                     .addComponent(jLabel11)
-                    .addContainerGap(725, Short.MAX_VALUE)))
+                    .addContainerGap(776, Short.MAX_VALUE)))
         );
 
         contentPanel.add(employeesPanel, "card4");
@@ -1047,6 +1105,164 @@ public class MainWindow extends javax.swing.JFrame {
             .addGap(0, 45, Short.MAX_VALUE)
         );
 
+        backToEmployeesButton1.setText("Back to list");
+        backToEmployeesButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backToEmployeesButton1ActionPerformed(evt);
+            }
+        });
+
+        editButton1.setText("Edit");
+        editButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButton1ActionPerformed(evt);
+            }
+        });
+
+        deleteButton1.setText("Delete");
+
+        jLabel18.setText("Employees in Department");
+
+        javax.swing.GroupLayout imageDepartmentPanelLayout = new javax.swing.GroupLayout(imageDepartmentPanel);
+        imageDepartmentPanel.setLayout(imageDepartmentPanelLayout);
+        imageDepartmentPanelLayout.setHorizontalGroup(
+            imageDepartmentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 74, Short.MAX_VALUE)
+        );
+        imageDepartmentPanelLayout.setVerticalGroup(
+            imageDepartmentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 61, Short.MAX_VALUE)
+        );
+
+        idDepartmentDetailPage.setEditable(false);
+        idDepartmentDetailPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idDepartmentDetailPageActionPerformed(evt);
+            }
+        });
+
+        jLabel34.setText("ID:");
+
+        jLabel35.setText("Location");
+
+        locationDetailPage.setEditable(false);
+        locationDetailPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                locationDetailPageActionPerformed(evt);
+            }
+        });
+
+        jLabel38.setText("Department Head");
+
+        deptHeadDetail.setEditable(false);
+
+        departmentNameDetailPage.setText("Department Name Placeholder");
+
+        employeesInDeptTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID", "Name", "Annual Pay"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        employeesInDeptTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                employeesInDeptTableMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(employeesInDeptTable);
+
+        javax.swing.GroupLayout departmentDetailPanelLayout = new javax.swing.GroupLayout(departmentDetailPanel);
+        departmentDetailPanel.setLayout(departmentDetailPanelLayout);
+        departmentDetailPanelLayout.setHorizontalGroup(
+            departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(departmentDetailPanelLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(backToEmployeesButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(editButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(deleteButton1)
+                .addGap(20, 20, 20))
+            .addGroup(departmentDetailPanelLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18)
+                    .addGroup(departmentDetailPanelLayout.createSequentialGroup()
+                        .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(departmentDetailPanelLayout.createSequentialGroup()
+                                .addComponent(imageDepartmentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(41, 41, 41))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, departmentDetailPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel34)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addComponent(idDepartmentDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(departmentDetailPanelLayout.createSequentialGroup()
+                        .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel35)
+                            .addComponent(locationDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(41, 41, 41)
+                        .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(deptHeadDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel38))))
+                .addGap(0, 49, Short.MAX_VALUE))
+            .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(departmentDetailPanelLayout.createSequentialGroup()
+                    .addGap(125, 125, 125)
+                    .addComponent(departmentNameDetailPage)
+                    .addContainerGap(233, Short.MAX_VALUE)))
+        );
+        departmentDetailPanelLayout.setVerticalGroup(
+            departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(departmentDetailPanelLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(backToEmployeesButton1)
+                    .addComponent(editButton1)
+                    .addComponent(deleteButton1))
+                .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(departmentDetailPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(imageDepartmentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, departmentDetailPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(idDepartmentDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel34))
+                        .addGap(18, 18, 18)))
+                .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel35)
+                    .addComponent(jLabel38))
+                .addGap(8, 8, 8)
+                .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(locationDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deptHeadDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addComponent(jLabel18)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(42, Short.MAX_VALUE))
+            .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(departmentDetailPanelLayout.createSequentialGroup()
+                    .addGap(98, 98, 98)
+                    .addComponent(departmentNameDetailPage)
+                    .addContainerGap(603, Short.MAX_VALUE)))
+        );
+
         javax.swing.GroupLayout departmentsPanelLayout = new javax.swing.GroupLayout(departmentsPanel);
         departmentsPanel.setLayout(departmentsPanelLayout);
         departmentsPanelLayout.setHorizontalGroup(
@@ -1064,13 +1280,16 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(addDepartmentButton))
                             .addComponent(searchDepartmentsField, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(1230, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, departmentsPanelLayout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(departmentDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(1124, Short.MAX_VALUE))
             .addGroup(departmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(departmentsPanelLayout.createSequentialGroup()
                     .addGap(477, 477, 477)
                     .addComponent(jLabel14)
-                    .addContainerGap(1576, Short.MAX_VALUE)))
+                    .addContainerGap(2012, Short.MAX_VALUE)))
         );
         departmentsPanelLayout.setVerticalGroup(
             departmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1081,8 +1300,13 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(addDepartmentButton))
                 .addGap(50, 50, 50)
                 .addComponent(searchDepartmentsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(departmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(departmentsPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(departmentsPanelLayout.createSequentialGroup()
+                        .addGap(121, 121, 121)
+                        .addComponent(departmentDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(paginationPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1090,7 +1314,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(departmentsPanelLayout.createSequentialGroup()
                     .addGap(254, 254, 254)
                     .addComponent(jLabel14)
-                    .addContainerGap(725, Short.MAX_VALUE)))
+                    .addContainerGap(776, Short.MAX_VALUE)))
         );
 
         contentPanel.add(departmentsPanel, "card4");
@@ -1099,7 +1323,7 @@ public class MainWindow extends javax.swing.JFrame {
         rightPanel.setLayout(rightPanelLayout);
         rightPanelLayout.setHorizontalGroup(
             rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2065, Short.MAX_VALUE)
+            .addGap(0, 2501, Short.MAX_VALUE)
             .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(rightPanelLayout.createSequentialGroup()
                     .addContainerGap()
@@ -1342,7 +1566,10 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void departmentsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_departmentsTableMouseClicked
         // TODO add your handling code here:
-        
+        // fake data to test detail page
+        // fake data
+        Department dept = new Department(101, "IT", "HQ");
+        showDepartmentDetails(dept);
 
     }//GEN-LAST:event_departmentsTableMouseClicked
 
@@ -1356,6 +1583,27 @@ public class MainWindow extends javax.swing.JFrame {
         cl.show(contentPanel, "employees");
 
     }//GEN-LAST:event_backToEmployeesButtonActionPerformed
+
+    private void backToEmployeesButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToEmployeesButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_backToEmployeesButton1ActionPerformed
+
+    private void editButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editButton1ActionPerformed
+
+    private void idDepartmentDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idDepartmentDetailPageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idDepartmentDetailPageActionPerformed
+
+    private void locationDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationDetailPageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_locationDetailPageActionPerformed
+
+    private void employeesInDeptTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeesInDeptTableMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_employeesInDeptTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1406,23 +1654,30 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextArea addressDetailPage;
     private javax.swing.JTextArea addressField1;
     private javax.swing.JButton backToEmployeesButton;
+    private javax.swing.JButton backToEmployeesButton1;
     private javax.swing.JButton cancelButton1;
     private javax.swing.JButton cancelButton2;
     private javax.swing.JButton cancelButton3;
     private javax.swing.JButton confirmDeleteButton;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JButton deleteButton;
+    private javax.swing.JButton deleteButton1;
     private javax.swing.JTextField departmentDetailPage;
+    private javax.swing.JPanel departmentDetailPanel;
     private javax.swing.JComboBox<String> departmentForEmployeeCombo1;
     private javax.swing.JComboBox<String> departmentHeadSelect;
+    private javax.swing.JLabel departmentNameDetailPage;
     private javax.swing.JTextField departmentNameField;
     private javax.swing.JButton departmentsButton;
     private javax.swing.JComboBox<String> departmentsListSelect;
     private javax.swing.JPanel departmentsPanel;
     private javax.swing.JTable departmentsTable;
+    private javax.swing.JTextField deptHeadDetail;
     private javax.swing.JButton editButton;
+    private javax.swing.JButton editButton1;
     private javax.swing.JPanel employeeDetailPanel;
     private javax.swing.JButton employeesButton;
+    private javax.swing.JTable employeesInDeptTable;
     private javax.swing.JPanel employeesPanel;
     private javax.swing.JTable employeesTable;
     private javax.swing.JButton exitButton;
@@ -1432,8 +1687,10 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField genderDetailPage;
     private javax.swing.ButtonGroup genderGroup;
     private javax.swing.JPanel headerPanel;
+    private javax.swing.JTextField idDepartmentDetailPage;
     private javax.swing.JTextField idDetailPage;
     private javax.swing.JTextField idField2;
+    private javax.swing.JPanel imageDepartmentPanel;
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
@@ -1445,6 +1702,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -1462,6 +1720,9 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1474,10 +1735,12 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField lastNameField1;
+    private javax.swing.JTextField locationDetailPage;
     private javax.swing.JTextField locationField;
     private javax.swing.JButton loginButton;
     private javax.swing.JRadioButton maleButton1;
