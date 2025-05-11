@@ -3,11 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Logic;
-
-/**
- *
- * @author zainab
- */
+//Raghad did something
 public class Department {
     private int id;
     private String name;
