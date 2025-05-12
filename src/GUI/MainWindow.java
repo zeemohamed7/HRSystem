@@ -81,8 +81,11 @@ public class MainWindow extends javax.swing.JFrame {
         contentPanel.add(departmentDetailPanel, "departmentDetail");
         contentPanel.add(payrollPanel, "payroll");
 
-
+        
+        // all function init for data
         initialiseEmployeesTable();
+        populateDepartmentsComboBox();
+
         
         
         // Fake Department table
@@ -133,6 +136,7 @@ public class MainWindow extends javax.swing.JFrame {
     employeesTable.setModel(model);
     
 }
+    
 
 
     // show employee detail 
@@ -269,7 +273,17 @@ public class MainWindow extends javax.swing.JFrame {
         new Timer(3000, e -> toast.dispose()).start();
     }
 
-    
+    private void populateDepartmentsComboBox() {
+    DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+    model.addElement("All Departments");
+
+    for (Department dept : departments) {
+        model.addElement(dept.getName());
+    }
+
+    departmentsListSelect.setModel(model);
+}
+
     
         /**
      * This method is called from within the constructor to initialize the form.
@@ -882,6 +896,11 @@ public class MainWindow extends javax.swing.JFrame {
         );
 
         departmentsListSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All Departments", "Item 2", "Item 3", "Item 4" }));
+        departmentsListSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                departmentsListSelectActionPerformed(evt);
+            }
+        });
 
         addEmployeeButton.setText("+ Add Employee");
         addEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -1486,6 +1505,8 @@ public class MainWindow extends javax.swing.JFrame {
         
         // Close the form
         AddDepartmentForm.dispose();
+        
+        populateDepartmentsComboBox(); //refresh combo box
     }//GEN-LAST:event_addDepartmentConfirmButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
@@ -1635,6 +1656,10 @@ public class MainWindow extends javax.swing.JFrame {
        JOptionPane.showMessageDialog(this, "Department deleted succefully.");
        }
     }//GEN-LAST:event_deleteButton1ActionPerformed
+
+    private void departmentsListSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsListSelectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_departmentsListSelectActionPerformed
     private void deleteDepartment(Department department){
         departments.remove(department);
     }
