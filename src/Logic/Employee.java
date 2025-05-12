@@ -15,19 +15,21 @@ public class Employee {
     private String surname;
     private char gender;
     private String address;
-    private int payLevel;  
+    private double salary;
+    private int level;  
     private boolean isHead;
 
     public Employee() {
     }
 
-    public Employee(String firstName, String surname, char gender, String address, int payLevel) {
+    public Employee(String firstName, String surname, char gender, String address, double salary, int level) {
         employeeId = staticEmployeeId++;
         this.firstName = firstName;
         this.surname = surname;
         this.gender = gender;
         this.address = address;
-        this.payLevel = payLevel;
+        this.salary = salary;
+        this.level = level;
     }
 
 
@@ -68,12 +70,20 @@ public class Employee {
         this.address = address;
     }
 
-    public int getPayLevel() {
-        return payLevel;
+    public double getSalary() {
+        return salary;
     }
 
-    public void setPayLevel(int payLevel) {
-        this.payLevel = payLevel;
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public boolean isIsHead() {

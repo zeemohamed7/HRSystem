@@ -30,12 +30,37 @@ public class MainWindow extends javax.swing.JFrame {
         allEmployees = new ArrayList();
         departments = new ArrayList();
         
+        // Initialize salary levels
+        payLevelForEmployeeCombo1.removeAllItems();
+        payLevelForEmployeeCombo1.addItem("Select Annual Salary");
+        payLevelForEmployeeCombo1.addItem("Level 1 - BHD 44,245.75");
+        payLevelForEmployeeCombo1.addItem("Level 2 - BHD 48,670.32");
+        payLevelForEmployeeCombo1.addItem("Level 3 - BHD 53,537.35");
+        payLevelForEmployeeCombo1.addItem("Level 4 - BHD 58,891.09");
+        payLevelForEmployeeCombo1.addItem("Level 5 - BHD 64,780.20");
+        payLevelForEmployeeCombo1.addItem("Level 6 - BHD 71,258.22");
+        payLevelForEmployeeCombo1.addItem("Level 7 - BHD 80,946.95");
+        payLevelForEmployeeCombo1.addItem("Level 8 - BHD 96,336.34");
+        
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
         
         // Add login and dashboard panel to main panel
+        // Add generate pay report button
+        JButton generatePayReportButton = new JButton("Generate Pay Report");
+        generatePayReportButton.addActionListener(this::generatePayReportButtonActionPerformed);
+        generatePayReportButton.setBackground(new Color(0, 102, 102));
+        generatePayReportButton.setForeground(Color.WHITE);
+        generatePayReportButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        
+        // Add button to dashboard
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setBackground(new Color(255, 255, 255));
+        buttonPanel.add(generatePayReportButton);
+        
+        // Add panels to main frame
         MainFrame.add(LoginPanel, "login");
         MainFrame.add(DashboardPanel, "dashboard");
         
@@ -78,18 +103,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         };
 
-        // add sample data to table
-        Object[][] sampleData = {
-            {1, "Alice Johnson", "HR", "Female", 5000},
-            {2, "Bob Smith", "IT", "Male", 4000},
-            {3, "Charlie Brown", "Sales", "Female", 3500}
-        };
-    
-        // add data to model
-        for (Object[] row : sampleData) {
-            model.addRow(row);
-        }
-        
+
         // add model to employees table
         employeesTable.setModel(model);
         
@@ -106,18 +120,6 @@ public class MainWindow extends javax.swing.JFrame {
             }
         };
 
-        // Sample data for departments
-        Object[][] sampleDepartments = {
-            {1, "HR", "Main Office", "Alice Johnson"},
-            {2, "IT", "Building A", "Bob Smith"},
-            {3, "Sales", "Remote Office", "Charlie Brown"},
-            {4, "Marketing", "HQ - 3rd Floor", null}, 
-        };
-
-        // Add each row to the model
-        for (Object[] row : sampleDepartments) {
-            deptModel.addRow(row);
-        }
 
         // Set model to the department table
         departmentsTable.setModel(deptModel);
@@ -173,8 +175,9 @@ public class MainWindow extends javax.swing.JFrame {
         cl.show(contentPanel, "departmentDetail");
         
         // display data
-//        departmentNameDetailPage.setText(dept.getName());
-//        idDepartmentDetailPage.setText(Integer.toString(dept.getId()));
+
+        departmentNameDetailPage.setText(dept.getName());
+        idDepartmentDetailPage.setText(Integer.toString(dept.getDeptID()));
         
     }
     
@@ -1523,9 +1526,92 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void addEmployeeConfirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeConfirmButton1ActionPerformed
-        // TODO add your handling code here:
-        showSuccessToast(this,"Employee added successfully!");
-
+        // Get values from form fields
+        String firstName = firstNameField1.getText().trim();
+        String lastName = lastNameField1.getText().trim();
+        String address = addressField1.getText().trim();
+        
+        // Validate required fields
+        if (firstName.isEmpty()) {
+            showErrorToast(this, "First name is required");
+            firstNameField1.requestFocus();
+            return;
+        }
+        
+        if (lastName.isEmpty()) {
+            showErrorToast(this, "Last name is required");
+            lastNameField1.requestFocus();
+            return;
+        }
+        
+        if (address.isEmpty()) {
+            showErrorToast(this, "Address is required");
+            addressField1.requestFocus();
+            return;
+        }
+        
+        // Validate gender selection
+        char gender;
+        if (maleButton1.isSelected()) {
+            gender = 'M';
+        } else if (femaleButton1.isSelected()) {
+            gender = 'F';
+        } else {
+            showErrorToast(this, "Please select a gender");
+            return;
+        }
+        
+        // Get salary from combo box
+        String salaryStr = (String) payLevelForEmployeeCombo1.getSelectedItem();
+        if (salaryStr == null || salaryStr.equals("Select Annual Salary")) {
+            showErrorToast(this, "Please select an annual salary");
+            return;
+        }
+        
+        // Extract level and salary amount (e.g., "Level 1 - BHD 44,245.75")
+        double salary;
+        int level;
+        try {
+            // Extract level number (e.g., "Level 1" -> 1)
+            level = Integer.parseInt(salaryStr.split(" - ")[0].substring(6));
+            
+            // Extract salary amount (get the part after "BHD ")
+            String amountStr = salaryStr.split("BHD ")[1];
+            salary = Double.parseDouble(amountStr.replace(",", ""));
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            showErrorToast(this, "Invalid salary format");
+            return;
+        }
+        
+        // Create new employee
+        Employee newEmployee = new Employee(firstName, lastName, gender, address, salary, level);
+        
+        // Add to employees list
+        allEmployees.add(newEmployee);
+        
+        // Update employees table
+        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+        model.addRow(new Object[]{
+            newEmployee.getEmployeeId(),
+            newEmployee.getFirstName() + " " + newEmployee.getSurname(),
+            departmentForEmployeeCombo1.getSelectedItem(),
+            newEmployee.getGender(),
+            String.format("BHD %.2f", newEmployee.getSalary())
+        });
+        
+        // Clear form fields
+        firstNameField1.setText("");
+        lastNameField1.setText("");
+        addressField1.setText("");
+        genderGroup.clearSelection();
+        payLevelForEmployeeCombo1.setSelectedIndex(0);
+        departmentForEmployeeCombo1.setSelectedIndex(0);
+        
+        // Show success message
+        showSuccessToast(this, "Employee added successfully!");
+        
+        // Close the form
+        AddEmployeeForm.dispose();
     }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
 
     private void cancelEmployeeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelEmployeeFormButtonActionPerformed
@@ -1611,13 +1697,112 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButton2ActionPerformed
 
     private void addDepartmentConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentConfirmButtonActionPerformed
-        // TODO add your handling code here:
+        // Get values from form fields
+        String departmentName = departmentNameField.getText().trim();
+        String location = locationField.getText().trim();
+        
+        // Validate input
+        if (departmentName.isEmpty()) {
+            showErrorToast(this, "Department name is required");
+            departmentNameField.requestFocus();
+            return;
+        }
+        
+        if (location.isEmpty()) {
+            showErrorToast(this, "Location is required");
+            locationField.requestFocus();
+            return;
+        }
+        
+        // Create new department
+        Department newDepartment = new Department(departmentName, location);
+        
+        // Add to departments list
+        departments.add(newDepartment);
+        
+        // Update departments table
+        DefaultTableModel model = (DefaultTableModel) departmentsTable.getModel();
+        model.addRow(new Object[]{
+            newDepartment.getDeptID(),
+            newDepartment.getName(),
+            newDepartment.getLocation(),
+            "Not Assigned"
+        });
+        
+        // Clear form fields
+        departmentNameField.setText("");
+        locationField.setText("");
+        
+        // Show success message
+        showSuccessToast(this, "Department added successfully");
+        
+        // Close the form
+        AddDepartmentForm.dispose();
     }//GEN-LAST:event_addDepartmentConfirmButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-        // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_exitButtonActionPerformed
+
+    private void generatePayReportButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // Check if there are any employees
+        if (allEmployees.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No employees found in the system.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        StringBuilder report = new StringBuilder();
+        report.append("EMPLOYEE PAYROLL REPORT\n");
+        report.append("======================\n\n");
+
+        // Group employees by department
+        for (Department dept : departments) {
+            report.append("Department: ").append(dept.getName()).append("\n");
+            report.append("Location: ").append(dept.getLocation()).append("\n");
+            report.append("----------------------------------------\n");
+
+            double departmentTotal = 0.0;
+            boolean hasDepartmentEmployees = false;
+
+            // List employees in this department
+            for (Employee emp : allEmployees) {
+                if (dept.getEmployees().contains(emp)) {
+                    hasDepartmentEmployees = true;
+                    report.append(String.format("%-20s %-20s Level %-2d BHD %,10.2f\n",
+                            emp.getFirstName(),
+                            emp.getSurname(),
+                            emp.getLevel(),
+                            emp.getSalary()));
+                    departmentTotal += emp.getSalary();
+                }
+            }
+
+            if (!hasDepartmentEmployees) {
+                report.append("No employees in this department\n");
+            } else {
+                report.append("----------------------------------------\n");
+                report.append(String.format("Department Total: BHD %,10.2f\n", departmentTotal));
+            }
+            report.append("\n");
+        }
+
+        // Calculate and append total payroll
+        double totalPayroll = allEmployees.stream()
+                .mapToDouble(Employee::getSalary)
+                .sum();
+        report.append("======================\n");
+        report.append(String.format("TOTAL PAYROLL: BHD %,10.2f\n", totalPayroll));
+
+        // Display the report
+        JTextArea textArea = new JTextArea(report.toString());
+        textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        textArea.setEditable(false);
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(500, 400));
+
+        JOptionPane.showMessageDialog(this, scrollPane, "Payroll Report", JOptionPane.INFORMATION_MESSAGE);
+    }
 
     private void cancelButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton3ActionPerformed
         // TODO add your handling code here:
@@ -1674,6 +1859,7 @@ public class MainWindow extends javax.swing.JFrame {
 //        Department dept = new Department(101, "IT", "HQ");
 //        showDepartmentDetails(dept);
 
+
     }//GEN-LAST:event_departmentsTableMouseClicked
 
     private void genderDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genderDetailPageActionPerformed
@@ -1700,6 +1886,7 @@ public class MainWindow extends javax.swing.JFrame {
         
 //        EditDepartmentForm editForm = new EditDepartmentForm(dept);
 //        editForm.setVisible(true);
+
 
 
     }//GEN-LAST:event_editDepartmentButtonActionPerformed
