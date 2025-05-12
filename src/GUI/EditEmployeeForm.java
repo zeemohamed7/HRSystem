@@ -19,19 +19,73 @@ import javax.swing.Timer;
  * @author zainab
  */
 public class EditEmployeeForm extends javax.swing.JFrame {
-
     /**
      * Creates new form EditEmployeeForm
      */
     public EditEmployeeForm() {
     }
-    public EditEmployeeForm(Employee emp) {
+    public EditEmployeeForm(Employee employee) {
         initComponents();
-                Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
-//        firstNameEditField.setText(emp.getName());
+        
+        boolean found = false;
+        Department dep = null;
+        String depName;
+        
+        idEditField.setText(Integer.toString(employee.getEmployeeId()));
+        firstNameEditField.setText(employee.getFirstName());
+        lastNameEditField.setText(employee.getSurname());
+        addressEditField.setText(employee.getAddress());
+        
+        // add gender
+        if(employee.getGender() == 'M')
+        {
+            maleEditButton.setSelected(true);
+        }
+        
+        else if(employee.getGender() == 'F')
+        {
+            femaleEditButton.setSelected(true);
+        }
+        
+        // add current department of employee
+        for(Department department : MainWindow.departments)
+        {
+             for(Employee emp : department.getEmployees())
+             {
+                 if(emp == employee)
+                 {
+                    found = true; 
+                    dep = department;
+                 }
+             }
+        }
+       
+        if(found == true)
+        {
+            depName = dep.getName();
+            departmentEditCombo.addItem(depName);
+        }
+        
+        else if(found == false)
+        {
+            departmentEditCombo.addItem("Null");
+        }
+        
+        for(Department department : MainWindow.departments)
+        {
+            if(department != dep)
+            {
+                departmentEditCombo.addItem(department.getName());
+            }
+        }
+        
+        
+        // add pay level 
+        
     }
 
     /**
@@ -67,7 +121,11 @@ public class EditEmployeeForm extends javax.swing.JFrame {
 
         jLabel22.setText("First Name");
 
-        departmentEditCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department", "Item 2", "Item 3", "Item 4" }));
+        departmentEditCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                departmentEditComboActionPerformed(evt);
+            }
+        });
 
         cancelButton1.setText("Cancel");
         cancelButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -239,6 +297,16 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         showSuccessToast(this,"Employee added successfully!");
     }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
+
+    private void departmentEditComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentEditComboActionPerformed
+        // TODO add your handling code here:
+        
+        // loop through and add all departments
+        
+        // save employee to department
+        
+        // remove employee from previous department
+    }//GEN-LAST:event_departmentEditComboActionPerformed
 
     private void idEditFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idEditFieldActionPerformed
         // TODO add your handling code here:
