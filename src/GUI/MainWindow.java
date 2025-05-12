@@ -18,10 +18,11 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     
-    public static ArrayList<Employee> allEmployees;
-    public static ArrayList<Department> departments;
+    private ArrayList<Employee> allEmployees;
+    private ArrayList<Department> departments;
     
     private Employee selectedEmployee;
+    private Department selectedDepartment;
 
             
     public MainWindow() {
@@ -130,7 +131,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     // show employee detail 
     private void showEmployeeDetails(Employee employee) {
-        
+        selectedEmployee = employee;
         // show employee detail page
         selectedEmployee = employee;
         CardLayout cl = (CardLayout) contentPanel.getLayout();
@@ -169,7 +170,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     // show department detail 
     private void showDepartmentDetails(Department dept) {
-        
+        selectedDepartment = dept;  
         // show employee detail page
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "departmentDetail");
@@ -867,6 +868,11 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         deleteButton.setText("Delete");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         idDetailPage.setEditable(false);
         idDetailPage.addActionListener(new java.awt.event.ActionListener() {
@@ -1176,6 +1182,11 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         deleteButton1.setText("Delete");
+        deleteButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel18.setText("Employees in Department");
 
@@ -1337,7 +1348,7 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(departmentDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(addDepartmentButton, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addContainerGap(1266, Short.MAX_VALUE))
+                .addContainerGap(1263, Short.MAX_VALUE))
             .addGroup(departmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(departmentsPanelLayout.createSequentialGroup()
                     .addGap(477, 477, 477)
@@ -1811,8 +1822,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void employeesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeesTableMouseClicked
         // TODO add your handling code here:
         // fake data to test detail page
-        Employee emp = new Employee("Zahraa", "Hubail", 'F', "Karbabad", 8);
-        showEmployeeDetails(emp);
+
 
 
         // get row selected
@@ -1841,6 +1851,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void editEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEmployeeButtonActionPerformed
         // TODO add your handling code here:
+        
+        EditEmployeeForm editForm = new EditEmployeeForm(selectedEmployee);
        EditEmployeeForm editForm = new EditEmployeeForm(selectedEmployee);
         editForm.setVisible(true);
 
@@ -1856,6 +1868,8 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         // fake data to test detail page
         // fake data
+      
+        
 //        Department dept = new Department(101, "IT", "HQ");
 //        showDepartmentDetails(dept);
 
@@ -1881,13 +1895,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void editDepartmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDepartmentButtonActionPerformed
         // TODO add your handling code here:
-        // fake data
-//        Department dept = new Department(1, "IT", "HQ");
-        
-//        EditDepartmentForm editForm = new EditDepartmentForm(dept);
-//        editForm.setVisible(true);
-
-
+        //EditDepartmentForm editForm = new EditDepartmentForm(dept);
+       // editForm.setVisible(true);
 
     }//GEN-LAST:event_editDepartmentButtonActionPerformed
 
@@ -1914,6 +1923,44 @@ public class MainWindow extends javax.swing.JFrame {
         cl.show(contentPanel, "payroll");
     }//GEN-LAST:event_payrollReportButtonActionPerformed
 
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this employee?", 
+                "DELETE Employee", 2, JOptionPane.YES_NO_OPTION);
+      
+       if(confirm == JOptionPane.YES_OPTION){
+       
+       //remove the employee from the data source
+       deleteEmployee(selectedEmployee);
+       JOptionPane.showMessageDialog(this, "Employee deleted succefully.");
+       }
+        
+    }//GEN-LAST:event_deleteButtonActionPerformed
+    private void deleteEmployee(Employee employee){
+    allEmployees.remove(employee);
+    }
+    
+    
+    private void deleteButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButton1ActionPerformed
+        // TODO add your handling code here:
+         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this department?",
+                 "DELETE Department", 2);
+        
+        if(confirm == JOptionPane.YES_OPTION){
+       
+       //remove the department 
+       deleteDepartment(selectedDepartment);
+       JOptionPane.showMessageDialog(this, "Department deleted succefully.");
+       }
+    }//GEN-LAST:event_deleteButton1ActionPerformed
+ private void deleteDepartment(Department department){
+     departments.remove(department);
+    }
+    
+    
+    
+    
+    
     /**
      * @param args the command line arguments
      */
