@@ -14,13 +14,16 @@ import java.util.ArrayList;
  * @author zainab
  */
 public class MainWindow extends javax.swing.JFrame {
-
     /**
      * Creates new form MainWindow
      */
     
     private ArrayList<Employee> allEmployees;
     private ArrayList<Department> departments;
+    
+    private Employee selectedEmployee;
+    private Department selectedDepartment;
+
             
     public MainWindow() {
         initComponents();
@@ -128,32 +131,52 @@ public class MainWindow extends javax.swing.JFrame {
     
     // show employee detail 
     private void showEmployeeDetails(Employee employee) {
-        
+        selectedEmployee = employee;
         // show employee detail page
+        selectedEmployee = employee;
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "employeeDetail");
+        boolean found = false;
+        Department dep = null;
+        String depName;
         
-        // display data
-//        idDetailPage.setText(Integer.toString(employee.getEmployeeId());
-//        firstNameDetailPage.setText(employee.getFirstName());
-//        surnameDetailPage.setText(employee.getName());
-//        genderDetailPage.setText(employee.getGender());
-//        salaryDetailPage.setText(Double.toString(employee.getSalary()));
-//        departmentDetailPage.setText(employee.getDepartment());
-//        addressDetailPage.setText(employee.get);
+        //display data
+        idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
+        firstNameDetailPage.setText(employee.getFirstName());
+        surnameDetailPage.setText(employee.getSurname());
+        genderDetailPage.setText(Character.toString(employee.getGender()));
+        payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
+        addressDetailPage.setText(employee.getAddress());
         
+        for(Department department : departments)
+        {
+             for(Employee emp : department.getEmployees())
+             {
+                 if(emp == employee)
+                 {
+                    found = true; 
+                    dep = department;
+                 }
+             }
+        }
        
+        if(found == true)
+        {
+            depName = dep.getName();
+            departmentDetailPage.setText(depName);
+        }
     }
     
     
     // show department detail 
     private void showDepartmentDetails(Department dept) {
-        
+        selectedDepartment = dept;  
         // show employee detail page
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "departmentDetail");
         
         // display data
+
         departmentNameDetailPage.setText(dept.getName());
         idDepartmentDetailPage.setText(Integer.toString(dept.getDeptID()));
         
@@ -332,7 +355,6 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         genderDetailPage = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
-        salaryDetailPage = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
         surnameDetailPage = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
@@ -846,6 +868,11 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         deleteButton.setText("Delete");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         idDetailPage.setEditable(false);
         idDetailPage.addActionListener(new java.awt.event.ActionListener() {
@@ -892,8 +919,6 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel29.setText("Paylevel");
 
-        salaryDetailPage.setEditable(false);
-
         jLabel30.setText("Surname");
 
         surnameDetailPage.setEditable(false);
@@ -918,9 +943,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(salaryDetailPage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(payLevelDetailPage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(payLevelDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
@@ -973,8 +996,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(jLabel29)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(payLevelDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(salaryDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(28, 28, 28)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -1160,6 +1182,11 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         deleteButton1.setText("Delete");
+        deleteButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel18.setText("Employees in Department");
 
@@ -1321,7 +1348,7 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(departmentDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(addDepartmentButton, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addContainerGap(1266, Short.MAX_VALUE))
+                .addContainerGap(1263, Short.MAX_VALUE))
             .addGroup(departmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(departmentsPanelLayout.createSequentialGroup()
                     .addGap(477, 477, 477)
@@ -1796,6 +1823,8 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         // fake data to test detail page
 
+
+
         // get row selected
 //        int selectedRow = employeesTable.getSelectedRow();
 //        // check if row selected
@@ -1823,6 +1852,10 @@ public class MainWindow extends javax.swing.JFrame {
     private void editEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEmployeeButtonActionPerformed
         // TODO add your handling code here:
         
+        EditEmployeeForm editForm = new EditEmployeeForm(selectedEmployee);
+       EditEmployeeForm editForm = new EditEmployeeForm(selectedEmployee);
+        editForm.setVisible(true);
+
 
 
     }//GEN-LAST:event_editEmployeeButtonActionPerformed
@@ -1835,6 +1868,11 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         // fake data to test detail page
         // fake data
+      
+        
+//        Department dept = new Department(101, "IT", "HQ");
+//        showDepartmentDetails(dept);
+
 
     }//GEN-LAST:event_departmentsTableMouseClicked
 
@@ -1857,7 +1895,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void editDepartmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDepartmentButtonActionPerformed
         // TODO add your handling code here:
-        // fake data
+        //EditDepartmentForm editForm = new EditDepartmentForm(dept);
+       // editForm.setVisible(true);
 
     }//GEN-LAST:event_editDepartmentButtonActionPerformed
 
@@ -1884,6 +1923,44 @@ public class MainWindow extends javax.swing.JFrame {
         cl.show(contentPanel, "payroll");
     }//GEN-LAST:event_payrollReportButtonActionPerformed
 
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this employee?", 
+                "DELETE Employee", 2, JOptionPane.YES_NO_OPTION);
+      
+       if(confirm == JOptionPane.YES_OPTION){
+       
+       //remove the employee from the data source
+       deleteEmployee(selectedEmployee);
+       JOptionPane.showMessageDialog(this, "Employee deleted succefully.");
+       }
+        
+    }//GEN-LAST:event_deleteButtonActionPerformed
+    private void deleteEmployee(Employee employee){
+    allEmployees.remove(employee);
+    }
+    
+    
+    private void deleteButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButton1ActionPerformed
+        // TODO add your handling code here:
+         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this department?",
+                 "DELETE Department", 2);
+        
+        if(confirm == JOptionPane.YES_OPTION){
+       
+       //remove the department 
+       deleteDepartment(selectedDepartment);
+       JOptionPane.showMessageDialog(this, "Department deleted succefully.");
+       }
+    }//GEN-LAST:event_deleteButton1ActionPerformed
+ private void deleteDepartment(Department department){
+     departments.remove(department);
+    }
+    
+    
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -2036,7 +2113,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel reportPanel;
     private javax.swing.JTextPane reportTextPane;
     private javax.swing.JPanel rightPanel;
-    private javax.swing.JTextField salaryDetailPage;
     private javax.swing.JTextField searchDepartmentsField;
     private javax.swing.JTextField searchEmployeesTextField;
     private javax.swing.JPanel sidemenuPanel;
