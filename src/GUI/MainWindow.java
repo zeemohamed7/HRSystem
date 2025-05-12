@@ -18,8 +18,8 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     
-    private ArrayList<Employee> allEmployees;
-    private ArrayList<Department> departments;
+    public static ArrayList<Employee> allEmployees;
+    public static ArrayList<Department> departments;
     
     private Employee selectedEmployee;
     private Department selectedDepartment;
@@ -92,21 +92,7 @@ public class MainWindow extends javax.swing.JFrame {
         contentPanel.add(payrollPanel, "payroll");
 
 
-        
-        // Fake employee table
-        String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Anuual Pay"};
-        // create table with model
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-        // disable editing for all cells
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-
-        // add model to employees table
-        employeesTable.setModel(model);
+        initialiseEmployeesTable();
         
         
         // Fake Department table
@@ -128,43 +114,72 @@ public class MainWindow extends javax.swing.JFrame {
 
     }
     
+    private void initialiseEmployeesTable() {
+    String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Pay Level"};
     
+    // Create table with model
+    DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    
+
+    // Populate the table with employee data
+    for (Employee emp : allEmployees) {
+        int id = emp.getEmployeeId();
+        String fullName = emp.getFirstName() + " " + emp.getSurname();  // Concatenate first and last name
+        String department = Department.getDepartmentNameById(departments, emp.getDeptID());
+        char gender = emp.getGender();
+        int payLevel = emp.getPayLevel();
+
+        // Add the row to the model
+        Object[] row = {id, fullName, department, gender, payLevel};
+        model.addRow(row);
+    }
+
+    // Set model to employees table
+    employeesTable.setModel(model);
+}
+
+
     // show employee detail 
     private void showEmployeeDetails(Employee employee) {
-        selectedEmployee = employee;
-        // show employee detail page
-        selectedEmployee = employee;
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, "employeeDetail");
-        boolean found = false;
-        Department dep = null;
-        String depName;
-        
-        //display data
-        idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
-        firstNameDetailPage.setText(employee.getFirstName());
-        surnameDetailPage.setText(employee.getSurname());
-        genderDetailPage.setText(Character.toString(employee.getGender()));
-        payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
-        addressDetailPage.setText(employee.getAddress());
-        
-        for(Department department : departments)
-        {
-             for(Employee emp : department.getEmployees())
-             {
-                 if(emp == employee)
-                 {
-                    found = true; 
-                    dep = department;
-                 }
-             }
-        }
-       
-        if(found == true)
-        {
-            depName = dep.getName();
-            departmentDetailPage.setText(depName);
-        }
+//        selectedEmployee = employee;
+//        // show employee detail page
+//        selectedEmployee = employee;
+//        CardLayout cl = (CardLayout) contentPanel.getLayout();
+//        cl.show(contentPanel, "employeeDetail");
+//        boolean found = false;
+//        Department dep = null;
+//        String depName;
+//        
+//        //display data
+//        idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
+//        firstNameDetailPage.setText(employee.getFirstName());
+//        surnameDetailPage.setText(employee.getSurname());
+//        genderDetailPage.setText(Character.toString(employee.getGender()));
+//        payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
+//        addressDetailPage.setText(employee.getAddress());
+//        
+//        for(Department department : departments)
+//        {
+//             for(Employee emp : department.getEmployees())
+//             {
+//                 if(emp == employee)
+//                 {
+//                    found = true; 
+//                    dep = department;
+//                 }
+//             }
+//        }
+//       
+//        if(found == true)
+//        {
+//            depName = dep.getName();
+//            departmentDetailPage.setText(depName);
+//        }
     }
     
     
@@ -279,20 +294,17 @@ public class MainWindow extends javax.swing.JFrame {
         AddEmployeeForm = new javax.swing.JDialog();
         femaleButton1 = new javax.swing.JRadioButton();
         jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
         payLevelForEmployeeCombo1 = new javax.swing.JComboBox<>();
         jLabel21 = new javax.swing.JLabel();
         addEmployeeConfirmButton1 = new javax.swing.JButton();
         jLabel22 = new javax.swing.JLabel();
         cancelEmployeeFormButton = new javax.swing.JButton();
-        jLabel23 = new javax.swing.JLabel();
         firstNameField1 = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         addressField1 = new javax.swing.JTextArea();
         jLabel25 = new javax.swing.JLabel();
         lastNameField1 = new javax.swing.JTextField();
-        idField2 = new javax.swing.JTextField();
         jLabel26 = new javax.swing.JLabel();
         departmentForEmployeeCombo1 = new javax.swing.JComboBox<>();
         maleButton1 = new javax.swing.JRadioButton();
@@ -401,8 +413,6 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel19.setText("Pay Level");
 
-        jLabel20.setText("ID");
-
         payLevelForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select pay level", "Item 2", "Item 3", "Item 4" }));
 
         jLabel21.setText("Address");
@@ -422,9 +432,6 @@ public class MainWindow extends javax.swing.JFrame {
                 cancelEmployeeFormButtonActionPerformed(evt);
             }
         });
-
-        jLabel23.setFont(new java.awt.Font("Helvetica Neue", 0, 10)); // NOI18N
-        jLabel23.setText("ID is automatically assigned sequentially");
 
         firstNameField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -481,7 +488,6 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addComponent(maleButton1)
                                 .addGap(18, 18, 18)
                                 .addComponent(femaleButton1))
-                            .addComponent(idField2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel19)
                             .addComponent(jLabel25)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -491,21 +497,13 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addComponent(lastNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(firstNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(payLevelForEmployeeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel20)
-                            .addComponent(jLabel23))))
+                            .addComponent(payLevelForEmployeeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
         AddEmployeeFormLayout.setVerticalGroup(
             AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AddEmployeeFormLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel20)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(idField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addComponent(jLabel23)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(26, 26, 26)
                 .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(firstNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1285,7 +1283,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(deptHeadDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel38))))
-                .addGap(0, 49, Short.MAX_VALUE))
+                .addGap(0, 61, Short.MAX_VALUE))
             .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(departmentDetailPanelLayout.createSequentialGroup()
                     .addGap(125, 125, 125)
@@ -1321,7 +1319,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jLabel18)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
             .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(departmentDetailPanelLayout.createSequentialGroup()
                     .addGap(98, 98, 98)
@@ -1444,7 +1442,7 @@ public class MainWindow extends javax.swing.JFrame {
         rightPanel.setLayout(rightPanelLayout);
         rightPanelLayout.setHorizontalGroup(
             rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2643, Short.MAX_VALUE)
+            .addGap(0, 2655, Short.MAX_VALUE)
             .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(rightPanelLayout.createSequentialGroup()
                     .addContainerGap()
@@ -1580,35 +1578,36 @@ public class MainWindow extends javax.swing.JFrame {
         }
         
         // Extract level and salary amount (e.g., "Level 1 - BHD 44,245.75")
-        double salary;
-        int level;
+//        double salary;
+        int payLevel;
         try {
             // Extract level number (e.g., "Level 1" -> 1)
-            level = Integer.parseInt(salaryStr.split(" - ")[0].substring(6));
+            payLevel = Integer.parseInt(salaryStr.split(" - ")[0].substring(6));
             
             // Extract salary amount (get the part after "BHD ")
-            String amountStr = salaryStr.split("BHD ")[1];
-            salary = Double.parseDouble(amountStr.replace(",", ""));
+//            String amountStr = salaryStr.split("BHD ")[1];
+//            salary = Double.parseDouble(amountStr.replace(",", ""));
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
             showErrorToast(this, "Invalid salary format");
             return;
         }
         
         // Create new employee
-        Employee newEmployee = new Employee(firstName, lastName, gender, address, salary, level);
+         Employee newEmployee = new Employee(firstName, lastName, gender, address, payLevel);
+
         
         // Add to employees list
         allEmployees.add(newEmployee);
         
         // Update employees table
-        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-        model.addRow(new Object[]{
-            newEmployee.getEmployeeId(),
-            newEmployee.getFirstName() + " " + newEmployee.getSurname(),
-            departmentForEmployeeCombo1.getSelectedItem(),
-            newEmployee.getGender(),
-            String.format("BHD %.2f", newEmployee.getSalary())
-        });
+//        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+//        model.addRow(new Object[]{
+//            newEmployee.getEmployeeId(),
+//            newEmployee.getFirstName() + " " + newEmployee.getSurname(),
+//            departmentForEmployeeCombo1.getSelectedItem(),
+//            newEmployee.getGender(),
+//            String.format("BHD %.2f", newEmployee.getSalary())
+//        });
         
         // Clear form fields
         firstNameField1.setText("");
@@ -1757,62 +1756,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void generatePayReportButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // Check if there are any employees
-        if (allEmployees.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No employees found in the system.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        
 
-        StringBuilder report = new StringBuilder();
-        report.append("EMPLOYEE PAYROLL REPORT\n");
-        report.append("======================\n\n");
-
-        // Group employees by department
-        for (Department dept : departments) {
-            report.append("Department: ").append(dept.getName()).append("\n");
-            report.append("Location: ").append(dept.getLocation()).append("\n");
-            report.append("----------------------------------------\n");
-
-            double departmentTotal = 0.0;
-            boolean hasDepartmentEmployees = false;
-
-            // List employees in this department
-            for (Employee emp : allEmployees) {
-                if (dept.getEmployees().contains(emp)) {
-                    hasDepartmentEmployees = true;
-                    report.append(String.format("%-20s %-20s Level %-2d BHD %,10.2f\n",
-                            emp.getFirstName(),
-                            emp.getSurname(),
-                            emp.getLevel(),
-                            emp.getSalary()));
-                    departmentTotal += emp.getSalary();
-                }
-            }
-
-            if (!hasDepartmentEmployees) {
-                report.append("No employees in this department\n");
-            } else {
-                report.append("----------------------------------------\n");
-                report.append(String.format("Department Total: BHD %,10.2f\n", departmentTotal));
-            }
-            report.append("\n");
-        }
-
-        // Calculate and append total payroll
-        double totalPayroll = allEmployees.stream()
-                .mapToDouble(Employee::getSalary)
-                .sum();
-        report.append("======================\n");
-        report.append(String.format("TOTAL PAYROLL: BHD %,10.2f\n", totalPayroll));
-
-        // Display the report
-        JTextArea textArea = new JTextArea(report.toString());
-        textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-        textArea.setEditable(false);
-
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setPreferredSize(new Dimension(500, 400));
-
-        JOptionPane.showMessageDialog(this, scrollPane, "Payroll Report", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void cancelButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton3ActionPerformed
@@ -1853,7 +1798,6 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         EditEmployeeForm editForm = new EditEmployeeForm(selectedEmployee);
-       EditEmployeeForm editForm = new EditEmployeeForm(selectedEmployee);
         editForm.setVisible(true);
 
 
@@ -2046,7 +1990,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel headerPanel;
     private javax.swing.JTextField idDepartmentDetailPage;
     private javax.swing.JTextField idDetailPage;
-    private javax.swing.JTextField idField2;
     private javax.swing.JPanel imageDepartmentPanel;
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
@@ -2062,10 +2005,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;

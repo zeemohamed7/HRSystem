@@ -15,21 +15,30 @@ public class Employee {
     private String surname;
     private char gender;
     private String address;
-    private double salary;
-    private int level;  
+    private int payLevel;  
     private boolean isHead;
+    private int deptID;
 
     public Employee() {
     }
 
-    public Employee(String firstName, String surname, char gender, String address, double salary, int level) {
-        employeeId = staticEmployeeId++;
+    public Employee(String firstName, String surname, char gender, String address, int payLevel) {
+        this.employeeId = employeeId;
         this.firstName = firstName;
         this.surname = surname;
         this.gender = gender;
         this.address = address;
-        this.salary = salary;
-        this.level = level;
+        this.payLevel = payLevel;
+    }
+    
+    public Employee(String firstName, String surname, char gender, String address, int payLevel, int deptID) {
+        this.employeeId = employeeId;
+        this.firstName = firstName;
+        this.surname = surname;
+        this.gender = gender;
+        this.address = address;
+        this.payLevel = payLevel;
+        this.deptID = deptID;
     }
 
 
@@ -37,6 +46,9 @@ public class Employee {
         return employeeId;
     }
 
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -70,20 +82,12 @@ public class Employee {
         this.address = address;
     }
 
-    public double getSalary() {
-        return salary;
+    public int getPayLevel() {
+        return payLevel;
     }
 
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
+    public void setPayLevel(int payLevel) {
+        this.payLevel = payLevel;
     }
 
     public boolean isIsHead() {
@@ -93,6 +97,16 @@ public class Employee {
     public void setIsHead(boolean isHead) {
         this.isHead = isHead;
     }
+
+    public int getDeptID() {
+        return deptID;
+    }
+
+    public void setDeptID(int deptID) {
+        this.deptID = deptID;
+    }
+    
+    
     
     
     

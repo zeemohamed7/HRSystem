@@ -31,7 +31,6 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="femaleButton1" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="idField2" alignment="0" min="-2" pref="194" max="-2" attributes="0"/>
                               <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel25" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jScrollPane3" alignment="0" min="-2" pref="451" max="-2" attributes="0"/>
@@ -43,8 +42,6 @@
                                   <Component id="firstNameField1" min="-2" pref="191" max="-2" attributes="0"/>
                               </Group>
                               <Component id="payLevelForEmployeeCombo1" alignment="0" min="-2" pref="186" max="-2" attributes="0"/>
-                              <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel23" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -55,13 +52,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                  <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="idField2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                  <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                           <Component id="firstNameField1" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -118,11 +109,6 @@
             <Property name="text" type="java.lang.String" value="Pay Level"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel20">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="ID"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JComboBox" name="payLevelForEmployeeCombo1">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -164,14 +150,6 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelEmployeeFormButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel23">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Helvetica Neue" size="10" style="0"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="ID is automatically assigned sequentially"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JTextField" name="firstNameField1">
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="firstNameField1ActionPerformed"/>
@@ -206,8 +184,6 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="lastNameField1ActionPerformed"/>
           </Events>
-        </Component>
-        <Component class="javax.swing.JTextField" name="idField2">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel26">
           <Properties>

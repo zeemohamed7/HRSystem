@@ -17,7 +17,6 @@ public class Department {
     private String name;
     private String location;
     private Employee departmentHead; 
-    private ArrayList<Employee> employees;
 
     public Department() {
     }
@@ -27,7 +26,6 @@ public class Department {
         deptID = staticDeptId++;
         this.name = name;
         this.location = location;
-        employees = new ArrayList();
     }
 
     //Constructor with department head
@@ -36,7 +34,6 @@ public class Department {
         this.name = name;
         this.location = location;
         this.departmentHead = departmentHead;
-        employees = new ArrayList();
     }
 
     public int getDeptID() {
@@ -66,9 +63,16 @@ public class Department {
     public void setDepartmentHead(Employee departmentHead) {
         this.departmentHead = departmentHead;
     }
-
-    public ArrayList<Employee> getEmployees() {
-        return employees;
+    
+    // Looks up department name by ID
+        public static String getDepartmentNameById(ArrayList<Department> departments, int id) {
+        for (Department dept : departments) {
+            if (dept.getDeptID() == id) {
+                return dept.getName();
+            }
+        }
+        return "Unknown";
     }
+
  
 }
