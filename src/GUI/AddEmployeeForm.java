@@ -302,25 +302,23 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         // Get selected department (can be null)
         String selectedDepartmentName = (String) departmentForEmployeeCombo1.getSelectedItem();
         Integer departmentId = (selectedDepartmentName != null) ? Department.getIdByDepartmentName(departments, selectedDepartmentName) : null;
-        System.out.println("deptid");
-        System.out.println(departmentId);
+        // Create new employee based on whether departmentId is null or not
+           Employee newEmployee;
+           if (departmentId == null) {
+               // No department selected, create employee without department
+               newEmployee = new Employee(firstName, lastName, gender, address, payLevel);
+           } else {
+               // Department selected, create employee with department ID
+               newEmployee = new Employee(firstName, lastName, gender, address, payLevel, departmentId);
+}
 
-
-        // Create new employee
-        Employee newEmployee = new Employee(firstName, lastName, gender, address, payLevel, departmentId);
 
         // Add to employees list
         main.allEmployees.add(newEmployee);
 
         // Update employees table
-//        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-//        model.addRow(new Object[]{
-//            newEmployee.getEmployeeId(),
-//            newEmployee.getFirstName() + " " + newEmployee.getSurname(),
-//            (selectedDepartment != null) ? selectedDepartment.getName() : "No Department",
-//            newEmployee.getGender(),
-//            newEmployee.getPayLevel()
-//        });
+        main.refreshEmployeeTable();
+
         // Clear form fields
         firstNameField1.setText("");
         lastNameField1.setText("");

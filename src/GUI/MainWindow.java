@@ -1888,10 +1888,34 @@ public class MainWindow extends javax.swing.JFrame {
        JOptionPane.showMessageDialog(this, "Department deleted succefully.");
        }
     }//GEN-LAST:event_deleteButton1ActionPerformed
- private void deleteDepartment(Department department){
-     departments.remove(department);
+    private void deleteDepartment(Department department){
+        departments.remove(department);
     }
-    
+ 
+public void refreshEmployeeTable() {
+    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+    model.setRowCount(0);  // Clear existing rows
+
+    for (Employee emp : allEmployees) {
+        int id = emp.getEmployeeId();
+        String fullName = emp.getFirstName() + " " + emp.getSurname();  // Concatenate first and last name
+        Integer deptId = emp.getDeptID();
+        String department = "No Department";  // Default value if no department is assigned
+
+        if (deptId != null) {
+            department = Department.getDepartmentNameById(departments, deptId);
+        }
+
+
+        char gender = emp.getGender();
+        int payLevel = emp.getPayLevel();
+
+        // Add the row to the model
+        Object[] row = {id, fullName, department, gender, payLevel};
+        model.addRow(row);
+    }
+}
+
     
     
     

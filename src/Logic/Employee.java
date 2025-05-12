@@ -100,11 +100,11 @@ public class Employee {
         this.isHead = isHead;
     }
 
-    public int getDeptID() {
+    public Integer getDeptID() {
         return deptID;
     }
 
-    public void setDeptID(int deptID) {
+    public void setDeptID(Integer deptID) {
         this.deptID = deptID;
     }
     
