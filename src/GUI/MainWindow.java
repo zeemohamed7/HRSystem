@@ -274,15 +274,13 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private void populateDepartmentsComboBox() {
-    DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
-    model.addElement("All Departments");
-
-    for (Department dept : departments) {
-        model.addElement(dept.getName());
+        departmentsListSelect.removeAllItems();
+        departmentsListSelect.addItem("All Departments");
+        for (Department dept : departments) {
+            departmentsListSelect.addItem(dept.getName());
+        }
     }
 
-    departmentsListSelect.setModel(model);
-}
 
     
         /**
@@ -1507,6 +1505,7 @@ public class MainWindow extends javax.swing.JFrame {
         AddDepartmentForm.dispose();
         
         populateDepartmentsComboBox(); //refresh combo box
+        refreshDepartmentsComboBox();
     }//GEN-LAST:event_addDepartmentConfirmButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
@@ -1658,37 +1657,95 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteButton1ActionPerformed
 
     private void departmentsListSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsListSelectActionPerformed
-        // TODO add your handling code here:
+// TODO add your handling code here:
+    String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
+    
+    if (selectedDepartment == null || selectedDepartment.equals("All Departments")) {
+        // Show all employees (including those with no department)
+        selectedDepartment = "All Departments";
+    }
+
+    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+    model.setRowCount(0); // Clear the table
+
+    for (Employee emp : allEmployees) {
+        Integer deptID = emp.getDeptID();
+        String department = "No Department"; // Default for employees with no department
+
+        // If deptID is not null, fetch the department name
+        if (deptID != null) {
+            department = Department.getDepartmentNameById(departments, deptID);
+        }
+
+        // Check if "All Departments" is selected or the department matches
+        if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
+            int id = emp.getEmployeeId();
+            String fullName = emp.getFirstName() + " " + emp.getSurname();
+            char gender = emp.getGender();
+            int payLevel = emp.getPayLevel();
+
+            Object[] row = {id, fullName, department, gender, payLevel};
+            model.addRow(row);
+        }
+    }
+
     }//GEN-LAST:event_departmentsListSelectActionPerformed
     private void deleteDepartment(Department department){
         departments.remove(department);
+        refreshDepartmentsComboBox();
     }
  
-public void refreshEmployeeTable() {
-    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-    model.setRowCount(0);  // Clear existing rows
+    public void refreshEmployeeTable() {
+        // Get the selected department from the combo box
+        String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
 
-    for (Employee emp : allEmployees) {
-        int id = emp.getEmployeeId();
-        String fullName = emp.getFirstName() + " " + emp.getSurname();  // Concatenate first and last name
-        Integer deptId = emp.getDeptID();
-        String department = "No Department";  // Default value if no department is assigned
-
-        if (deptId != null) {
-            department = Department.getDepartmentNameById(departments, deptId);
+        // Default to "All Departments" if selectedDepartment is null
+        if (selectedDepartment == null) {
+            selectedDepartment = "All Departments";
         }
 
+        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+        model.setRowCount(0);  // Clear existing rows
 
-        char gender = emp.getGender();
-        int payLevel = emp.getPayLevel();
+        // Loop through all employees
+        for (Employee emp : allEmployees) {
+            int id = emp.getEmployeeId();
+            String fullName = emp.getFirstName() + " " + emp.getSurname();  // Concatenate first and last name
+            Integer deptId = emp.getDeptID();
+            String department = "No Department";  // Default value if no department is assigned
 
-        // Add the row to the model
-        Object[] row = {id, fullName, department, gender, payLevel};
-        model.addRow(row);
+            if (deptId != null) {
+                department = Department.getDepartmentNameById(departments, deptId);
+            }
+
+            // Filter employees based on the selected department
+            if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
+                char gender = emp.getGender();
+                int payLevel = emp.getPayLevel();
+
+                // Add the row to the model
+                Object[] row = {id, fullName, department, gender, payLevel};
+                model.addRow(row);
+            }
+        }
     }
+
+
+        private void refreshDepartmentsComboBox() {
+        departmentsListSelect.removeAllItems();  // Clear all existing items
+
+        // Add "All Departments" option at the top
+        departmentsListSelect.addItem("All Departments");
+        
+
+        // Now re-populate the combo box with the updated list of departments
+        for (Department dept : departments) {
+            departmentsListSelect.addItem(dept.getName());  // Add department names
+        }
+        
+        refreshEmployeeTable();
 }
 
-    
     
     
     
