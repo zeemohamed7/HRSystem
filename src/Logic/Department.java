@@ -63,7 +63,10 @@ public class Department {
     public void setDepartmentHead(Employee departmentHead) {
         this.departmentHead = departmentHead;
     }
-    
+        @Override
+    public String toString() {
+        return name;  // This makes the JComboBox display the department name
+    }
     // Looks up department name by ID
         public static String getDepartmentNameById(ArrayList<Department> departments, int id) {
         for (Department dept : departments) {

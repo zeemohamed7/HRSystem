@@ -1655,25 +1655,10 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void addEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeButtonActionPerformed
         // TODO add your handling code here:
-    AddEmployeeForm addEmployeeForm = new AddEmployeeForm();
-
-    // Populate the department combo box here
-    DefaultComboBoxModel<String> departmentModel = new DefaultComboBoxModel<>();
-    
-    // Assuming allDepartments is a list of Department objects
-    for (Department department : departments) {
-        departmentModel.addElement(department.getName());
-    }
-    
-    // Set the combo box model in the form
-    addEmployeeForm.departmentForEmployeeCombo1.setModel(departmentModel);
-
-    // Set up the AddEmployeeForm dialog
-    addEmployeeForm.setTitle("Add Employee");
-    addEmployeeForm.setSize(500, 500);
-    addEmployeeForm.setLocationRelativeTo(null);
-    addEmployeeForm.setModal(true);
+    AddEmployeeForm addEmployeeForm = new AddEmployeeForm(this);
     addEmployeeForm.setVisible(true);
+    
+    
 
         
     }//GEN-LAST:event_addEmployeeButtonActionPerformed
