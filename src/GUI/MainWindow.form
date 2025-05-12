@@ -673,9 +673,9 @@
                           <Component id="departmentsButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="payrollReportButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="463" max="32767" attributes="0"/>
+                          <EmptySpace pref="351" max="32767" attributes="0"/>
                           <Component id="exitButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="174" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="286" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1547,7 +1547,7 @@
                                       <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="jScrollPane5" min="-2" pref="391" max="-2" attributes="0"/>
-                                      <EmptySpace pref="42" max="32767" attributes="0"/>
+                                      <EmptySpace pref="44" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">

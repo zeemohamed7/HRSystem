@@ -4,39 +4,42 @@
  */
 package Logic;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author zainab
  */
 public class Department {
-    private int id;
+    private int staticDeptId = 0;
+    private int deptID;
     private String name;
     private String location;
     private Employee departmentHead; 
-    
-    // Constructor with dept head
-    public Department(int id, String name, String location, Employee departmentHead) {
-        this.id = id;
+    private ArrayList<Employee> employees;
+
+    public Department() {
+    }
+
+    //Constructor without department head
+    public Department(String name, String location) {
+        deptID = staticDeptId++;
+        this.name = name;
+        this.location = location;
+        employees = new ArrayList();
+    }
+
+    //Constructor with department head
+    public Department(String name, String location, Employee departmentHead) {
+        deptID = staticDeptId++;
         this.name = name;
         this.location = location;
         this.departmentHead = departmentHead;
+        employees = new ArrayList();
     }
 
-    // Constructor without dept head
-    public Department(int id, String name, String location) {
-        this.id = id;
-        this.name = name;
-        this.location = location;
-        this.departmentHead = null;
-
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public int getDeptID() {
+        return deptID;
     }
 
     public String getName() {
@@ -62,6 +65,9 @@ public class Department {
     public void setDepartmentHead(Employee departmentHead) {
         this.departmentHead = departmentHead;
     }
-    
-    
+
+    public ArrayList<Employee> getEmployees() {
+        return employees;
+    }
+ 
 }
