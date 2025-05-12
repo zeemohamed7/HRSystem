@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -25,14 +26,23 @@ public class AddEmployeeForm extends javax.swing.JFrame {
     }
     public AddEmployeeForm(MainWindow main) {
         initComponents();
-        
+setDefaultCloseOperation(DISPOSE_ON_CLOSE);
        this.main = main;
 
                         
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
-        this.setLocation(x, y);
+        
+                this.setLocation(x, y);
+
+            // When the form is disposed, make the main window visible again
+    addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosed(java.awt.event.WindowEvent evt) {
+            main.setVisible(true);
+        }
+    });
         
         // populate combo box
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
@@ -225,8 +235,12 @@ public class AddEmployeeForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelEmployeeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelEmployeeFormButtonActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
+        // TODO add your handling code here:    
+    // Show the main window
+    main.setVisible(true);
+
+    // Dispose the current form
+    dispose();
     }//GEN-LAST:event_cancelEmployeeFormButtonActionPerformed
 
     private void maleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maleButton1ActionPerformed
@@ -331,7 +345,9 @@ public class AddEmployeeForm extends javax.swing.JFrame {
 //        showSuccessToast(this, "Employee added successfully!");
 
         // Close the form
-        this.dispose();
+               main.setVisible(true);
+
+               this.dispose();
     }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
 
     private void payLevelForEmployeeCombo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelForEmployeeCombo1ActionPerformed

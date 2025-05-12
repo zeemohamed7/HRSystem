@@ -281,23 +281,6 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        AddEmployeeForm = new javax.swing.JDialog();
-        femaleButton1 = new javax.swing.JRadioButton();
-        jLabel19 = new javax.swing.JLabel();
-        payLevelForEmployeeCombo1 = new javax.swing.JComboBox<>();
-        jLabel21 = new javax.swing.JLabel();
-        addEmployeeConfirmButton1 = new javax.swing.JButton();
-        jLabel22 = new javax.swing.JLabel();
-        cancelEmployeeFormButton = new javax.swing.JButton();
-        firstNameField1 = new javax.swing.JTextField();
-        jLabel24 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        addressField1 = new javax.swing.JTextArea();
-        jLabel25 = new javax.swing.JLabel();
-        lastNameField1 = new javax.swing.JTextField();
-        jLabel26 = new javax.swing.JLabel();
-        departmentForEmployeeCombo1 = new javax.swing.JComboBox<>();
-        maleButton1 = new javax.swing.JRadioButton();
         AddDepartmentForm = new javax.swing.JDialog();
         jLabel9 = new javax.swing.JLabel();
         departmentNameField = new javax.swing.JTextField();
@@ -397,134 +380,6 @@ public class MainWindow extends javax.swing.JFrame {
         reportPanel = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         reportTextPane = new javax.swing.JTextPane();
-
-        femaleButton1.setText("Female");
-
-        jLabel19.setText("Pay Level");
-
-        payLevelForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select pay level", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel21.setText("Address");
-
-        addEmployeeConfirmButton1.setText("Add Employee");
-        addEmployeeConfirmButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addEmployeeConfirmButton1ActionPerformed(evt);
-            }
-        });
-
-        jLabel22.setText("First Name");
-
-        cancelEmployeeFormButton.setText("Cancel");
-        cancelEmployeeFormButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelEmployeeFormButtonActionPerformed(evt);
-            }
-        });
-
-        firstNameField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                firstNameField1ActionPerformed(evt);
-            }
-        });
-
-        jLabel24.setText("Last Name");
-
-        addressField1.setColumns(20);
-        addressField1.setRows(5);
-        jScrollPane3.setViewportView(addressField1);
-
-        jLabel25.setText("Department");
-
-        lastNameField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lastNameField1ActionPerformed(evt);
-            }
-        });
-
-        jLabel26.setText("Gender");
-
-        departmentForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department", "Item 2", "Item 3", "Item 4" }));
-
-        maleButton1.setText("Male");
-        maleButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                maleButton1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout AddEmployeeFormLayout = new javax.swing.GroupLayout(AddEmployeeForm.getContentPane());
-        AddEmployeeForm.getContentPane().setLayout(AddEmployeeFormLayout);
-        AddEmployeeFormLayout.setHorizontalGroup(
-            AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AddEmployeeFormLayout.createSequentialGroup()
-                .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(AddEmployeeFormLayout.createSequentialGroup()
-                        .addGap(268, 268, 268)
-                        .addComponent(cancelEmployeeFormButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(addEmployeeConfirmButton1))
-                    .addGroup(AddEmployeeFormLayout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(AddEmployeeFormLayout.createSequentialGroup()
-                                .addComponent(jLabel22)
-                                .addGap(146, 146, 146)
-                                .addComponent(jLabel24))
-                            .addComponent(jLabel26)
-                            .addGroup(AddEmployeeFormLayout.createSequentialGroup()
-                                .addComponent(maleButton1)
-                                .addGap(18, 18, 18)
-                                .addComponent(femaleButton1))
-                            .addComponent(jLabel19)
-                            .addComponent(jLabel25)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel21)
-                            .addComponent(departmentForEmployeeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(AddEmployeeFormLayout.createSequentialGroup()
-                                .addComponent(lastNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(firstNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(payLevelForEmployeeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(30, Short.MAX_VALUE))
-        );
-        AddEmployeeFormLayout.setVerticalGroup(
-            AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AddEmployeeFormLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(firstNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lastNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(AddEmployeeFormLayout.createSequentialGroup()
-                        .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel22))
-                        .addGap(29, 29, 29)))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel26)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(maleButton1)
-                    .addComponent(femaleButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel21)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel25)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(departmentForEmployeeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel19)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(payLevelForEmployeeCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(AddEmployeeFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelEmployeeFormButton)
-                    .addComponent(addEmployeeConfirmButton1))
-                .addGap(23, 23, 23))
-        );
 
         jLabel9.setText("Department Name");
 
@@ -1522,117 +1377,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_loginButtonActionPerformed
 
-    private void addEmployeeConfirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeConfirmButton1ActionPerformed
-//        // Get values from form fields
-//        String firstName = firstNameField1.getText().trim();
-//        String lastName = lastNameField1.getText().trim();
-//        String address = addressField1.getText().trim();
-//        
-//        // Validate required fields
-//        if (firstName.isEmpty()) {
-//            showErrorToast(this, "First name is required");
-//            firstNameField1.requestFocus();
-//            return;
-//        }
-//        
-//        if (lastName.isEmpty()) {
-//            showErrorToast(this, "Last name is required");
-//            lastNameField1.requestFocus();
-//            return;
-//        }
-//        
-//        if (address.isEmpty()) {
-//            showErrorToast(this, "Address is required");
-//            addressField1.requestFocus();
-//            return;
-//        }
-//        
-//        // Validate gender selection
-//        char gender;
-//        if (maleButton1.isSelected()) {
-//            gender = 'M';
-//        } else if (femaleButton1.isSelected()) {
-//            gender = 'F';
-//        } else {
-//            showErrorToast(this, "Please select a gender");
-//            return;
-//        }
-//        
-//        // Get salary from combo box
-//        String salaryStr = (String) payLevelForEmployeeCombo1.getSelectedItem();
-//        if (salaryStr == null || salaryStr.equals("Select Annual Salary")) {
-//            showErrorToast(this, "Please select an annual salary");
-//            return;
-//        }
-//        
-//        // Extract level and salary amount (e.g., "Level 1 - BHD 44,245.75")
-////        double salary;
-//        int payLevel;
-//        try {
-//            // Extract level number (e.g., "Level 1" -> 1)
-//            payLevel = Integer.parseInt(salaryStr.split(" - ")[0].substring(6));
-//            
-//            // Extract salary amount (get the part after "BHD ")
-////            String amountStr = salaryStr.split("BHD ")[1];
-////            salary = Double.parseDouble(amountStr.replace(",", ""));
-//        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-//            showErrorToast(this, "Invalid salary format");
-//            return;
-//        }
-//        
-//        // Get selected department (can be null)
-//        Department selectedDepartment = (Department) departmentForEmployeeCombo1.getSelectedItem();
-//        Integer departmentId = (selectedDepartment != null) ? selectedDepartment.getDeptID() : null;
-//
-//        // Create new employee
-//        Employee newEmployee = new Employee(firstName, lastName, gender, address, payLevel, departmentId);
-//
-//        
-//        // Add to employees list
-//        allEmployees.add(newEmployee);
-//        
-//        // Update employees table
-//        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-//        model.addRow(new Object[]{
-//            newEmployee.getEmployeeId(),
-//            newEmployee.getFirstName() + " " + newEmployee.getSurname(),
-//            (selectedDepartment != null) ? selectedDepartment.getName() : "No Department",
-//            newEmployee.getGender(),
-//            newEmployee.getPayLevel()
-//        });
-//        // Clear form fields
-//        firstNameField1.setText("");
-//        lastNameField1.setText("");
-//        addressField1.setText("");
-//        genderGroup.clearSelection();
-//        payLevelForEmployeeCombo1.setSelectedIndex(0);
-//        departmentForEmployeeCombo1.setSelectedIndex(0);
-//        
-//        // Show success message
-//        showSuccessToast(this, "Employee added successfully!");
-//        
-//        // Close the form
-//        AddEmployeeForm.dispose();
-    }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
-
-    private void cancelEmployeeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelEmployeeFormButtonActionPerformed
-        // TODO add your handling code here:
-        AddEmployeeForm.dispose();
-
-    }//GEN-LAST:event_cancelEmployeeFormButtonActionPerformed
-
-    private void firstNameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_firstNameField1ActionPerformed
-
-    private void lastNameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lastNameField1ActionPerformed
-
-    private void maleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maleButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_maleButton1ActionPerformed
-
     private void employeesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cl = (CardLayout)(contentPanel.getLayout());
@@ -1642,12 +1386,15 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void addEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeButtonActionPerformed
         // TODO add your handling code here:
+    // Create and show the AddEmployeeForm
+    // Hide the main window
+    setVisible(false);
+
+    // Open the AddEmployeeForm
     AddEmployeeForm addEmployeeForm = new AddEmployeeForm(this);
     addEmployeeForm.setVisible(true);
-    
-    
 
-        
+           
     }//GEN-LAST:event_addEmployeeButtonActionPerformed
 
     private void searchEmployeesTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchEmployeesTextFieldActionPerformed
@@ -1957,7 +1704,6 @@ public void refreshEmployeeTable() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog AddDepartmentForm;
-    public javax.swing.JDialog AddEmployeeForm;
     private javax.swing.JDialog ConfirmDelete;
     private javax.swing.JPanel DashboardPanel;
     private javax.swing.JPanel LoginPanel;
@@ -1965,21 +1711,17 @@ public void refreshEmployeeTable() {
     private javax.swing.JButton addDepartmentButton;
     private javax.swing.JButton addDepartmentConfirmButton;
     private javax.swing.JButton addEmployeeButton;
-    private javax.swing.JButton addEmployeeConfirmButton1;
     private javax.swing.JTextArea addressDetailPage;
-    private javax.swing.JTextArea addressField1;
     private javax.swing.JButton backToDepartmentsButton;
     private javax.swing.JButton backToEmployeesButton;
     private javax.swing.JButton cancelButton2;
     private javax.swing.JButton cancelButton3;
-    private javax.swing.JButton cancelEmployeeFormButton;
     private javax.swing.JButton confirmDeleteButton;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton deleteButton1;
     private javax.swing.JTextField departmentDetailPage;
     private javax.swing.JPanel departmentDetailPanel;
-    private javax.swing.JComboBox<String> departmentForEmployeeCombo1;
     private javax.swing.JComboBox<String> departmentHeadSelect;
     private javax.swing.JLabel departmentNameDetailPage;
     private javax.swing.JTextField departmentNameField;
@@ -1996,9 +1738,7 @@ public void refreshEmployeeTable() {
     private javax.swing.JPanel employeesPanel;
     private javax.swing.JTable employeesTable;
     private javax.swing.JButton exitButton;
-    private javax.swing.JRadioButton femaleButton1;
     private javax.swing.JTextField firstNameDetailPage;
-    private javax.swing.JTextField firstNameField1;
     private javax.swing.JTextField genderDetailPage;
     private javax.swing.JButton generateReportButton;
     private javax.swing.JPanel headerPanel;
@@ -2017,13 +1757,7 @@ public void refreshEmployeeTable() {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
@@ -2047,22 +1781,18 @@ public void refreshEmployeeTable() {
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField lastNameField1;
     private javax.swing.JTextField locationDetailPage;
     private javax.swing.JTextField locationField;
     private javax.swing.JButton loginButton;
     private javax.swing.JPanel logoPanel;
-    private javax.swing.JRadioButton maleButton1;
     private javax.swing.JPanel paginationPanel;
     private javax.swing.JPanel paginationPanel1;
     private javax.swing.JTextField payLevelDetailPage;
-    private javax.swing.JComboBox<String> payLevelForEmployeeCombo1;
     private javax.swing.JPanel payrollPanel;
     private javax.swing.JButton payrollReportButton;
     private javax.swing.JPanel reportPanel;
