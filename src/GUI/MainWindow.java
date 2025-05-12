@@ -94,7 +94,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         
         // Fake employee table
-        String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Anuual Pay"};
+        String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Salary"};
         // create table with model
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
         // disable editing for all cells
@@ -145,7 +145,7 @@ public class MainWindow extends javax.swing.JFrame {
         firstNameDetailPage.setText(employee.getFirstName());
         surnameDetailPage.setText(employee.getSurname());
         genderDetailPage.setText(Character.toString(employee.getGender()));
-        payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
+        payLevelDetailPage.setText(Integer.toString(employee.getLevel()));
         addressDetailPage.setText(employee.getAddress());
         
         for(Department department : departments)
@@ -403,7 +403,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel20.setText("ID");
 
-        payLevelForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select pay level", "Item 2", "Item 3", "Item 4" }));
+        payLevelForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select pay level" }));
 
         jLabel21.setText("Address");
 
@@ -448,7 +448,12 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel26.setText("Gender");
 
-        departmentForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department", "Item 2", "Item 3", "Item 4" }));
+        departmentForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department" }));
+        departmentForEmployeeCombo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                departmentForEmployeeCombo1ActionPerformed(evt);
+            }
+        });
 
         genderGroup.add(maleButton1);
         maleButton1.setText("Male");
@@ -1041,6 +1046,11 @@ public class MainWindow extends javax.swing.JFrame {
         );
 
         departmentsListSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All Departments", "Item 2", "Item 3", "Item 4" }));
+        departmentsListSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                departmentsListSelectActionPerformed(evt);
+            }
+        });
 
         addEmployeeButton.setText("+ Add Employee");
         addEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -1285,7 +1295,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(deptHeadDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel38))))
-                .addGap(0, 49, Short.MAX_VALUE))
+                .addGap(0, 61, Short.MAX_VALUE))
             .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(departmentDetailPanelLayout.createSequentialGroup()
                     .addGap(125, 125, 125)
@@ -1321,7 +1331,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jLabel18)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
             .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(departmentDetailPanelLayout.createSequentialGroup()
                     .addGap(98, 98, 98)
@@ -1444,7 +1454,7 @@ public class MainWindow extends javax.swing.JFrame {
         rightPanel.setLayout(rightPanelLayout);
         rightPanelLayout.setHorizontalGroup(
             rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2643, Short.MAX_VALUE)
+            .addGap(0, 2655, Short.MAX_VALUE)
             .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(rightPanelLayout.createSequentialGroup()
                     .addContainerGap()
@@ -1594,18 +1604,33 @@ public class MainWindow extends javax.swing.JFrame {
             return;
         }
         
+        // Get selected department
+        String selectedDepartment = (String) departmentForEmployeeCombo1.getSelectedItem();
+        if (selectedDepartment == null || selectedDepartment.equals("Select department")) {
+            showErrorToast(this, "Please select a department");
+            return;
+        }
+        
         // Create new employee
         Employee newEmployee = new Employee(firstName, lastName, gender, address, salary, level);
         
         // Add to employees list
         allEmployees.add(newEmployee);
         
+        // Find the department and add employee to it
+        for (Department dept : departments) {
+            if (dept.getName().equals(selectedDepartment)) {
+                dept.getEmployees().add(newEmployee);
+                break;
+            }
+        }
+        
         // Update employees table
         DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
         model.addRow(new Object[]{
             newEmployee.getEmployeeId(),
             newEmployee.getFirstName() + " " + newEmployee.getSurname(),
-            departmentForEmployeeCombo1.getSelectedItem(),
+            selectedDepartment,
             newEmployee.getGender(),
             String.format("BHD %.2f", newEmployee.getSalary())
         });
@@ -1747,6 +1772,20 @@ public class MainWindow extends javax.swing.JFrame {
         // Show success message
         showSuccessToast(this, "Department added successfully");
         
+        // Update department combo boxes
+        departmentForEmployeeCombo1.removeAllItems();
+        departmentsListSelect.removeAllItems();
+        
+        // Add default items
+        departmentForEmployeeCombo1.addItem("Select department");
+        departmentsListSelect.addItem("All Departments");
+        
+        // Add all departments to both combo boxes
+        for(Department dept : departments) {
+            departmentForEmployeeCombo1.addItem(dept.getName());
+            departmentsListSelect.addItem(dept.getName());
+        }
+        
         // Close the form
         AddDepartmentForm.dispose();
     }//GEN-LAST:event_addDepartmentConfirmButtonActionPerformed
@@ -1853,7 +1892,6 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         EditEmployeeForm editForm = new EditEmployeeForm(selectedEmployee);
-       EditEmployeeForm editForm = new EditEmployeeForm(selectedEmployee);
         editForm.setVisible(true);
 
 
@@ -1953,6 +1991,62 @@ public class MainWindow extends javax.swing.JFrame {
        JOptionPane.showMessageDialog(this, "Department deleted succefully.");
        }
     }//GEN-LAST:event_deleteButton1ActionPerformed
+
+    private void departmentForEmployeeCombo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentForEmployeeCombo1ActionPerformed
+        // No action needed here
+    }//GEN-LAST:event_departmentForEmployeeCombo1ActionPerformed
+
+    private void departmentsListSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsListSelectActionPerformed
+        String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
+        System.out.println("Selected department: " + selectedDepartment);
+        System.out.println("Total departments: " + departments.size());
+        
+        if (selectedDepartment != null) {
+            DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+            model.setRowCount(0); // Clear the table
+
+            if (selectedDepartment.equals("All Departments")) {
+                System.out.println("Showing all departments");
+                // Show all employees
+                for (Department dept : departments) {
+                    System.out.println("Department: " + dept.getName() + ", Employees: " + dept.getEmployees().size());
+                    for (Employee emp : dept.getEmployees()) {
+                        model.addRow(new Object[]{
+                            emp.getEmployeeId(),
+                            emp.getFirstName() + " " + emp.getSurname(),
+                            dept.getName(),
+                            emp.getGender(),
+                            String.format("BHD %.2f", emp.getSalary())
+                        });
+                    }
+                }
+            } else {
+                System.out.println("Filtering by department: " + selectedDepartment);
+                // Show employees only from selected department
+                boolean found = false;
+                for (Department dept : departments) {
+                    System.out.println("Checking department: " + dept.getName());
+                    if (dept.getName().equals(selectedDepartment)) {
+                        found = true;
+                        System.out.println("Found department: " + dept.getName() + ", Employees: " + dept.getEmployees().size());
+                        for (Employee emp : dept.getEmployees()) {
+                            model.addRow(new Object[]{
+                                emp.getEmployeeId(),
+                                emp.getFirstName() + " " + emp.getSurname(),
+                                dept.getName(),
+                                emp.getGender(),
+                                String.format("BHD %.2f", emp.getSalary())
+                            });
+                        }
+                        break;
+                    }
+                }
+                if (!found) {
+                    System.out.println("Department not found: " + selectedDepartment);
+                }
+            }
+        }
+    }//GEN-LAST:event_departmentsListSelectActionPerformed
  private void deleteDepartment(Department department){
      departments.remove(department);
     }

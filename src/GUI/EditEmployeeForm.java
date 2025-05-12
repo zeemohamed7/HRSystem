@@ -50,19 +50,19 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         {
             femaleEditButton.setSelected(true);
         }
-        
-        // add current department of employee
-        for(Department department : MainWindow.departments)
-        {
-             for(Employee emp : department.getEmployees())
-             {
-                 if(emp == employee)
-                 {
-                    found = true; 
-                    dep = department;
-                 }
-             }
-        }
+//        
+//        add current department of employee
+//       for(Department department : MainWindow.departments)
+//       {
+//            for(Employee emp : department.getEmployees())
+//            {
+//                if(emp == employee)
+//                {
+//                   found = true; 
+//                   dep = department;
+//                }
+//            }
+//       }
        
         if(found == true)
         {
@@ -75,14 +75,14 @@ public class EditEmployeeForm extends javax.swing.JFrame {
             departmentEditCombo.addItem("Null");
         }
         
-        for(Department department : MainWindow.departments)
-        {
-            if(department != dep)
-            {
-                departmentEditCombo.addItem(department.getName());
-            }
-        }
-        
+//       for(Department department : MainWindow.departments)
+//       {
+//           if(department != dep)
+//           {
+//               departmentEditCombo.addItem(department.getName());
+//           }
+//       }
+//        
         
         // add pay level 
         
