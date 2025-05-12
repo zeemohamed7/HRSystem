@@ -39,7 +39,8 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         this.setLocation(x, y);
         selectedEmployee = employee;
         populateDepartmentsComboBox();      // Populate the combo box
-        preSelectDepartment();              // Pre-select the department
+        populatePayLevelComboBox();         // Populate the pay level combo box
+
         
         
         firstNameEditField.setText(employee.getFirstName());
@@ -56,12 +57,13 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         {
             femaleEditButton.setSelected(true);
         }
-        
-        // add current department of employee
-        
+       
+        // add department
+        preSelectDepartment();   
         
         
         // add pay level 
+        preSelectPayLevel();                
         
     }
 
@@ -89,6 +91,56 @@ public class EditEmployeeForm extends javax.swing.JFrame {
 
         // Set the selected item in the combo box to the employee's current department
         departmentEditCombo.setSelectedItem(departmentName);
+    }
+    
+    
+    private void preSelectPayLevel() {
+            int payLevel = selectedEmployee.getPayLevel();
+
+            switch (payLevel) {
+                case 1:
+                    payLevelEditCombo.setSelectedItem("Level 1 - BHD 44,245.75");
+                    break;
+                case 2:
+                    payLevelEditCombo.setSelectedItem("Level 2 - BHD 48,670.32");
+                    break;
+                case 3:
+                    payLevelEditCombo.setSelectedItem("Level 3 - BHD 53,537.35");
+                    break;
+                case 4:
+                    payLevelEditCombo.setSelectedItem("Level 4 - BHD 58,891.09");
+                    break;
+                case 5:
+                    payLevelEditCombo.setSelectedItem("Level 5 - BHD 64,780.20");
+                    break;
+                case 6:
+                    payLevelEditCombo.setSelectedItem("Level 6 - BHD 71,258.22");
+                    break;
+                case 7:
+                    payLevelEditCombo.setSelectedItem("Level 7 - BHD 80,946.95");
+                    break;
+                case 8:
+                    payLevelEditCombo.setSelectedItem("Level 8 - BHD 96,336.34");
+                    break;
+                default:
+                    payLevelEditCombo.setSelectedItem("Select Annual Salary");
+                    break;
+            }
+        }
+
+    // Populate pay level combo box
+    private void populatePayLevelComboBox() {
+        payLevelEditCombo.removeAllItems();  // Clear all existing items
+
+        payLevelEditCombo.addItem("Select Annual Salary");
+        payLevelEditCombo.addItem("Level 1 - BHD 44,245.75");
+        payLevelEditCombo.addItem("Level 2 - BHD 48,670.32");
+        payLevelEditCombo.addItem("Level 3 - BHD 53,537.35");
+        payLevelEditCombo.addItem("Level 4 - BHD 58,891.09");
+        payLevelEditCombo.addItem("Level 5 - BHD 64,780.20");
+        payLevelEditCombo.addItem("Level 6 - BHD 71,258.22");
+        payLevelEditCombo.addItem("Level 7 - BHD 80,946.95");
+        payLevelEditCombo.addItem("Level 8 - BHD 96,336.34");
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -170,6 +222,11 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         jLabel19.setText("Pay Level");
 
         payLevelEditCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select pay level", "Item 2", "Item 3", "Item 4" }));
+        payLevelEditCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payLevelEditComboActionPerformed(evt);
+            }
+        });
 
         jLabel21.setText("Address");
 
@@ -288,6 +345,10 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         
         // remove employee from previous department
     }//GEN-LAST:event_departmentEditComboActionPerformed
+
+    private void payLevelEditComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelEditComboActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_payLevelEditComboActionPerformed
 
     
     
