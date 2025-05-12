@@ -14,13 +14,15 @@ import java.util.ArrayList;
  * @author zainab
  */
 public class MainWindow extends javax.swing.JFrame {
-
     /**
      * Creates new form MainWindow
      */
     
-    private ArrayList<Employee> allEmployees;
-    private ArrayList<Department> departments;
+    public static ArrayList<Employee> allEmployees;
+    public static ArrayList<Department> departments;
+    
+    private Employee selectedEmployee;
+
             
     public MainWindow() {
         initComponents();
@@ -128,19 +130,38 @@ public class MainWindow extends javax.swing.JFrame {
     private void showEmployeeDetails(Employee employee) {
         
         // show employee detail page
+        selectedEmployee = employee;
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "employeeDetail");
+        boolean found = false;
+        Department dep = null;
+        String depName;
         
-        // display data
-//        idDetailPage.setText(Integer.toString(employee.getEmployeeId());
-//        firstNameDetailPage.setText(employee.getFirstName());
-//        surnameDetailPage.setText(employee.getName());
-//        genderDetailPage.setText(employee.getGender());
-//        salaryDetailPage.setText(Double.toString(employee.getSalary()));
-//        departmentDetailPage.setText(employee.getDepartment());
-//        addressDetailPage.setText(employee.get);
+        //display data
+        idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
+        firstNameDetailPage.setText(employee.getFirstName());
+        surnameDetailPage.setText(employee.getSurname());
+        genderDetailPage.setText(Character.toString(employee.getGender()));
+        payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
+        addressDetailPage.setText(employee.getAddress());
         
+        for(Department department : departments)
+        {
+             for(Employee emp : department.getEmployees())
+             {
+                 if(emp == employee)
+                 {
+                    found = true; 
+                    dep = department;
+                 }
+             }
+        }
        
+        if(found == true)
+        {
+            depName = dep.getName();
+            departmentDetailPage.setText(depName);
+        }
     }
     
     
@@ -152,8 +173,8 @@ public class MainWindow extends javax.swing.JFrame {
         cl.show(contentPanel, "departmentDetail");
         
         // display data
-        departmentNameDetailPage.setText(dept.getName());
-        idDepartmentDetailPage.setText(Integer.toString(dept.getId()));
+//        departmentNameDetailPage.setText(dept.getName());
+//        idDepartmentDetailPage.setText(Integer.toString(dept.getId()));
         
     }
     
@@ -330,7 +351,6 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         genderDetailPage = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
-        salaryDetailPage = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
         surnameDetailPage = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
@@ -890,8 +910,6 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel29.setText("Paylevel");
 
-        salaryDetailPage.setEditable(false);
-
         jLabel30.setText("Surname");
 
         surnameDetailPage.setEditable(false);
@@ -916,9 +934,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(salaryDetailPage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(payLevelDetailPage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(payLevelDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
@@ -971,8 +987,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(jLabel29)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(payLevelDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(salaryDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(28, 28, 28)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -1611,7 +1626,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void employeesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeesTableMouseClicked
         // TODO add your handling code here:
         // fake data to test detail page
-        Employee emp = new Employee(1, "Alice Johnson", "HR", "Female", 5000);
+        Employee emp = new Employee("Zahraa", "Hubail", 'F', "Karbabad", 8);
         showEmployeeDetails(emp);
 
 
@@ -1641,9 +1656,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void editEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEmployeeButtonActionPerformed
         // TODO add your handling code here:
-        Employee emp = new Employee(1, "Alice Johnson", "HR", "Female", 5000);
-        
-        EditEmployeeForm editForm = new EditEmployeeForm(emp);
+       EditEmployeeForm editForm = new EditEmployeeForm(selectedEmployee);
         editForm.setVisible(true);
 
 
@@ -1658,8 +1671,8 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         // fake data to test detail page
         // fake data
-        Department dept = new Department(101, "IT", "HQ");
-        showDepartmentDetails(dept);
+//        Department dept = new Department(101, "IT", "HQ");
+//        showDepartmentDetails(dept);
 
     }//GEN-LAST:event_departmentsTableMouseClicked
 
@@ -1683,10 +1696,10 @@ public class MainWindow extends javax.swing.JFrame {
     private void editDepartmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDepartmentButtonActionPerformed
         // TODO add your handling code here:
         // fake data
-        Department dept = new Department(1, "IT", "HQ");
+//        Department dept = new Department(1, "IT", "HQ");
         
-        EditDepartmentForm editForm = new EditDepartmentForm(dept);
-        editForm.setVisible(true);
+//        EditDepartmentForm editForm = new EditDepartmentForm(dept);
+//        editForm.setVisible(true);
 
 
     }//GEN-LAST:event_editDepartmentButtonActionPerformed
@@ -1866,7 +1879,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel reportPanel;
     private javax.swing.JTextPane reportTextPane;
     private javax.swing.JPanel rightPanel;
-    private javax.swing.JTextField salaryDetailPage;
     private javax.swing.JTextField searchDepartmentsField;
     private javax.swing.JTextField searchEmployeesTextField;
     private javax.swing.JPanel sidemenuPanel;
