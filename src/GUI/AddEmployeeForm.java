@@ -7,6 +7,7 @@ import Logic.*;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -14,6 +15,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AddEmployeeForm extends javax.swing.JFrame {
     MainWindow main;
+           ArrayList<Department> departments = main.departments;
+       ArrayList<Employee> allEmployees = main.allEmployees;
     /**
      * Creates new form AddEmployeeForm
      */
@@ -24,11 +27,34 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         initComponents();
         
        this.main = main;
+
                         
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
+        
+        // populate combo box
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        model.addElement(null); // Default option
+
+        for (Department dept : departments) {
+            model.addElement(dept.getName());
+        }
+
+        departmentForEmployeeCombo1.setModel(model);
+        
+        // populate pay level
+        payLevelForEmployeeCombo1.removeAllItems();
+        payLevelForEmployeeCombo1.addItem("Select Annual Salary");
+        payLevelForEmployeeCombo1.addItem("Level 1 - BHD 44,245.75");
+        payLevelForEmployeeCombo1.addItem("Level 2 - BHD 48,670.32");
+        payLevelForEmployeeCombo1.addItem("Level 3 - BHD 53,537.35");
+        payLevelForEmployeeCombo1.addItem("Level 4 - BHD 58,891.09");
+        payLevelForEmployeeCombo1.addItem("Level 5 - BHD 64,780.20");
+        payLevelForEmployeeCombo1.addItem("Level 6 - BHD 71,258.22");
+        payLevelForEmployeeCombo1.addItem("Level 7 - BHD 80,946.95");
+        payLevelForEmployeeCombo1.addItem("Level 8 - BHD 96,336.34");
     }
 
     /**
@@ -40,6 +66,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        genderGroup = new javax.swing.ButtonGroup();
         jLabel22 = new javax.swing.JLabel();
         departmentForEmployeeCombo1 = new javax.swing.JComboBox<>();
         cancelEmployeeFormButton = new javax.swing.JButton();
@@ -70,6 +97,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
             }
         });
 
+        genderGroup.add(maleButton1);
         maleButton1.setText("Male");
         maleButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -97,6 +125,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
             }
         });
 
+        genderGroup.add(femaleButton1);
         femaleButton1.setText("Female");
 
         jLabel26.setText("Gender");
@@ -104,6 +133,11 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         jLabel19.setText("Pay Level");
 
         payLevelForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select pay level", "Item 2", "Item 3", "Item 4" }));
+        payLevelForEmployeeCombo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payLevelForEmployeeCombo1ActionPerformed(evt);
+            }
+        });
 
         jLabel21.setText("Address");
 
@@ -266,8 +300,11 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         }
 
         // Get selected department (can be null)
-        Department selectedDepartment = (Department) departmentForEmployeeCombo1.getSelectedItem();
-        Integer departmentId = (selectedDepartment != null) ? selectedDepartment.getDeptID() : null;
+        String selectedDepartmentName = (String) departmentForEmployeeCombo1.getSelectedItem();
+        Integer departmentId = (selectedDepartmentName != null) ? Department.getIdByDepartmentName(departments, selectedDepartmentName) : null;
+        System.out.println("deptid");
+        System.out.println(departmentId);
+
 
         // Create new employee
         Employee newEmployee = new Employee(firstName, lastName, gender, address, payLevel, departmentId);
@@ -298,6 +335,10 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         // Close the form
         this.dispose();
     }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
+
+    private void payLevelForEmployeeCombo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelForEmployeeCombo1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_payLevelForEmployeeCombo1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -341,6 +382,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> departmentForEmployeeCombo1;
     private javax.swing.JRadioButton femaleButton1;
     private javax.swing.JTextField firstNameField1;
+    private javax.swing.ButtonGroup genderGroup;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;

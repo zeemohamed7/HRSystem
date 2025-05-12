@@ -9,7 +9,7 @@ package Logic;
  * @author zainab
  */
 public class Employee {
-    private static int staticEmployeeId = 0;
+    private static int staticEmployeeId = 1;
     private int employeeId;
     private String firstName;
     private String surname;

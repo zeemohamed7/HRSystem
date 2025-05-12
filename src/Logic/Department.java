@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 
 public class Department {
-    private int staticDeptId = 0;
+    private static int staticDeptId = 1;
     private int deptID;
     private String name;
     private String location;
@@ -23,14 +23,14 @@ public class Department {
 
     //Constructor without department head
     public Department(String name, String location) {
-        deptID = staticDeptId++;
+        this.deptID = staticDeptId++;
         this.name = name;
         this.location = location;
     }
 
     //Constructor with department head
     public Department(String name, String location, Employee departmentHead) {
-        deptID = staticDeptId++;
+        this.deptID = staticDeptId++;
         this.name = name;
         this.location = location;
         this.departmentHead = departmentHead;
@@ -65,7 +65,7 @@ public class Department {
     }
         @Override
     public String toString() {
-        return name;  // This makes the JComboBox display the department name
+            return (deptID == 0) ? "Select Department" : name; //  makes jcombo display the department name
     }
     // Looks up department name by ID
         public static String getDepartmentNameById(ArrayList<Department> departments, int id) {
@@ -75,6 +75,15 @@ public class Department {
             }
         }
         return "Unknown";
+    }
+    // Looks up ID name by name
+        public static int getIdByDepartmentName(ArrayList<Department> departments, String name) {
+        for (Department dept : departments) {
+            if (dept.getName() == name) {
+                return dept.getDeptID();
+            }
+        }
+        return 0;
     }
 
  

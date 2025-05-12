@@ -31,17 +31,7 @@ public class MainWindow extends javax.swing.JFrame {
         allEmployees = new ArrayList();
         departments = new ArrayList();
         
-        // Initialize salary levels
-        payLevelForEmployeeCombo1.removeAllItems();
-        payLevelForEmployeeCombo1.addItem("Select Annual Salary");
-        payLevelForEmployeeCombo1.addItem("Level 1 - BHD 44,245.75");
-        payLevelForEmployeeCombo1.addItem("Level 2 - BHD 48,670.32");
-        payLevelForEmployeeCombo1.addItem("Level 3 - BHD 53,537.35");
-        payLevelForEmployeeCombo1.addItem("Level 4 - BHD 58,891.09");
-        payLevelForEmployeeCombo1.addItem("Level 5 - BHD 64,780.20");
-        payLevelForEmployeeCombo1.addItem("Level 6 - BHD 71,258.22");
-        payLevelForEmployeeCombo1.addItem("Level 7 - BHD 80,946.95");
-        payLevelForEmployeeCombo1.addItem("Level 8 - BHD 96,336.34");
+
         
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
@@ -291,7 +281,6 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        genderGroup = new javax.swing.ButtonGroup();
         AddEmployeeForm = new javax.swing.JDialog();
         femaleButton1 = new javax.swing.JRadioButton();
         jLabel19 = new javax.swing.JLabel();
@@ -409,7 +398,6 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         reportTextPane = new javax.swing.JTextPane();
 
-        genderGroup.add(femaleButton1);
         femaleButton1.setText("Female");
 
         jLabel19.setText("Pay Level");
@@ -458,7 +446,6 @@ public class MainWindow extends javax.swing.JFrame {
 
         departmentForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department", "Item 2", "Item 3", "Item 4" }));
 
-        genderGroup.add(maleButton1);
         maleButton1.setText("Male");
         maleButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1536,96 +1523,96 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void addEmployeeConfirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeConfirmButton1ActionPerformed
-        // Get values from form fields
-        String firstName = firstNameField1.getText().trim();
-        String lastName = lastNameField1.getText().trim();
-        String address = addressField1.getText().trim();
-        
-        // Validate required fields
-        if (firstName.isEmpty()) {
-            showErrorToast(this, "First name is required");
-            firstNameField1.requestFocus();
-            return;
-        }
-        
-        if (lastName.isEmpty()) {
-            showErrorToast(this, "Last name is required");
-            lastNameField1.requestFocus();
-            return;
-        }
-        
-        if (address.isEmpty()) {
-            showErrorToast(this, "Address is required");
-            addressField1.requestFocus();
-            return;
-        }
-        
-        // Validate gender selection
-        char gender;
-        if (maleButton1.isSelected()) {
-            gender = 'M';
-        } else if (femaleButton1.isSelected()) {
-            gender = 'F';
-        } else {
-            showErrorToast(this, "Please select a gender");
-            return;
-        }
-        
-        // Get salary from combo box
-        String salaryStr = (String) payLevelForEmployeeCombo1.getSelectedItem();
-        if (salaryStr == null || salaryStr.equals("Select Annual Salary")) {
-            showErrorToast(this, "Please select an annual salary");
-            return;
-        }
-        
-        // Extract level and salary amount (e.g., "Level 1 - BHD 44,245.75")
-//        double salary;
-        int payLevel;
-        try {
-            // Extract level number (e.g., "Level 1" -> 1)
-            payLevel = Integer.parseInt(salaryStr.split(" - ")[0].substring(6));
-            
-            // Extract salary amount (get the part after "BHD ")
-//            String amountStr = salaryStr.split("BHD ")[1];
-//            salary = Double.parseDouble(amountStr.replace(",", ""));
-        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            showErrorToast(this, "Invalid salary format");
-            return;
-        }
-        
-        // Get selected department (can be null)
-        Department selectedDepartment = (Department) departmentForEmployeeCombo1.getSelectedItem();
-        Integer departmentId = (selectedDepartment != null) ? selectedDepartment.getDeptID() : null;
-
-        // Create new employee
-        Employee newEmployee = new Employee(firstName, lastName, gender, address, payLevel, departmentId);
-
-        
-        // Add to employees list
-        allEmployees.add(newEmployee);
-        
-        // Update employees table
-        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-        model.addRow(new Object[]{
-            newEmployee.getEmployeeId(),
-            newEmployee.getFirstName() + " " + newEmployee.getSurname(),
-            (selectedDepartment != null) ? selectedDepartment.getName() : "No Department",
-            newEmployee.getGender(),
-            newEmployee.getPayLevel()
-        });
-        // Clear form fields
-        firstNameField1.setText("");
-        lastNameField1.setText("");
-        addressField1.setText("");
-        genderGroup.clearSelection();
-        payLevelForEmployeeCombo1.setSelectedIndex(0);
-        departmentForEmployeeCombo1.setSelectedIndex(0);
-        
-        // Show success message
-        showSuccessToast(this, "Employee added successfully!");
-        
-        // Close the form
-        AddEmployeeForm.dispose();
+//        // Get values from form fields
+//        String firstName = firstNameField1.getText().trim();
+//        String lastName = lastNameField1.getText().trim();
+//        String address = addressField1.getText().trim();
+//        
+//        // Validate required fields
+//        if (firstName.isEmpty()) {
+//            showErrorToast(this, "First name is required");
+//            firstNameField1.requestFocus();
+//            return;
+//        }
+//        
+//        if (lastName.isEmpty()) {
+//            showErrorToast(this, "Last name is required");
+//            lastNameField1.requestFocus();
+//            return;
+//        }
+//        
+//        if (address.isEmpty()) {
+//            showErrorToast(this, "Address is required");
+//            addressField1.requestFocus();
+//            return;
+//        }
+//        
+//        // Validate gender selection
+//        char gender;
+//        if (maleButton1.isSelected()) {
+//            gender = 'M';
+//        } else if (femaleButton1.isSelected()) {
+//            gender = 'F';
+//        } else {
+//            showErrorToast(this, "Please select a gender");
+//            return;
+//        }
+//        
+//        // Get salary from combo box
+//        String salaryStr = (String) payLevelForEmployeeCombo1.getSelectedItem();
+//        if (salaryStr == null || salaryStr.equals("Select Annual Salary")) {
+//            showErrorToast(this, "Please select an annual salary");
+//            return;
+//        }
+//        
+//        // Extract level and salary amount (e.g., "Level 1 - BHD 44,245.75")
+////        double salary;
+//        int payLevel;
+//        try {
+//            // Extract level number (e.g., "Level 1" -> 1)
+//            payLevel = Integer.parseInt(salaryStr.split(" - ")[0].substring(6));
+//            
+//            // Extract salary amount (get the part after "BHD ")
+////            String amountStr = salaryStr.split("BHD ")[1];
+////            salary = Double.parseDouble(amountStr.replace(",", ""));
+//        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+//            showErrorToast(this, "Invalid salary format");
+//            return;
+//        }
+//        
+//        // Get selected department (can be null)
+//        Department selectedDepartment = (Department) departmentForEmployeeCombo1.getSelectedItem();
+//        Integer departmentId = (selectedDepartment != null) ? selectedDepartment.getDeptID() : null;
+//
+//        // Create new employee
+//        Employee newEmployee = new Employee(firstName, lastName, gender, address, payLevel, departmentId);
+//
+//        
+//        // Add to employees list
+//        allEmployees.add(newEmployee);
+//        
+//        // Update employees table
+//        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+//        model.addRow(new Object[]{
+//            newEmployee.getEmployeeId(),
+//            newEmployee.getFirstName() + " " + newEmployee.getSurname(),
+//            (selectedDepartment != null) ? selectedDepartment.getName() : "No Department",
+//            newEmployee.getGender(),
+//            newEmployee.getPayLevel()
+//        });
+//        // Clear form fields
+//        firstNameField1.setText("");
+//        lastNameField1.setText("");
+//        addressField1.setText("");
+//        genderGroup.clearSelection();
+//        payLevelForEmployeeCombo1.setSelectedIndex(0);
+//        departmentForEmployeeCombo1.setSelectedIndex(0);
+//        
+//        // Show success message
+//        showSuccessToast(this, "Employee added successfully!");
+//        
+//        // Close the form
+//        AddEmployeeForm.dispose();
     }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
 
     private void cancelEmployeeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelEmployeeFormButtonActionPerformed
@@ -1989,7 +1976,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField firstNameDetailPage;
     private javax.swing.JTextField firstNameField1;
     private javax.swing.JTextField genderDetailPage;
-    private javax.swing.ButtonGroup genderGroup;
     private javax.swing.JButton generateReportButton;
     private javax.swing.JPanel headerPanel;
     private javax.swing.JTextField idDepartmentDetailPage;
