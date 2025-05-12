@@ -141,6 +141,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Set model to employees table
     employeesTable.setModel(model);
+    
 }
 
 
@@ -1592,23 +1593,26 @@ public class MainWindow extends javax.swing.JFrame {
             return;
         }
         
+        // Get selected department (can be null)
+        Department selectedDepartment = (Department) departmentForEmployeeCombo1.getSelectedItem();
+        Integer departmentId = (selectedDepartment != null) ? selectedDepartment.getDeptID() : null;
+
         // Create new employee
-         Employee newEmployee = new Employee(firstName, lastName, gender, address, payLevel);
+        Employee newEmployee = new Employee(firstName, lastName, gender, address, payLevel, departmentId);
 
         
         // Add to employees list
         allEmployees.add(newEmployee);
         
         // Update employees table
-//        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-//        model.addRow(new Object[]{
-//            newEmployee.getEmployeeId(),
-//            newEmployee.getFirstName() + " " + newEmployee.getSurname(),
-//            departmentForEmployeeCombo1.getSelectedItem(),
-//            newEmployee.getGender(),
-//            String.format("BHD %.2f", newEmployee.getSalary())
-//        });
-        
+        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+        model.addRow(new Object[]{
+            newEmployee.getEmployeeId(),
+            newEmployee.getFirstName() + " " + newEmployee.getSurname(),
+            (selectedDepartment != null) ? selectedDepartment.getName() : "No Department",
+            newEmployee.getGender(),
+            newEmployee.getPayLevel()
+        });
         // Clear form fields
         firstNameField1.setText("");
         lastNameField1.setText("");
@@ -1651,11 +1655,26 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void addEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeButtonActionPerformed
         // TODO add your handling code here:
-        AddEmployeeForm.setTitle("Add Employee");
-        AddEmployeeForm.setSize(500,500);
-        AddEmployeeForm.setLocationRelativeTo(null);
-        AddEmployeeForm.setModal(true); 
-        AddEmployeeForm.setVisible(true);
+    AddEmployeeForm addEmployeeForm = new AddEmployeeForm();
+
+    // Populate the department combo box here
+    DefaultComboBoxModel<String> departmentModel = new DefaultComboBoxModel<>();
+    
+    // Assuming allDepartments is a list of Department objects
+    for (Department department : departments) {
+        departmentModel.addElement(department.getName());
+    }
+    
+    // Set the combo box model in the form
+    addEmployeeForm.departmentForEmployeeCombo1.setModel(departmentModel);
+
+    // Set up the AddEmployeeForm dialog
+    addEmployeeForm.setTitle("Add Employee");
+    addEmployeeForm.setSize(500, 500);
+    addEmployeeForm.setLocationRelativeTo(null);
+    addEmployeeForm.setModal(true);
+    addEmployeeForm.setVisible(true);
+
         
     }//GEN-LAST:event_addEmployeeButtonActionPerformed
 
@@ -1942,7 +1961,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog AddDepartmentForm;
-    private javax.swing.JDialog AddEmployeeForm;
+    public javax.swing.JDialog AddEmployeeForm;
     private javax.swing.JDialog ConfirmDelete;
     private javax.swing.JPanel DashboardPanel;
     private javax.swing.JPanel LoginPanel;

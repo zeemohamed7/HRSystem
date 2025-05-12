@@ -5,6 +5,9 @@
     <Component class="javax.swing.ButtonGroup" name="genderGroup">
     </Component>
     <Container class="javax.swing.JDialog" name="AddEmployeeForm">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
 
       <Layout>
         <DimensionLayout dim="0">

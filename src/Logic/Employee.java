@@ -9,7 +9,7 @@ package Logic;
  * @author zainab
  */
 public class Employee {
-    private int staticEmployeeId = 0;
+    private static int staticEmployeeId = 0;
     private int employeeId;
     private String firstName;
     private String surname;
@@ -17,22 +17,24 @@ public class Employee {
     private String address;
     private int payLevel;  
     private boolean isHead;
-    private int deptID;
+    private Integer deptID; // converted to Integer as it can be null
 
     public Employee() {
     }
 
     public Employee(String firstName, String surname, char gender, String address, int payLevel) {
-        this.employeeId = employeeId;
+        this.employeeId = staticEmployeeId++;
         this.firstName = firstName;
         this.surname = surname;
         this.gender = gender;
         this.address = address;
         this.payLevel = payLevel;
+        this.deptID = null;
+
     }
     
     public Employee(String firstName, String surname, char gender, String address, int payLevel, int deptID) {
-        this.employeeId = employeeId;
+        this.employeeId = staticEmployeeId;
         this.firstName = firstName;
         this.surname = surname;
         this.gender = gender;
