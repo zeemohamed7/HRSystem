@@ -31,7 +31,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
-        firstNameEditField.setText(emp.getName());
+//        firstNameEditField.setText(emp.getName());
     }
 
     /**

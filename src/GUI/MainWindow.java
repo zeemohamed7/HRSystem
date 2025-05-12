@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import Logic.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,9 +18,16 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
+    
+    private ArrayList<Employee> allEmployees;
+    private ArrayList<Department> departments;
+            
     public MainWindow() {
         initComponents();
-                
+              
+        allEmployees = new ArrayList();
+        departments = new ArrayList();
+        
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
@@ -124,15 +132,15 @@ public class MainWindow extends javax.swing.JFrame {
         cl.show(contentPanel, "employeeDetail");
         
         // display data
-        idDetailPage.setText(Integer.toString(employee.getId()));
-        firstNameDetailPage.setText(employee.getName());
+//        idDetailPage.setText(Integer.toString(employee.getEmployeeId());
+//        firstNameDetailPage.setText(employee.getFirstName());
 //        surnameDetailPage.setText(employee.getName());
-        genderDetailPage.setText(employee.getGender());
-        salaryDetailPage.setText(Double.toString(employee.getSalary()));
-        departmentDetailPage.setText(employee.getDepartment());
+//        genderDetailPage.setText(employee.getGender());
+//        salaryDetailPage.setText(Double.toString(employee.getSalary()));
+//        departmentDetailPage.setText(employee.getDepartment());
+//        addressDetailPage.setText(employee.get);
         
-        
-
+       
     }
     
     
@@ -741,9 +749,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(departmentsButton)
                 .addGap(18, 18, 18)
                 .addComponent(payrollReportButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 463, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 351, Short.MAX_VALUE)
                 .addComponent(exitButton)
-                .addGap(174, 174, 174))
+                .addGap(286, 286, 286))
         );
 
         jLabel7.setText("HRConnect");
@@ -1284,7 +1292,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jLabel18)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
             .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(departmentDetailPanelLayout.createSequentialGroup()
                     .addGap(98, 98, 98)
