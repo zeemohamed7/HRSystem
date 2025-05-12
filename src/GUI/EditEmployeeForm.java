@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,10 +20,16 @@ import javax.swing.Timer;
  * @author zainab
  */
 public class EditEmployeeForm extends javax.swing.JFrame {
+    
+        private Employee selectedEmployee;
+        MainWindow main;
+        ArrayList<Department> departments = main.departments;
+
     /**
      * Creates new form EditEmployeeForm
      */
     public EditEmployeeForm() {
+        initComponents();
     }
     public EditEmployeeForm(Employee employee) {
         initComponents();
@@ -30,63 +37,59 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
+        selectedEmployee = employee;
+        populateDepartmentsComboBox();      // Populate the combo box
+        preSelectDepartment();              // Pre-select the department
         
-        boolean found = false;
-        Department dep = null;
-        String depName;
         
         firstNameEditField.setText(employee.getFirstName());
         lastNameEditField.setText(employee.getSurname());
         addressEditField.setText(employee.getAddress());
         
         // add gender
-//        if(employee.getGender() == 'M')
-//        {
-//            maleEditButton.setSelected(true);
-//        }
-//        
-//        else if(employee.getGender() == 'F')
-//        {
-//            femaleEditButton.setSelected(true);
-//        }
-//        
-//        // add current department of employee
-//        for(Department department : MainWindow.departments)
-//        {
-//             for(Employee emp : department.getEmployees())
-//             {
-//                 if(emp == employee)
-//                 {
-//                    found = true; 
-//                    dep = department;
-//                 }
-//             }
-//        }
-//       
-//        if(found == true)
-//        {
-//            depName = dep.getName();
-//            departmentEditCombo.addItem(depName);
-//        }
-//        
-//        else if(found == false)
-//        {
-//            departmentEditCombo.addItem("Null");
-//        }
-//        
-//        for(Department department : MainWindow.departments)
-//        {
-//            if(department != dep)
-//            {
-//                departmentEditCombo.addItem(department.getName());
-//            }
-//        }
+        if(employee.getGender() == 'M')
+        {
+            maleEditButton.setSelected(true);
+        }
+        
+        else if(employee.getGender() == 'F')
+        {
+            femaleEditButton.setSelected(true);
+        }
+        
+        // add current department of employee
+        
         
         
         // add pay level 
         
     }
 
+    private void populateDepartmentsComboBox() {
+        departmentEditCombo.removeAllItems();  // Clear all existing items
+
+        // Add "No Department" option at the top (optional)
+        departmentEditCombo.addItem("No Department");
+
+        // Now re-populate the combo box with the updated list of departments
+        for (Department dept : departments) {
+            departmentEditCombo.addItem(dept.getName());  // Add department names
+        }
+    }
+
+    private void preSelectDepartment() {
+        // Get the department ID of the current employee
+        Integer deptID = selectedEmployee.getDeptID();
+        String departmentName = "No Department";  // Default if no department is assigned
+
+        if (deptID != null) {
+            // Look up the department name by its ID
+            departmentName = Department.getDepartmentNameById(departments, deptID);
+        }
+
+        // Set the selected item in the combo box to the employee's current department
+        departmentEditCombo.setSelectedItem(departmentName);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -96,6 +99,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        editGenderGroup = new javax.swing.ButtonGroup();
         jLabel22 = new javax.swing.JLabel();
         departmentEditCombo = new javax.swing.JComboBox<>();
         cancelButton1 = new javax.swing.JButton();
@@ -130,6 +134,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
             }
         });
 
+        editGenderGroup.add(maleEditButton);
         maleEditButton.setText("Male");
         maleEditButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,6 +162,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
             }
         });
 
+        editGenderGroup.add(femaleEditButton);
         femaleEditButton.setText("Female");
 
         jLabel26.setText("Gender");
@@ -369,6 +375,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
     private javax.swing.JTextArea addressEditField;
     private javax.swing.JButton cancelButton1;
     private javax.swing.JComboBox<String> departmentEditCombo;
+    private javax.swing.ButtonGroup editGenderGroup;
     private javax.swing.JRadioButton femaleEditButton;
     private javax.swing.JTextField firstNameEditField;
     private javax.swing.JLabel jLabel19;

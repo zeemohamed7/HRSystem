@@ -141,40 +141,25 @@ public class MainWindow extends javax.swing.JFrame {
 
     // show employee detail 
     private void showEmployeeDetails(Employee employee) {
-//        selectedEmployee = employee;
-//        // show employee detail page
-//        selectedEmployee = employee;
-//        CardLayout cl = (CardLayout) contentPanel.getLayout();
-//        cl.show(contentPanel, "employeeDetail");
-//        boolean found = false;
-//        Department dep = null;
-//        String depName;
-//        
-//        //display data
-//        idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
-//        firstNameDetailPage.setText(employee.getFirstName());
-//        surnameDetailPage.setText(employee.getSurname());
-//        genderDetailPage.setText(Character.toString(employee.getGender()));
-//        payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
-//        addressDetailPage.setText(employee.getAddress());
-//        
-//        for(Department department : departments)
-//        {
-//             for(Employee emp : department.getEmployees())
-//             {
-//                 if(emp == employee)
-//                 {
-//                    found = true; 
-//                    dep = department;
-//                 }
-//             }
-//        }
-//       
-//        if(found == true)
-//        {
-//            depName = dep.getName();
-//            departmentDetailPage.setText(depName);
-//        }
+        selectedEmployee = employee;
+        // show employee detail page
+        selectedEmployee = employee;
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "employeeDetail");
+        
+        //display data
+        idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
+        firstNameDetailPage.setText(employee.getFirstName());
+        surnameDetailPage.setText(employee.getSurname());
+        genderDetailPage.setText(Character.toString(employee.getGender()));
+        payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
+        addressDetailPage.setText(employee.getAddress());
+        String department = "No Department";  
+        if (employee.getDeptID() != null) {
+            department = Department.getDepartmentNameById(departments, employee.getDeptID());
+        }
+        departmentDetailPage.setText(department);        
+        
     }
     
     
@@ -1524,32 +1509,28 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void employeesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeesTableMouseClicked
         // TODO add your handling code here:
-        // fake data to test detail page
 
+        int selectedRow = employeesTable.getSelectedRow();
+        // check if row selected
+       if (selectedRow != -1) {
+           // get employee id
+           Object employeeId = employeesTable.getValueAt(selectedRow, 0);
 
+           Employee employee = null;
+           // find employee by ID to send over to detail page
+           for (Employee emp : allEmployees) {
+               if (emp.getEmployeeId() == (Integer) employeeId) { // cast to compare
+                   employee = emp;
+                   break;
+               }
+           }
 
-        // get row selected
-//        int selectedRow = employeesTable.getSelectedRow();
-//        // check if row selected
-//       if (selectedRow != -1) {
-//           // get employee id
-//           Object employeeId = employeesTable.getValueAt(selectedRow, 0);
-//
-//           Employee employee = null;
-//           // find employee by ID to send over to detail page
-//           for (Employee emp : employeeList) {
-//               if (emp.getId().equals(employeeId)) {
-//                   employee = emp;
-//                   break;
-//               }
-//           }
-//
-//           if (employee != null) {
-//               showEmployeeDetails(employee);
-//           } else {
-//               JOptionPane.showMessageDialog(null, "Employee not found");
-//           }
-//       }
+           if (employee != null) {
+               showEmployeeDetails(employee);
+           } else {
+               JOptionPane.showMessageDialog(null, "Employee not found");
+           }
+       }
     }//GEN-LAST:event_employeesTableMouseClicked
 
     private void editEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEmployeeButtonActionPerformed
