@@ -34,7 +34,7 @@ public class Employee {
     }
     
     public Employee(String firstName, String surname, char gender, String address, int payLevel, int deptID) {
-        this.employeeId = staticEmployeeId;
+        this.employeeId = staticEmployeeId++;
         this.firstName = firstName;
         this.surname = surname;
         this.gender = gender;

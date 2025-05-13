@@ -7,27 +7,39 @@ package GUI;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import Logic.*;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author zainab
  */
 public class EditDepartmentForm extends javax.swing.JFrame {
-
+    private Department selectedDepartment;
+    private MainWindow main;
     /**
      * Creates new form EditDepartmentForm
      */
     public EditDepartmentForm() {
     }
-    public EditDepartmentForm(Department dept) {
+    public EditDepartmentForm(MainWindow main, Department dept) {
         initComponents();
                         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
+        this.main = main;
+        this.selectedDepartment = dept;
         
-        // initialise departments
-        departmentNameField.setText(dept.getName());
+        // initialise departments details for edit
+         departmentNameField.setText(dept.getName());
+        locationField.setText(dept.getLocation());
+
+        // Set the department head (if available)
+        if (selectedDepartment.getDepartmentHead() != null) {
+            departmentHeadSelect.setSelectedItem(selectedDepartment.getDepartmentHead().getFirstName());
+        } else {
+            departmentHeadSelect.setSelectedItem("No Department Head");
+        }
     }
 
     /**
@@ -46,7 +58,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         departmentHeadSelect = new javax.swing.JComboBox<>();
         cancelButton2 = new javax.swing.JButton();
-        addDepartmentConfirmButton = new javax.swing.JButton();
+        editDepartmentSaveButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,10 +89,10 @@ public class EditDepartmentForm extends javax.swing.JFrame {
             }
         });
 
-        addDepartmentConfirmButton.setText("Save Changes");
-        addDepartmentConfirmButton.addActionListener(new java.awt.event.ActionListener() {
+        editDepartmentSaveButton.setText("Save Changes");
+        editDepartmentSaveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addDepartmentConfirmButtonActionPerformed(evt);
+                editDepartmentSaveButtonActionPerformed(evt);
             }
         });
 
@@ -94,7 +106,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cancelButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(addDepartmentConfirmButton))
+                        .addComponent(editDepartmentSaveButton))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel9)
                         .addComponent(departmentNameField)
@@ -122,7 +134,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton2)
-                    .addComponent(addDepartmentConfirmButton))
+                    .addComponent(editDepartmentSaveButton))
                 .addContainerGap(68, Short.MAX_VALUE))
         );
 
@@ -143,9 +155,33 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_cancelButton2ActionPerformed
 
-    private void addDepartmentConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentConfirmButtonActionPerformed
+    private void editDepartmentSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDepartmentSaveButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_addDepartmentConfirmButtonActionPerformed
+        String departmentName = departmentNameField.getText();
+        String location = locationField.getText();
+        String headName = (String) departmentHeadSelect.getSelectedItem();
+
+        // Validate the fields (optional)
+        if (departmentNameField.getText().isEmpty() || locationField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+            return;
+        }
+
+        // Get department head (if selected)
+        Employee departmentHead = null;
+        if (!headName.equals("No Department Head")) {
+//            departmentHead = findEmployeeByName(headName);
+        }
+
+        // Update the department object
+        selectedDepartment.setName(departmentName);
+        selectedDepartment.setLocation(location);
+        selectedDepartment.setDepartmentHead(departmentHead);
+
+        main.refreshDepartmentTable();  
+        main.updateDepartmentDetails(selectedDepartment);
+        this.dispose();  
+    }//GEN-LAST:event_editDepartmentSaveButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -183,10 +219,10 @@ public class EditDepartmentForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addDepartmentConfirmButton;
     private javax.swing.JButton cancelButton2;
     private javax.swing.JComboBox<String> departmentHeadSelect;
     private javax.swing.JTextField departmentNameField;
+    private javax.swing.JButton editDepartmentSaveButton;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel9;

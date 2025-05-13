@@ -29,7 +29,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="cancelButton2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="addDepartmentConfirmButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="editDepartmentSaveButton" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
                       <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -62,7 +62,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cancelButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="addDepartmentConfirmButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="editDepartmentSaveButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="68" max="32767" attributes="0"/>
           </Group>
@@ -118,12 +118,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelButton2ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="addDepartmentConfirmButton">
+    <Component class="javax.swing.JButton" name="editDepartmentSaveButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Save Changes"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addDepartmentConfirmButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editDepartmentSaveButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

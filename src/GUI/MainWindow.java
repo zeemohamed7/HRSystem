@@ -21,8 +21,11 @@ public class MainWindow extends javax.swing.JFrame {
     public static ArrayList<Employee> allEmployees;
     public static ArrayList<Department> departments;
     
+    
     private Employee selectedEmployee;
     private Department selectedDepartment;
+    private DefaultTableModel deptModel;
+
 
             
     public MainWindow() {
@@ -88,12 +91,10 @@ public class MainWindow extends javax.swing.JFrame {
 
         
         
-        // Fake Department table
-        // Fake column headers for the department table
         String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
 
         // Create the table model
-        DefaultTableModel deptModel = new DefaultTableModel(departmentColumnNames, 0) {
+        deptModel = new DefaultTableModel(departmentColumnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Make all cells non-editable
@@ -174,6 +175,27 @@ public class MainWindow extends javax.swing.JFrame {
 
         departmentNameDetailPage.setText(dept.getName());
         idDepartmentDetailPage.setText(Integer.toString(dept.getDeptID()));
+        locationDetailPage.setText(dept.getLocation());
+       
+        // if there is a department head (later)
+        
+        
+        // display employees in department
+            // Assuming you have a list of employees (e.g., allEmployees)
+    StringBuilder employeeDetails = new StringBuilder();
+
+    for (Employee employee : allEmployees) {
+        if (employee.getDeptID() == (Integer) dept.getDeptID()) {
+            // Add employee details to a display container
+            employeeDetails.append("ID: ").append(employee.getEmployeeId())
+                           .append(", Name: ").append(employee.getFirstName())
+                           .append(" ").append(employee.getSurname())
+                           .append("\n");
+        }
+    }
+
+    // Assuming you have a JTextArea or JLabel for displaying employee details
+    employeeListArea.setText(employeeDetails.toString());
         
     }
     
@@ -369,8 +391,8 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel38 = new javax.swing.JLabel();
         deptHeadDetail = new javax.swing.JTextField();
         departmentNameDetailPage = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        employeesInDeptTable = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        employeeListArea = new javax.swing.JTextPane();
         payrollPanel = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
         generateReportButton = new javax.swing.JButton();
@@ -1068,31 +1090,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         departmentNameDetailPage.setText("Department Name Placeholder");
 
-        employeesInDeptTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "ID", "Name", "Annual Pay"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        employeesInDeptTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                employeesInDeptTableMouseClicked(evt);
-            }
-        });
-        jScrollPane5.setViewportView(employeesInDeptTable);
+        employeeListArea.setEditable(false);
+        jScrollPane3.setViewportView(employeeListArea);
 
         javax.swing.GroupLayout departmentDetailPanelLayout = new javax.swing.GroupLayout(departmentDetailPanel);
         departmentDetailPanel.setLayout(departmentDetailPanelLayout);
@@ -1109,7 +1108,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(departmentDetailPanelLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18)
                     .addGroup(departmentDetailPanelLayout.createSequentialGroup()
                         .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1128,7 +1127,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(deptHeadDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel38))))
-                .addGap(0, 61, Short.MAX_VALUE))
+                .addGap(0, 67, Short.MAX_VALUE))
             .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(departmentDetailPanelLayout.createSequentialGroup()
                     .addGap(125, 125, 125)
@@ -1162,9 +1161,9 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(deptHeadDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
                 .addComponent(jLabel18)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addGap(33, 33, 33)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(83, Short.MAX_VALUE))
             .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(departmentDetailPanelLayout.createSequentialGroup()
                     .addGap(98, 98, 98)
@@ -1553,8 +1552,27 @@ public class MainWindow extends javax.swing.JFrame {
         // fake data
       
         
-//        Department dept = new Department(101, "IT", "HQ");
-//        showDepartmentDetails(dept);
+        int selectedRow = departmentsTable.getSelectedRow();
+        // check if row selected
+       if (selectedRow != -1) {
+           // get employee id
+           Object deptId = departmentsTable.getValueAt(selectedRow, 0);
+
+           Department selectedDepartment = null;
+           // find employee by ID to send over to detail page
+           for (Department dept : departments) {
+               if (dept.getDeptID() == (Integer) deptId) { // cast to compare
+                   selectedDepartment = dept;
+                   break;
+               }
+           }
+
+           if (selectedDepartment != null) {
+               showDepartmentDetails(selectedDepartment);
+           } else {
+               JOptionPane.showMessageDialog(null, "Employee not found");
+           }
+       }
 
 
     }//GEN-LAST:event_departmentsTableMouseClicked
@@ -1578,8 +1596,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void editDepartmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDepartmentButtonActionPerformed
         // TODO add your handling code here:
-        //EditDepartmentForm editForm = new EditDepartmentForm(dept);
-       // editForm.setVisible(true);
+        EditDepartmentForm editForm = new EditDepartmentForm(this, selectedDepartment);
+        editForm.setVisible(true);
 
     }//GEN-LAST:event_editDepartmentButtonActionPerformed
 
@@ -1590,11 +1608,6 @@ public class MainWindow extends javax.swing.JFrame {
     private void locationDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_locationDetailPageActionPerformed
-
-    private void employeesInDeptTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeesInDeptTableMouseClicked
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_employeesInDeptTableMouseClicked
 
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
         // TODO add your handling code here:
@@ -1635,6 +1648,7 @@ public class MainWindow extends javax.swing.JFrame {
        deleteDepartment(selectedDepartment);
        JOptionPane.showMessageDialog(this, "Department deleted succefully.");
        }
+        refreshEmployeeTable();
     }//GEN-LAST:event_deleteButton1ActionPerformed
 
     private void departmentsListSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsListSelectActionPerformed
@@ -1675,6 +1689,26 @@ public class MainWindow extends javax.swing.JFrame {
         departments.remove(department);
         refreshDepartmentsComboBox();
     }
+    
+    public void refreshDepartmentsTable() {
+        // Clear the current table data
+        deptModel.setRowCount(0);
+
+        // Iterate through the list of departments and add them to the table
+        for (Department dept : departments) {
+            // Check if department has a head, otherwise display blank
+            String headName = (dept.getDepartmentHead() != null) ? dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname() : "";
+            
+            Object[] rowData = { 
+                dept.getDeptID(), 
+                dept.getName(), 
+                dept.getLocation(), 
+                headName  // Display department head or leave blank
+            };
+            
+            deptModel.addRow(rowData);
+        }
+    }
  
     public void refreshEmployeeTable() {
         // Get the selected department from the combo box
@@ -1711,6 +1745,24 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
 
+        public void refreshDepartmentTable() {
+            // Assuming you have a JTable named departmentTable
+            DefaultTableModel model = (DefaultTableModel) departmentsTable.getModel();
+
+            // Clear existing rows
+            model.setRowCount(0);
+
+            // Populate the table with updated department data
+            for (Department dept : departments) {  // Assuming you have a method to get departments
+                // Add department data as rows
+                model.addRow(new Object[]{
+                    dept.getDeptID(), 
+                    dept.getName(), 
+                    dept.getLocation(),
+                    dept.getDepartmentHead() != null ? dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname() : "No Head"
+                });
+            }
+        }
 
         private void refreshDepartmentsComboBox() {
         departmentsListSelect.removeAllItems();  // Clear all existing items
@@ -1750,7 +1802,26 @@ public class MainWindow extends javax.swing.JFrame {
 }
 
 
-    
+    public void updateDepartmentDetails(Department updatedDepartment) {
+        if (selectedDepartment != null && selectedDepartment.getDeptID() == updatedDepartment.getDeptID()) {
+            // Update the department name
+            departmentNameDetailPage.setText(updatedDepartment.getName());
+
+            // Update the department ID
+            idDepartmentDetailPage.setText(Integer.toString(updatedDepartment.getDeptID()));
+
+            // Update the department location
+            locationDetailPage.setText(updatedDepartment.getLocation());
+
+            // Update the department head, if any
+            if (updatedDepartment.getDepartmentHead() != null) {
+                deptHeadDetail.setText(updatedDepartment.getDepartmentHead().getFirstName() + " " + updatedDepartment.getDepartmentHead().getSurname());
+            } else {
+                deptHeadDetail.setText("No Head"); // Or leave it blank
+            }
+        }
+    }
+
     
     
     /**
@@ -1819,8 +1890,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton editDepartmentButton;
     private javax.swing.JButton editEmployeeButton;
     private javax.swing.JPanel employeeDetailPanel;
+    private javax.swing.JTextPane employeeListArea;
     private javax.swing.JButton employeesButton;
-    private javax.swing.JTable employeesInDeptTable;
     private javax.swing.JPanel employeesPanel;
     private javax.swing.JTable employeesTable;
     private javax.swing.JButton exitButton;
@@ -1867,8 +1938,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
