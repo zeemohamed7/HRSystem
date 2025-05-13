@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -256,6 +257,7 @@ setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_lastNameField1ActionPerformed
 
     private void addEmployeeConfirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeConfirmButton1ActionPerformed
+        try {
         // Get values from form fields
         String firstName = firstNameField1.getText().trim();
         String lastName = lastNameField1.getText().trim();
@@ -263,19 +265,19 @@ setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         // Validate required fields
         if (firstName.isEmpty()) {
-//            showErrorToast(this, "First name is required");
+            JOptionPane.showMessageDialog(this, "First name is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
             firstNameField1.requestFocus();
             return;
         }
 
         if (lastName.isEmpty()) {
-//            showErrorToast(this, "Last name is required");
+            JOptionPane.showMessageDialog(this, "Last name is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
             lastNameField1.requestFocus();
             return;
         }
 
         if (address.isEmpty()) {
-//            showErrorToast(this, "Address is required");
+            JOptionPane.showMessageDialog(this, "Address is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
             addressField1.requestFocus();
             return;
         }
@@ -287,45 +289,45 @@ setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         } else if (femaleButton1.isSelected()) {
             gender = 'F';
         } else {
-//            showErrorToast(this, "Please select a gender");
+            JOptionPane.showMessageDialog(this, "Please select a gender.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // Get salary from combo box
         String salaryStr = (String) payLevelForEmployeeCombo1.getSelectedItem();
         if (salaryStr == null || salaryStr.equals("Select Annual Salary")) {
-//            showErrorToast(this, "Please select an annual salary");
+            JOptionPane.showMessageDialog(this, "Please select a valid pay level.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Extract level and salary amount (e.g., "Level 1 - BHD 44,245.75")
-        //        double salary;
         int payLevel;
         try {
             // Extract level number (e.g., "Level 1" -> 1)
             payLevel = Integer.parseInt(salaryStr.split(" - ")[0].substring(6));
-
-            // Extract salary amount (get the part after "BHD ")
-            //            String amountStr = salaryStr.split("BHD ")[1];
-            //            salary = Double.parseDouble(amountStr.replace(",", ""));
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-//            showErrorToast(this, "Invalid salary format");
+            JOptionPane.showMessageDialog(this, "Invalid pay level format.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // Get selected department (can be null)
         String selectedDepartmentName = (String) departmentForEmployeeCombo1.getSelectedItem();
-        Integer departmentId = (selectedDepartmentName != null) ? Department.getIdByDepartmentName(departments, selectedDepartmentName) : null;
-        // Create new employee based on whether departmentId is null or not
-           Employee newEmployee;
-           if (departmentId == null) {
-               // No department selected, create employee without department
-               newEmployee = new Employee(firstName, lastName, gender, address, payLevel);
-           } else {
-               // Department selected, create employee with department ID
-               newEmployee = new Employee(firstName, lastName, gender, address, payLevel, departmentId);
-}
+        Integer departmentId = null;
+        
+        if (selectedDepartmentName != null && !selectedDepartmentName.equals("No Department")) {
+            try {
+                departmentId = Department.getIdByDepartmentName(departments, selectedDepartmentName);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error retrieving department information: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
 
+        // Create new employee
+        Employee newEmployee;
+        if (departmentId == null) {
+            newEmployee = new Employee(firstName, lastName, gender, address, payLevel);
+        } else {
+            newEmployee = new Employee(firstName, lastName, gender, address, payLevel, departmentId);
+        }
 
         // Add to employees list
         main.allEmployees.add(newEmployee);
@@ -337,17 +339,23 @@ setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         firstNameField1.setText("");
         lastNameField1.setText("");
         addressField1.setText("");
-//        genderGroup.clearSelection();
         payLevelForEmployeeCombo1.setSelectedIndex(0);
         departmentForEmployeeCombo1.setSelectedIndex(0);
 
         // Show success message
-//        showSuccessToast(this, "Employee added successfully!");
+        JOptionPane.showMessageDialog(this, "Employee added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
         // Close the form
-               main.setVisible(true);
+        main.setVisible(true);
+        this.dispose();
 
-               this.dispose();
+    } catch (NullPointerException e) {
+        JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Unexpected error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
 
     private void payLevelForEmployeeCombo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelForEmployeeCombo1ActionPerformed

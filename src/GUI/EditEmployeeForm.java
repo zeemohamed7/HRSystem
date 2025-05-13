@@ -336,12 +336,12 @@ public class EditEmployeeForm extends javax.swing.JFrame {
 
     private void saveEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveEditButtonActionPerformed
         // TODO add your handling code here:
-        
-                
+        try {
         // Get the updated employee information
-        String firstName = firstNameEditField.getText();
-        String surname = lastNameEditField.getText();
-        String address = addressEditField.getText();
+        String firstName = firstNameEditField.getText().trim();
+        String surname = lastNameEditField.getText().trim();
+        String address = addressEditField.getText().trim();
+
         char gender = ' ';
         if (maleEditButton.isSelected()) {
             gender = 'M';
@@ -349,17 +349,18 @@ public class EditEmployeeForm extends javax.swing.JFrame {
             gender = 'F';
         }
 
-    String selectedDepartment = (String) departmentEditCombo.getSelectedItem();
-    Integer deptID = null;  // Default to no department
+        // Get selected department
+        String selectedDepartment = (String) departmentEditCombo.getSelectedItem();
+        Integer deptID = null;  // Default to no department
 
-    if (selectedDepartment != null && !selectedDepartment.equals("No Department")) {
-        for (Department dept : departments) {
-            if (dept.getName().equals(selectedDepartment)) {
-                deptID = dept.getDeptID();
-                break;
+        if (selectedDepartment != null && !selectedDepartment.equals("No Department")) {
+            for (Department dept : departments) {
+                if (dept.getName().equals(selectedDepartment)) {
+                    deptID = dept.getDeptID();
+                    break;
+                }
             }
         }
-    }
 
         // Validate and set pay level
         String selectedPayLevel = (String) payLevelEditCombo.getSelectedItem();
@@ -371,7 +372,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
                 try {
                     payLevel = Integer.parseInt(parts[0].replace("Level ", "").trim());
                 } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Invalid pay level selected.");
+                    JOptionPane.showMessageDialog(this, "Invalid pay level selected.", "Input Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -379,34 +380,46 @@ public class EditEmployeeForm extends javax.swing.JFrame {
 
         // Validate that all required fields are filled
         if (firstName.isEmpty() || surname.isEmpty() || gender == ' ' || payLevel == -1) {
-            JOptionPane.showMessageDialog(this, "Please fill in all fields and select valid options.");
+            JOptionPane.showMessageDialog(this, "Please fill in all required fields and select valid options.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // Update the selected employee object
-        selectedEmployee.setFirstName(firstName);
-        selectedEmployee.setSurname(surname);
-        selectedEmployee.setGender(gender);
-        selectedEmployee.setAddress(address);
-        selectedEmployee.setDeptID(deptID);
-        selectedEmployee.setPayLevel(payLevel);
-        
-       // Update the allEmployees list 
-        for (int i = 0; i < main.allEmployees.size(); i++) {
-            if (main.allEmployees.get(i).getEmployeeId() == selectedEmployee.getEmployeeId()) {
-                main.allEmployees.set(i, selectedEmployee);
-                break;
+        if (selectedEmployee != null) {
+            selectedEmployee.setFirstName(firstName);
+            selectedEmployee.setSurname(surname);
+            selectedEmployee.setGender(gender);
+            selectedEmployee.setAddress(address);
+            selectedEmployee.setDeptID(deptID);
+            selectedEmployee.setPayLevel(payLevel);
+
+            // Update the allEmployees list
+            for (int i = 0; i < main.allEmployees.size(); i++) {
+                if (main.allEmployees.get(i).getEmployeeId() == selectedEmployee.getEmployeeId()) {
+                    main.allEmployees.set(i, selectedEmployee);
+                    break;
+                }
             }
+
+            JOptionPane.showMessageDialog(this, "Employee information updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            // Refresh the employee table and detail page
+            main.updateEmployeeDetails(selectedEmployee);
+            main.refreshEmployeeTable();
         }
 
-        JOptionPane.showMessageDialog(this, "Employee information updated successfully!");
-
-        // refresh detail page and table
-        main.updateEmployeeDetails(selectedEmployee);
-        main.refreshEmployeeTable(); 
-        main.setEnabled(true);  
+        main.setEnabled(true);
         this.dispose();
-//        showSuccessToast(this,"Employee added successfully!");
+
+    } catch (NullPointerException e) {
+        JOptionPane.showMessageDialog(this, "An error occurred while updating the employee: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Unexpected error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+                
+
 
     }//GEN-LAST:event_saveEditButtonActionPerformed
 
@@ -425,52 +438,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_payLevelEditComboActionPerformed
 
-    
-    
-    public void showSuccessToast(JFrame parent, String message) {
-        JWindow toast = new JWindow(parent); 
-        toast.setLayout(new BorderLayout());
 
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setOpaque(true);
-        label.setBackground(new Color(60, 179, 113)); 
-        label.setForeground(Color.WHITE);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        toast.add(label, BorderLayout.CENTER);
-        toast.pack();
-
-        // Get location relative to parent window
-        int x = parent.getX() + parent.getWidth() - toast.getWidth() - 20;
-        int y = parent.getY() + parent.getHeight() - toast.getHeight() - 50;
-        toast.setLocation(x, y);
-
-        toast.setVisible(true);
-
-        // Auto-close after 3 seconds
-        new Timer(3000, e -> toast.dispose()).start();
-    }
-    public void showErrorToast(JFrame parent, String message) {
-        JWindow toast = new JWindow(parent); 
-        toast.setLayout(new BorderLayout());
-
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setOpaque(true);
-        label.setBackground(new Color(220, 53, 69)); 
-        label.setForeground(Color.WHITE);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        toast.add(label, BorderLayout.CENTER);
-        toast.pack();
-
-        // Get location relative to parent window
-        int x = parent.getX() + parent.getWidth() - toast.getWidth() - 20;
-        int y = parent.getY() + parent.getHeight() - toast.getHeight() - 50;
-        toast.setLocation(x, y);
-
-        toast.setVisible(true);
-
-        // Auto-close after 3 seconds
-        new Timer(3000, e -> toast.dispose()).start();
-    }
     /**
      * @param args the command line arguments
      */
