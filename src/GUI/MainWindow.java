@@ -152,6 +152,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     // show employee detail 
     private void showEmployeeDetails(Employee employee) {
+        selectedEmployee = null; // Reset before assigning
+        
         if (employee == null) {
             JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.WARNING_MESSAGE);
             return;
@@ -188,12 +190,18 @@ public class MainWindow extends javax.swing.JFrame {
     
     // show department detail 
     private void showDepartmentDetails(Department dept) {
+        
+
+
     if (dept == null) {
         JOptionPane.showMessageDialog(this, "No department selected.", "Error", JOptionPane.WARNING_MESSAGE);
         return;
     }
 
     selectedDepartment = dept;
+        System.out.println("NEW STUFF SHOW:");
+        System.out.println(selectedDepartment.getName());
+        System.out.println(selectedDepartment.getDepartmentHead());
 
     // Show department detail page
     CardLayout cl = (CardLayout) contentPanel.getLayout();
@@ -204,16 +212,24 @@ public class MainWindow extends javax.swing.JFrame {
         departmentNameDetailPage.setText(dept.getName());
         idDepartmentDetailPage.setText(Integer.toString(dept.getDeptID()));
         locationDetailPage.setText(dept.getLocation());
+        deptHeadDetail.setText(null);
 
         // Display department head, if applicable
-        String headName = "No Head Assigned";
-        for (Employee employee : allEmployees) {
-            if (employee.isIsHead() && employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
-                headName = employee.getFirstName() + " " + employee.getSurname();
-                break;
-            }
+        if(selectedDepartment.getDepartmentHead() != null) {
+            Employee headEmployee = selectedDepartment.getDepartmentHead();
+            deptHeadDetail.setText(headEmployee.getFirstName() + " " + headEmployee.getSurname());
+        } else {
+            deptHeadDetail.setText(null);
         }
-        deptHeadDetail.setText(headName);
+//        String headName = null;
+//        System.out.println(headName);
+//        for (Employee employee : allEmployees) {
+//            if (employee.isIsHead() && employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
+//                headName = employee.getFirstName() + " " + employee.getSurname();
+//                break;
+//            }
+//        }
+//        deptHeadDetail.setText(headName);
 
         // Display employees in the department
         StringBuilder employeeDetails = new StringBuilder();
@@ -323,7 +339,7 @@ public class MainWindow extends javax.swing.JFrame {
         new Timer(3000, e -> toast.dispose()).start();
     }
 
-    private void populateDepartmentsComboBox() {
+    public void populateDepartmentsComboBox() {
         departmentsListSelect.removeAllItems();
         departmentsListSelect.addItem("All Departments");
         for (Department dept : departments) {
@@ -343,15 +359,6 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        AddDepartmentForm = new javax.swing.JDialog();
-        jLabel9 = new javax.swing.JLabel();
-        departmentNameField = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        locationField = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
-        departmentHeadSelect = new javax.swing.JComboBox<>();
-        cancelButton2 = new javax.swing.JButton();
-        addDepartmentConfirmButton = new javax.swing.JButton();
         ConfirmDelete = new javax.swing.JDialog();
         jLabel16 = new javax.swing.JLabel();
         cancelButton3 = new javax.swing.JButton();
@@ -442,82 +449,6 @@ public class MainWindow extends javax.swing.JFrame {
         reportPanel = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         reportTextPane = new javax.swing.JTextPane();
-
-        jLabel9.setText("Department Name");
-
-        departmentNameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                departmentNameFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel10.setText("Location");
-
-        locationField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                locationFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel15.setText("Department Head");
-
-        departmentHeadSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department head", "Item 2", "Item 3", "Item 4" }));
-
-        cancelButton2.setText("Cancel");
-        cancelButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButton2ActionPerformed(evt);
-            }
-        });
-
-        addDepartmentConfirmButton.setText("Add Department");
-        addDepartmentConfirmButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addDepartmentConfirmButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout AddDepartmentFormLayout = new javax.swing.GroupLayout(AddDepartmentForm.getContentPane());
-        AddDepartmentForm.getContentPane().setLayout(AddDepartmentFormLayout);
-        AddDepartmentFormLayout.setHorizontalGroup(
-            AddDepartmentFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AddDepartmentFormLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(AddDepartmentFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(AddDepartmentFormLayout.createSequentialGroup()
-                        .addComponent(cancelButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(addDepartmentConfirmButton))
-                    .addGroup(AddDepartmentFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel9)
-                        .addComponent(departmentNameField)
-                        .addComponent(jLabel10)
-                        .addComponent(locationField, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
-                        .addComponent(jLabel15)
-                        .addComponent(departmentHeadSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
-        AddDepartmentFormLayout.setVerticalGroup(
-            AddDepartmentFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AddDepartmentFormLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(departmentNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(locationField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel15)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(departmentHeadSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(AddDepartmentFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelButton2)
-                    .addComponent(addDepartmentConfirmButton))
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
 
         jLabel16.setText("Are you sure you want to delete this? This action cannot be undone.");
 
@@ -1456,11 +1387,9 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void addDepartmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentButtonActionPerformed
         // TODO add your handling code here:
-        AddDepartmentForm.setTitle("Add Department");
-        AddDepartmentForm.setSize(450,300);
-        AddDepartmentForm.setLocationRelativeTo(null);
-        AddDepartmentForm.setModal(true); 
-        AddDepartmentForm.setVisible(true);
+        setVisible(false);
+        AddDepartmentForm addDeptartmentForm = new AddDepartmentForm(this);
+        addDeptartmentForm.setVisible(true);
     }//GEN-LAST:event_addDepartmentButtonActionPerformed
 
     private void searchDepartmentsFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDepartmentsFieldActionPerformed
@@ -1471,66 +1400,6 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         searchDepartmentsField.setText("");
     }//GEN-LAST:event_searchDepartmentsFieldFocusGained
-
-    private void departmentNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentNameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_departmentNameFieldActionPerformed
-
-    private void locationFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_locationFieldActionPerformed
-
-    private void cancelButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton2ActionPerformed
-        // TODO add your handling code here:
-        AddDepartmentForm.dispose();
-    }//GEN-LAST:event_cancelButton2ActionPerformed
-
-    private void addDepartmentConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentConfirmButtonActionPerformed
-        // Get values from form fields
-        String departmentName = departmentNameField.getText().trim();
-        String location = locationField.getText().trim();
-        
-        // Validate input
-        if (departmentName.isEmpty()) {
-            showErrorToast(this, "Department name is required");
-            departmentNameField.requestFocus();
-            return;
-        }
-        
-        if (location.isEmpty()) {
-            showErrorToast(this, "Location is required");
-            locationField.requestFocus();
-            return;
-        }
-        
-        // Create new department
-        Department newDepartment = new Department(departmentName, location);
-        
-        // Add to departments list
-        departments.add(newDepartment);
-        
-        // Update departments table
-        DefaultTableModel model = (DefaultTableModel) departmentsTable.getModel();
-        model.addRow(new Object[]{
-            newDepartment.getDeptID(),
-            newDepartment.getName(),
-            newDepartment.getLocation(),
-            "Not Assigned"
-        });
-        
-        // Clear form fields
-        departmentNameField.setText("");
-        locationField.setText("");
-        
-        // Show success message
-        showSuccessToast(this, "Department added successfully");
-        
-        // Close the form
-        AddDepartmentForm.dispose();
-        
-        populateDepartmentsComboBox(); //refresh combo box
-        refreshDepartmentsComboBox();
-    }//GEN-LAST:event_addDepartmentConfirmButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         System.exit(0);
@@ -1841,7 +1710,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         }
 
-        private void refreshDepartmentsComboBox() {
+        public void refreshDepartmentsComboBox() {
         departmentsListSelect.removeAllItems();  // Clear all existing items
 
         // Add "All Departments" option at the top
@@ -1887,25 +1756,37 @@ public class MainWindow extends javax.swing.JFrame {
 
 
 
-    public void updateDepartmentDetails(Department updatedDepartment) {
+public void updateDepartmentDetails(Department updatedDepartment) {
+    try {
         if (selectedDepartment != null && selectedDepartment.getDeptID() == updatedDepartment.getDeptID()) {
-            // Update the department name
-            departmentNameDetailPage.setText(updatedDepartment.getName());
+        // Update the department name
+        departmentNameDetailPage.setText(updatedDepartment.getName());
 
-            // Update the department ID
-            idDepartmentDetailPage.setText(Integer.toString(updatedDepartment.getDeptID()));
+        // Update the department ID
+        idDepartmentDetailPage.setText(Integer.toString(updatedDepartment.getDeptID()));
 
-            // Update the department location
-            locationDetailPage.setText(updatedDepartment.getLocation());
+        // Update the department location
+        locationDetailPage.setText(updatedDepartment.getLocation());
 
-            // Update the department head, if any
-            if (updatedDepartment.getDepartmentHead() != null) {
-                deptHeadDetail.setText(updatedDepartment.getDepartmentHead().getFirstName() + " " + updatedDepartment.getDepartmentHead().getSurname());
-            } else {
-                deptHeadDetail.setText("No Head"); // Or leave it blank
-            }
+        // Update the department head
+        Employee head = updatedDepartment.getDepartmentHead();
+        if (head != null) {
+            System.out.println(head.getFirstName() + " " + head.getSurname());
+            deptHeadDetail.setText(head.getFirstName() + " " + head.getSurname());
+        } else {
+            deptHeadDetail.setText(null);
         }
+    }  
+        System.out.println("NEW STUFF UPDATE:");
+        System.out.println(selectedDepartment.getName());
+        System.out.println(selectedDepartment.getDepartmentHead());
+    } catch (NullPointerException e) {
+        JOptionPane.showMessageDialog(this, "There was a problem updating the department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();  // Optional for debugging
     }
+}
 
     
     
@@ -1945,18 +1826,15 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDialog AddDepartmentForm;
     private javax.swing.JDialog ConfirmDelete;
     private javax.swing.JPanel DashboardPanel;
     private javax.swing.JPanel LoginPanel;
     private javax.swing.JPanel MainFrame;
     private javax.swing.JButton addDepartmentButton;
-    private javax.swing.JButton addDepartmentConfirmButton;
     private javax.swing.JButton addEmployeeButton;
     private javax.swing.JTextArea addressDetailPage;
     private javax.swing.JButton backToDepartmentsButton;
     private javax.swing.JButton backToEmployeesButton;
-    private javax.swing.JButton cancelButton2;
     private javax.swing.JButton cancelButton3;
     private javax.swing.JButton confirmDeleteButton;
     private javax.swing.JPanel contentPanel;
@@ -1964,9 +1842,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton deleteButton1;
     private javax.swing.JTextField departmentDetailPage;
     private javax.swing.JPanel departmentDetailPanel;
-    private javax.swing.JComboBox<String> departmentHeadSelect;
     private javax.swing.JLabel departmentNameDetailPage;
-    private javax.swing.JTextField departmentNameField;
     private javax.swing.JButton departmentsButton;
     private javax.swing.JComboBox<String> departmentsListSelect;
     private javax.swing.JPanel departmentsPanel;
@@ -1990,12 +1866,10 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -2017,7 +1891,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane;
@@ -2029,7 +1902,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField locationDetailPage;
-    private javax.swing.JTextField locationField;
     private javax.swing.JButton loginButton;
     private javax.swing.JPanel logoPanel;
     private javax.swing.JPanel paginationPanel;

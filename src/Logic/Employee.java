@@ -30,6 +30,7 @@ public class Employee {
         this.address = address;
         this.payLevel = payLevel;
         this.deptID = null;
+        this.isHead = false;
 
     }
     
@@ -41,6 +42,7 @@ public class Employee {
         this.address = address;
         this.payLevel = payLevel;
         this.deptID = deptID;
+        this.isHead = false;
     }
 
 

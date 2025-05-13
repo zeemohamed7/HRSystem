@@ -403,9 +403,11 @@ public class EditEmployeeForm extends javax.swing.JFrame {
 
             JOptionPane.showMessageDialog(this, "Employee information updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
+            
             // Refresh the employee table and detail page
             main.updateEmployeeDetails(selectedEmployee);
             main.refreshEmployeeTable();
+            main.refreshDepartmentTable();
         }
 
         main.setEnabled(true);

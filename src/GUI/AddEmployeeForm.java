@@ -16,8 +16,8 @@ import javax.swing.table.DefaultTableModel;
  * @author zainab
  */
 public class AddEmployeeForm extends javax.swing.JFrame {
-    MainWindow main;
-           ArrayList<Department> departments = main.departments;
+       MainWindow main;
+       ArrayList<Department> departments = main.departments;
        ArrayList<Employee> allEmployees = main.allEmployees;
     /**
      * Creates new form AddEmployeeForm
@@ -27,7 +27,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
     }
     public AddEmployeeForm(MainWindow main) {
         initComponents();
-setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
        this.main = main;
 
                         
@@ -35,10 +35,10 @@ setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         
-                this.setLocation(x, y);
+        this.setLocation(x, y);
 
-            // When the form is disposed, make the main window visible again
-    addWindowListener(new java.awt.event.WindowAdapter() {
+        // When the form is disposed, make the main window visible again
+        addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowClosed(java.awt.event.WindowEvent evt) {
             main.setVisible(true);
