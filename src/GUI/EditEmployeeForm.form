@@ -33,7 +33,7 @@
                       <EmptySpace min="-2" pref="268" max="-2" attributes="0"/>
                       <Component id="cancelButton1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="addEmployeeConfirmButton1" min="-2" max="-2" attributes="0"/>
+                      <Component id="saveEditButton" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
@@ -106,7 +106,7 @@
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cancelButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="addEmployeeConfirmButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="saveEditButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
           </Group>
@@ -227,12 +227,12 @@
         <Property name="text" type="java.lang.String" value="Address"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="addEmployeeConfirmButton1">
+    <Component class="javax.swing.JButton" name="saveEditButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Save Changes"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addEmployeeConfirmButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveEditButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

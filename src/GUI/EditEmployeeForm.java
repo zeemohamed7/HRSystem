@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JWindow;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -21,25 +22,29 @@ import javax.swing.Timer;
  */
 public class EditEmployeeForm extends javax.swing.JFrame {
     
-        private Employee selectedEmployee;
-        MainWindow main;
-        ArrayList<Department> departments = main.departments;
+    private Employee selectedEmployee;
+    private MainWindow main;
+    private ArrayList<Department> departments;
 
     /**
      * Creates new form EditEmployeeForm
      */
-    public EditEmployeeForm() {
-        initComponents();
-    }
-    public EditEmployeeForm(Employee employee) {
+
+    public EditEmployeeForm(MainWindow mainWindow, Employee employee) {
+    this.main = mainWindow;  // Properly initialize main with the passed MainWindow
+           this.selectedEmployee = employee;  // Set the selected employee to be edited
+           this.departments = mainWindow.departments;  // Now access departments from the MainWindow
+           
+           
         initComponents();
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
-        selectedEmployee = employee;
         populateDepartmentsComboBox();      // Populate the combo box
         populatePayLevelComboBox();         // Populate the pay level combo box
+
+
 
         
         
@@ -68,14 +73,12 @@ public class EditEmployeeForm extends javax.swing.JFrame {
     }
 
     private void populateDepartmentsComboBox() {
-        departmentEditCombo.removeAllItems();  // Clear all existing items
+        departmentEditCombo.removeAllItems();  
 
-        // Add "No Department" option at the top (optional)
         departmentEditCombo.addItem("No Department");
 
-        // Now re-populate the combo box with the updated list of departments
         for (Department dept : departments) {
-            departmentEditCombo.addItem(dept.getName());  // Add department names
+            departmentEditCombo.addItem(dept.getName());  
         }
     }
 
@@ -167,7 +170,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         payLevelEditCombo = new javax.swing.JComboBox<>();
         jLabel21 = new javax.swing.JLabel();
-        addEmployeeConfirmButton1 = new javax.swing.JButton();
+        saveEditButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -230,10 +233,10 @@ public class EditEmployeeForm extends javax.swing.JFrame {
 
         jLabel21.setText("Address");
 
-        addEmployeeConfirmButton1.setText("Save Changes");
-        addEmployeeConfirmButton1.addActionListener(new java.awt.event.ActionListener() {
+        saveEditButton.setText("Save Changes");
+        saveEditButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addEmployeeConfirmButton1ActionPerformed(evt);
+                saveEditButtonActionPerformed(evt);
             }
         });
 
@@ -247,7 +250,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
                         .addGap(268, 268, 268)
                         .addComponent(cancelButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(addEmployeeConfirmButton1))
+                        .addComponent(saveEditButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,7 +309,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton1)
-                    .addComponent(addEmployeeConfirmButton1))
+                    .addComponent(saveEditButton))
                 .addGap(23, 23, 23))
         );
 
@@ -331,11 +334,83 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_firstNameEditFieldActionPerformed
 
-    private void addEmployeeConfirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeConfirmButton1ActionPerformed
+    private void saveEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveEditButtonActionPerformed
         // TODO add your handling code here:
-        showSuccessToast(this,"Employee added successfully!");
-    }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
+        
+                
+        // Get the updated employee information
+        String firstName = firstNameEditField.getText();
+        String surname = lastNameEditField.getText();
+        String address = addressEditField.getText();
+        char gender = ' ';
+        if (maleEditButton.isSelected()) {
+            gender = 'M';
+        } else if (femaleEditButton.isSelected()) {
+            gender = 'F';
+        }
 
+    String selectedDepartment = (String) departmentEditCombo.getSelectedItem();
+    Integer deptID = null;  // Default to no department
+
+    if (selectedDepartment != null && !selectedDepartment.equals("No Department")) {
+        for (Department dept : departments) {
+            if (dept.getName().equals(selectedDepartment)) {
+                deptID = dept.getDeptID();
+                break;
+            }
+        }
+    }
+
+        // Validate and set pay level
+        String selectedPayLevel = (String) payLevelEditCombo.getSelectedItem();
+        int payLevel = -1;  // Default to invalid level
+
+        if (selectedPayLevel != null && !selectedPayLevel.equals("Select Annual Salary")) {
+            String[] parts = selectedPayLevel.split(" - ");
+            if (parts.length == 2) {
+                try {
+                    payLevel = Integer.parseInt(parts[0].replace("Level ", "").trim());
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Invalid pay level selected.");
+                    return;
+                }
+            }
+        }
+
+        // Validate that all required fields are filled
+        if (firstName.isEmpty() || surname.isEmpty() || gender == ' ' || payLevel == -1) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields and select valid options.");
+            return;
+        }
+
+        // Update the selected employee object
+        selectedEmployee.setFirstName(firstName);
+        selectedEmployee.setSurname(surname);
+        selectedEmployee.setGender(gender);
+        selectedEmployee.setAddress(address);
+        selectedEmployee.setDeptID(deptID);
+        selectedEmployee.setPayLevel(payLevel);
+        
+       // Update the allEmployees list 
+        for (int i = 0; i < main.allEmployees.size(); i++) {
+            if (main.allEmployees.get(i).getEmployeeId() == selectedEmployee.getEmployeeId()) {
+                main.allEmployees.set(i, selectedEmployee);
+                break;
+            }
+        }
+
+        JOptionPane.showMessageDialog(this, "Employee information updated successfully!");
+
+        // refresh detail page and table
+        main.updateEmployeeDetails(selectedEmployee);
+        main.refreshEmployeeTable(); 
+        main.setEnabled(true);  
+        this.dispose();
+//        showSuccessToast(this,"Employee added successfully!");
+
+    }//GEN-LAST:event_saveEditButtonActionPerformed
+
+    
     private void departmentEditComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentEditComboActionPerformed
         // TODO add your handling code here:
         
@@ -426,13 +501,12 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EditEmployeeForm().setVisible(true);
+//                new EditEmployeeForm().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addEmployeeConfirmButton1;
     private javax.swing.JTextArea addressEditField;
     private javax.swing.JButton cancelButton1;
     private javax.swing.JComboBox<String> departmentEditCombo;
@@ -449,5 +523,6 @@ public class EditEmployeeForm extends javax.swing.JFrame {
     private javax.swing.JTextField lastNameEditField;
     private javax.swing.JRadioButton maleEditButton;
     private javax.swing.JComboBox<String> payLevelEditCombo;
+    private javax.swing.JButton saveEditButton;
     // End of variables declaration//GEN-END:variables
 }

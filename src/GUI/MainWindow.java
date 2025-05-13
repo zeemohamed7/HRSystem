@@ -151,7 +151,7 @@ public class MainWindow extends javax.swing.JFrame {
         idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
         firstNameDetailPage.setText(employee.getFirstName());
         surnameDetailPage.setText(employee.getSurname());
-        genderDetailPage.setText(Character.toString(employee.getGender()));
+        genderDetailPage.setText(employee.getGender() == 'M' ? "Male" : "Female");
         payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
         addressDetailPage.setText(employee.getAddress());
         String department = "No Department";  
@@ -1536,7 +1536,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void editEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEmployeeButtonActionPerformed
         // TODO add your handling code here:
         
-        EditEmployeeForm editForm = new EditEmployeeForm(selectedEmployee);
+        EditEmployeeForm editForm = new EditEmployeeForm(this, selectedEmployee);
         editForm.setVisible(true);
 
 
@@ -1726,6 +1726,29 @@ public class MainWindow extends javax.swing.JFrame {
         
         refreshEmployeeTable();
 }
+        
+        public void updateEmployeeDetails(Employee updatedEmployee) {
+    if (selectedEmployee != null && selectedEmployee.getEmployeeId() == updatedEmployee.getEmployeeId()) {
+        // Update the displayed information
+        firstNameDetailPage.setText(updatedEmployee.getFirstName());
+        surnameDetailPage.setText(updatedEmployee.getSurname());
+        addressDetailPage.setText(updatedEmployee.getAddress());
+        genderDetailPage.setText(updatedEmployee.getGender() == 'M' ? "Male" : "Female");
+
+        // Find and display the department name
+        String departmentName = "No Department";
+        for (Department dept : departments) {
+            if(updatedEmployee.getDeptID() != null) {
+                departmentName = Department.getDepartmentNameById(departments, updatedEmployee.getDeptID());
+            }
+        }
+        departmentDetailPage.setText(departmentName);
+
+        // Pay Level
+        payLevelDetailPage.setText(Integer.toString(updatedEmployee.getPayLevel()));
+    }
+}
+
 
     
     
