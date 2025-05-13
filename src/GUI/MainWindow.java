@@ -1629,11 +1629,19 @@ public class MainWindow extends javax.swing.JFrame {
        //remove the employee from the data source
        deleteEmployee(selectedEmployee);
        JOptionPane.showMessageDialog(this, "Employee deleted succefully.");
+       
+       employeeDetailPanel.setVisible(false);
+       
+    // Switch back to Employee Panel 
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "employeePanel");
+       
        }
         
     }//GEN-LAST:event_deleteButtonActionPerformed
     private void deleteEmployee(Employee employee){
     allEmployees.remove(employee);
+    refreshEmployeeTable();
     }
     
     
@@ -1647,8 +1655,15 @@ public class MainWindow extends javax.swing.JFrame {
        //remove the department 
        deleteDepartment(selectedDepartment);
        JOptionPane.showMessageDialog(this, "Department deleted succefully.");
+       
+              departmentDetailPanel.setVisible(false);
+       
+    // Switch back to Employee Panel 
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "departmentPanel");
        }
         refreshEmployeeTable();
+        refreshDepartmentTable();
     }//GEN-LAST:event_deleteButton1ActionPerformed
 
     private void departmentsListSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsListSelectActionPerformed
