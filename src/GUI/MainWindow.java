@@ -1622,7 +1622,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this employee?", 
-                "DELETE Employee", 2, JOptionPane.YES_NO_OPTION);
+                "DELETE EMPLOYEE", 2, JOptionPane.YES_NO_OPTION);
       
        if(confirm == JOptionPane.YES_OPTION){
        
@@ -1648,24 +1648,57 @@ public class MainWindow extends javax.swing.JFrame {
     private void deleteButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButton1ActionPerformed
         // TODO add your handling code here:
          int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this department?",
-                 "DELETE Department", 2);
+                 "DELETE DEPARTMENT", 2);
         
         if(confirm == JOptionPane.YES_OPTION){
-       
-       //remove the department 
-       deleteDepartment(selectedDepartment);
-       JOptionPane.showMessageDialog(this, "Department deleted succefully.");
-       
-              departmentDetailPanel.setVisible(false);
-       
-    // Switch back to Employee Panel 
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, "departmentPanel");
-       }
-        refreshEmployeeTable();
-        refreshDepartmentTable();
-    }//GEN-LAST:event_deleteButton1ActionPerformed
+             if (confirm == JOptionPane.YES_OPTION) {
+        boolean hasEmployees = false;
+          int i = 0;
+        
+         // Use while loop to check if any employee is in the selected department
+        while (i < allEmployees.size()) {
+            Employee emp = allEmployees.get(i);
+            if (emp.getDeptID() == selectedDepartment.getDeptID()) {
+                hasEmployees = true;
+                break;
+            }
+            i++;
+        }
 
+        if (hasEmployees) {
+            JOptionPane.showMessageDialog(this, 
+                "Cannot delete department. It still has employees assigned to it.",
+                "Delete Failed", 
+                2);
+        } else {
+            deleteDepartment(selectedDepartment);
+            JOptionPane.showMessageDialog(this, "Department deleted successfully.");
+            departmentDetailPanel.setVisible(false);
+
+            // Switch back to Department Panel 
+            CardLayout cl = (CardLayout) contentPanel.getLayout();
+            cl.show(contentPanel, "departmentPanel");
+        }
+    }
+
+    // Refresh UI
+    refreshEmployeeTable();
+    refreshDepartmentTable();
+}
+            
+            
+  
+    }//GEN-LAST:event_deleteButton1ActionPerformed
+ private void deleteDepartment(Department department){
+        departments.remove(department);
+        refreshDepartmentsComboBox();
+    }
+    
+    
+    
+    
+    
+    
     private void departmentsListSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsListSelectActionPerformed
 // TODO add your handling code here:
     String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
@@ -1700,10 +1733,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     }//GEN-LAST:event_departmentsListSelectActionPerformed
-    private void deleteDepartment(Department department){
-        departments.remove(department);
-        refreshDepartmentsComboBox();
-    }
+   
     
     public void refreshDepartmentsTable() {
         // Clear the current table data
