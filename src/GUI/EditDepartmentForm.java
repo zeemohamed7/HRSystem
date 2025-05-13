@@ -179,6 +179,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         selectedDepartment.setDepartmentHead(departmentHead);
 
         main.refreshDepartmentTable();  
+        main.refreshEmployeeTable();
         main.updateDepartmentDetails(selectedDepartment);
         this.dispose();  
     }//GEN-LAST:event_editDepartmentSaveButtonActionPerformed

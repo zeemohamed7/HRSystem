@@ -107,97 +107,139 @@ public class MainWindow extends javax.swing.JFrame {
 
 
     }
-    
+
     private void initialiseEmployeesTable() {
-    String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Pay Level"};
-    
-    // Create table with model
-    DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
+        String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Pay Level"};
+
+        // Create table with model
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        try {
+            // Populate the table with employee data
+            for (Employee emp : allEmployees) {
+                int id = emp.getEmployeeId();
+                String fullName = emp.getFirstName() + " " + emp.getSurname();  
+
+                String department = "No Department";
+                if (emp.getDeptID() != null) {
+                    department = Department.getDepartmentNameById(departments, emp.getDeptID()); // emp.getDeptID() can be null so might throw exception
+                }
+
+                char gender = emp.getGender();
+                int payLevel = emp.getPayLevel();
+
+                // Add the row to the model
+                Object[] row = {id, fullName, department, gender, payLevel};
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();  
         }
-    };
-    
 
-    // Populate the table with employee data
-    for (Employee emp : allEmployees) {
-        int id = emp.getEmployeeId();
-        String fullName = emp.getFirstName() + " " + emp.getSurname();  // Concatenate first and last name
-        String department = Department.getDepartmentNameById(departments, emp.getDeptID());
-        char gender = emp.getGender();
-        int payLevel = emp.getPayLevel();
-
-        // Add the row to the model
-        Object[] row = {id, fullName, department, gender, payLevel};
-        model.addRow(row);
+        // Set model to employees table
+        employeesTable.setModel(model);
     }
 
-    // Set model to employees table
-    employeesTable.setModel(model);
-    
-}
     
 
 
     // show employee detail 
     private void showEmployeeDetails(Employee employee) {
+        if (employee == null) {
+            JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         selectedEmployee = employee;
-        // show employee detail page
-        selectedEmployee = employee;
+
+        // Show employee detail page
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "employeeDetail");
-        
-        //display data
-        idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
-        firstNameDetailPage.setText(employee.getFirstName());
-        surnameDetailPage.setText(employee.getSurname());
-        genderDetailPage.setText(employee.getGender() == 'M' ? "Male" : "Female");
-        payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
-        addressDetailPage.setText(employee.getAddress());
-        String department = "No Department";  
-        if (employee.getDeptID() != null) {
-            department = Department.getDepartmentNameById(departments, employee.getDeptID());
+
+        try {
+            // Display data
+            idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
+            firstNameDetailPage.setText(employee.getFirstName());
+            surnameDetailPage.setText(employee.getSurname());
+            genderDetailPage.setText(employee.getGender() == 'M' ? "Male" : "Female");
+            payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
+            addressDetailPage.setText(employee.getAddress());
+
+            String department = "No Department";
+            if (employee.getDeptID() != null) {
+                department = Department.getDepartmentNameById(departments, employee.getDeptID());
+            }
+            departmentDetailPage.setText(department);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error displaying employee details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-        departmentDetailPage.setText(department);        
-        
     }
+
     
     
     // show department detail 
     private void showDepartmentDetails(Department dept) {
-        selectedDepartment = dept;  
-        // show employee detail page
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, "departmentDetail");
-        
-        // display data
+    if (dept == null) {
+        JOptionPane.showMessageDialog(this, "No department selected.", "Error", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
+    selectedDepartment = dept;
+
+    // Show department detail page
+    CardLayout cl = (CardLayout) contentPanel.getLayout();
+    cl.show(contentPanel, "departmentDetail");
+
+    try {
+        // Display department data
         departmentNameDetailPage.setText(dept.getName());
         idDepartmentDetailPage.setText(Integer.toString(dept.getDeptID()));
         locationDetailPage.setText(dept.getLocation());
-       
-        // if there is a department head (later)
-        
-        
-        // display employees in department
-            // Assuming you have a list of employees (e.g., allEmployees)
-    StringBuilder employeeDetails = new StringBuilder();
 
-    for (Employee employee : allEmployees) {
-        if (employee.getDeptID() == (Integer) dept.getDeptID()) {
-            // Add employee details to a display container
-            employeeDetails.append("ID: ").append(employee.getEmployeeId())
-                           .append(", Name: ").append(employee.getFirstName())
-                           .append(" ").append(employee.getSurname())
-                           .append("\n");
+        // Display department head, if applicable
+        String headName = "No Head Assigned";
+        for (Employee employee : allEmployees) {
+            if (employee.isIsHead() && employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
+                headName = employee.getFirstName() + " " + employee.getSurname();
+                break;
+            }
         }
-    }
+        deptHeadDetail.setText(headName);
 
-    // Assuming you have a JTextArea or JLabel for displaying employee details
-    employeeListArea.setText(employeeDetails.toString());
-        
+        // Display employees in the department
+        StringBuilder employeeDetails = new StringBuilder();
+        boolean hasEmployees = false;
+
+        for (Employee employee : allEmployees) {
+            if (employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
+                hasEmployees = true;
+                employeeDetails.append("ID: ").append(employee.getEmployeeId())
+                               .append(", Name: ").append(employee.getFirstName())
+                               .append(" ").append(employee.getSurname())
+                               .append("\n");
+            }
+        }
+
+        if (!hasEmployees) {
+            employeeDetails.append("No employees in this department.");
+        }
+
+        employeeListArea.setText(employeeDetails.toString());
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error displaying department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
+}
+
     
 
 
@@ -1390,8 +1432,6 @@ public class MainWindow extends javax.swing.JFrame {
     // Create and show the AddEmployeeForm
     // Hide the main window
     setVisible(false);
-
-    // Open the AddEmployeeForm
     AddEmployeeForm addEmployeeForm = new AddEmployeeForm(this);
     addEmployeeForm.setVisible(true);
 
@@ -1442,7 +1482,6 @@ public class MainWindow extends javax.swing.JFrame {
     private void cancelButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton2ActionPerformed
         // TODO add your handling code here:
         AddDepartmentForm.dispose();
-
     }//GEN-LAST:event_cancelButton2ActionPerformed
 
     private void addDepartmentConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentConfirmButtonActionPerformed
@@ -1509,27 +1548,33 @@ public class MainWindow extends javax.swing.JFrame {
     private void employeesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeesTableMouseClicked
         // TODO add your handling code here:
 
-        int selectedRow = employeesTable.getSelectedRow();
-        // check if row selected
-       if (selectedRow != -1) {
-           // get employee id
-           Object employeeId = employeesTable.getValueAt(selectedRow, 0);
+    int selectedRow = employeesTable.getSelectedRow();
 
-           Employee employee = null;
-           // find employee by ID to send over to detail page
-           for (Employee emp : allEmployees) {
-               if (emp.getEmployeeId() == (Integer) employeeId) { // cast to compare
-                   employee = emp;
-                   break;
-               }
-           }
+    if (selectedRow != -1) {
+        Object employeeIdObj = employeesTable.getValueAt(selectedRow, 0);
 
-           if (employee != null) {
-               showEmployeeDetails(employee);
-           } else {
-               JOptionPane.showMessageDialog(null, "Employee not found");
-           }
-       }
+        if (employeeIdObj instanceof Integer) {
+            int employeeId = (Integer) employeeIdObj;
+            Employee selectedEmployee = null;
+
+            if (allEmployees != null) {
+                for (Employee emp : allEmployees) {
+                    if (emp.getEmployeeId() == employeeId) {
+                        selectedEmployee = emp;
+                        break;
+                    }
+                }
+            }
+
+            if (selectedEmployee != null) {
+                showEmployeeDetails(selectedEmployee);
+            } else {
+                JOptionPane.showMessageDialog(this, "Employee not found.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid Employee ID.");
+        }
+    }
     }//GEN-LAST:event_employeesTableMouseClicked
 
     private void editEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEmployeeButtonActionPerformed
@@ -1549,32 +1594,33 @@ public class MainWindow extends javax.swing.JFrame {
     private void departmentsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_departmentsTableMouseClicked
         // TODO add your handling code here:
         // fake data to test detail page
-        // fake data
-      
-        
-        int selectedRow = departmentsTable.getSelectedRow();
-        // check if row selected
-       if (selectedRow != -1) {
-           // get employee id
-           Object deptId = departmentsTable.getValueAt(selectedRow, 0);
+    int selectedRow = departmentsTable.getSelectedRow();
 
-           Department selectedDepartment = null;
-           // find employee by ID to send over to detail page
-           for (Department dept : departments) {
-               if (dept.getDeptID() == (Integer) deptId) { // cast to compare
-                   selectedDepartment = dept;
-                   break;
-               }
-           }
+        if (selectedRow != -1) {
+            Object deptIdObj = departmentsTable.getValueAt(selectedRow, 0);
 
-           if (selectedDepartment != null) {
-               showDepartmentDetails(selectedDepartment);
-           } else {
-               JOptionPane.showMessageDialog(null, "Employee not found");
-           }
-       }
+            if (deptIdObj instanceof Integer) {
+                int deptId = (Integer) deptIdObj;
+                Department selectedDepartment = null;
 
+                if (departments != null) {
+                    for (Department dept : departments) {
+                        if (dept.getDeptID() == deptId) {
+                            selectedDepartment = dept;
+                            break;
+                        }
+                    }
+                }
 
+                if (selectedDepartment != null) {
+                    showDepartmentDetails(selectedDepartment);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Department not found.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid department ID.");
+            }
+        }
     }//GEN-LAST:event_departmentsTableMouseClicked
 
     private void genderDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genderDetailPageActionPerformed
@@ -1668,35 +1714,39 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void departmentsListSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsListSelectActionPerformed
 // TODO add your handling code here:
-    String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
-    
-    if (selectedDepartment == null || selectedDepartment.equals("All Departments")) {
-        // Show all employees (including those with no department)
-        selectedDepartment = "All Departments";
-    }
-
-    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-    model.setRowCount(0); // Clear the table
-
-    for (Employee emp : allEmployees) {
-        Integer deptID = emp.getDeptID();
-        String department = "No Department"; // Default for employees with no department
-
-        // If deptID is not null, fetch the department name
-        if (deptID != null) {
-            department = Department.getDepartmentNameById(departments, deptID);
+    try {
+        String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
+        
+        if (selectedDepartment == null || selectedDepartment.equals("All Departments")) {
+            selectedDepartment = "All Departments";
         }
 
-        // Check if "All Departments" is selected or the department matches
-        if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
-            int id = emp.getEmployeeId();
-            String fullName = emp.getFirstName() + " " + emp.getSurname();
-            char gender = emp.getGender();
-            int payLevel = emp.getPayLevel();
+        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+        model.setRowCount(0); // Clear the table
 
-            Object[] row = {id, fullName, department, gender, payLevel};
-            model.addRow(row);
+        for (Employee emp : allEmployees) {
+            Integer deptID = emp.getDeptID();
+            String department = "No Department"; // Default for employees with no department
+
+            // If deptID is not null, fetch the department name
+            if (deptID != null) {
+                department = Department.getDepartmentNameById(departments, deptID);
+            }
+
+            // Check if "All Departments" is selected or the department matches
+            if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
+                int id = emp.getEmployeeId();
+                String fullName = emp.getFirstName() + " " + emp.getSurname();
+                char gender = emp.getGender();
+                int payLevel = emp.getPayLevel();
+
+                Object[] row = {id, fullName, department, gender, payLevel};
+                model.addRow(row);
+            }
         }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "An error occurred while updating the employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace(); // Optional for debugging
     }
 
     }//GEN-LAST:event_departmentsListSelectActionPerformed
@@ -1705,25 +1755,6 @@ public class MainWindow extends javax.swing.JFrame {
         refreshDepartmentsComboBox();
     }
     
-    public void refreshDepartmentsTable() {
-        // Clear the current table data
-        deptModel.setRowCount(0);
-
-        // Iterate through the list of departments and add them to the table
-        for (Department dept : departments) {
-            // Check if department has a head, otherwise display blank
-            String headName = (dept.getDepartmentHead() != null) ? dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname() : "";
-            
-            Object[] rowData = { 
-                dept.getDeptID(), 
-                dept.getName(), 
-                dept.getLocation(), 
-                headName  // Display department head or leave blank
-            };
-            
-            deptModel.addRow(rowData);
-        }
-    }
  
     public void refreshEmployeeTable() {
         // Get the selected department from the combo box
@@ -1767,8 +1798,8 @@ public class MainWindow extends javax.swing.JFrame {
             // Clear existing rows
             model.setRowCount(0);
 
-            // Populate the table with updated department data
-            for (Department dept : departments) {  // Assuming you have a method to get departments
+            // Populate table
+            for (Department dept : departments) {  
                 // Add department data as rows
                 model.addRow(new Object[]{
                     dept.getDeptID(), 
@@ -1793,28 +1824,36 @@ public class MainWindow extends javax.swing.JFrame {
         
         refreshEmployeeTable();
 }
-        
         public void updateEmployeeDetails(Employee updatedEmployee) {
-    if (selectedEmployee != null && selectedEmployee.getEmployeeId() == updatedEmployee.getEmployeeId()) {
-        // Update the displayed information
-        firstNameDetailPage.setText(updatedEmployee.getFirstName());
-        surnameDetailPage.setText(updatedEmployee.getSurname());
-        addressDetailPage.setText(updatedEmployee.getAddress());
-        genderDetailPage.setText(updatedEmployee.getGender() == 'M' ? "Male" : "Female");
+        try {
+            if (selectedEmployee != null && selectedEmployee.getEmployeeId() == updatedEmployee.getEmployeeId()) {
+                // Update the displayed information
+                firstNameDetailPage.setText(updatedEmployee.getFirstName());
+                surnameDetailPage.setText(updatedEmployee.getSurname());
+                addressDetailPage.setText(updatedEmployee.getAddress());
+                genderDetailPage.setText(updatedEmployee.getGender() == 'M' ? "Male" : "Female");
 
-        // Find and display the department name
-        String departmentName = "No Department";
-        for (Department dept : departments) {
-            if(updatedEmployee.getDeptID() != null) {
-                departmentName = Department.getDepartmentNameById(departments, updatedEmployee.getDeptID());
+                // Find and display the department name
+                String departmentName = "No Department";
+                if (departments != null) {
+                    if(updatedEmployee.getDeptID() != null) {
+                        departmentName = Department.getDepartmentNameById(departments, updatedEmployee.getDeptID());
+                        }
+                }
+
+                departmentDetailPage.setText(departmentName);
+
+                // Update pay level
+                payLevelDetailPage.setText(Integer.toString(updatedEmployee.getPayLevel()));
             }
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "There was a problem updating the employee details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();  // Optional for debugging
         }
-        departmentDetailPage.setText(departmentName);
-
-        // Pay Level
-        payLevelDetailPage.setText(Integer.toString(updatedEmployee.getPayLevel()));
     }
-}
+
 
 
     public void updateDepartmentDetails(Department updatedDepartment) {
