@@ -144,39 +144,57 @@ public class AddDepartmentForm extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButton2ActionPerformed
 
     private void addDepartmentConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentConfirmButtonActionPerformed
-       String departmentName = departmentNameField.getText().trim();
-        String location = locationField.getText().trim();
+       try {
+    String departmentName = departmentNameField.getText().trim();
+    String location = locationField.getText().trim();
 
-        // Validate input
-        if (departmentName.isEmpty()) {
-            departmentNameField.requestFocus();
-            return;
-        }
+    // Validate input
+    if (departmentName.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Department name cannot be empty.", "Input Error", JOptionPane.WARNING_MESSAGE);
+        departmentNameField.requestFocus();
+        return;
+    }
 
-        if (location.isEmpty()) {
-            locationField.requestFocus();
-            return;
-        }
+    if (location.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Location cannot be empty.", "Input Error", JOptionPane.WARNING_MESSAGE);
+        locationField.requestFocus();
+        return;
+    }
 
-        // Create new department without assigning a head
-        Department newDepartment = new Department(departmentName, location);
+    // Create new department without assigning a head
+    Department newDepartment = new Department(departmentName, location);
 
-        // Add to departments list
-        departments.add(newDepartment);
+    // Add to departments list
+    departments.add(newDepartment);
 
-        // Update departments table
-        main.refreshDepartmentTable();
+    // Update departments table
+    main.refreshDepartmentTable();
 
-        // Clear form fields
-        departmentNameField.setText("");
-        locationField.setText("");
+    // Clear form fields
+    departmentNameField.setText("");
+    locationField.setText("");
 
-        // Close the form
-        main.setVisible(true);
-        this.dispose();
+    // Refresh combo box and close the form
+    main.populateDepartmentsComboBox();
+    main.refreshDepartmentsComboBox();
+    main.setVisible(true);
+    this.dispose();
 
-        main.populateDepartmentsComboBox(); // Refresh combo box
-        main.refreshDepartmentsComboBox();
+} catch (NullPointerException e) {
+    JOptionPane.showMessageDialog(this, 
+        "An unexpected error occurred: " + e.getMessage(), 
+        "Error", 
+        JOptionPane.ERROR_MESSAGE
+    );
+    e.printStackTrace();
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(this, 
+        "An error occurred while creating the department: " + e.getMessage(), 
+        "Error", 
+        JOptionPane.ERROR_MESSAGE
+    );
+    e.printStackTrace();
+}
 
     }//GEN-LAST:event_addDepartmentConfirmButtonActionPerformed
 
