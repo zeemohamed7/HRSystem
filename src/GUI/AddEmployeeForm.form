@@ -54,12 +54,12 @@
                           <Component id="jScrollPane3" alignment="0" min="-2" pref="451" max="-2" attributes="0"/>
                           <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="departmentForEmployeeCombo1" alignment="0" min="-2" pref="186" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="lastNameField1" min="-2" pref="189" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="firstNameField1" min="-2" pref="191" max="-2" attributes="0"/>
-                          </Group>
                           <Component id="payLevelForEmployeeCombo1" alignment="0" min="-2" pref="186" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="firstNameField1" min="-2" pref="191" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="lastNameField1" min="-2" pref="189" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -71,18 +71,14 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                      <Component id="firstNameField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lastNameField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel24" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel22" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                  </Group>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel24" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel22" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="firstNameField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lastNameField1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Component id="jLabel26" min="-2" max="-2" attributes="0"/>

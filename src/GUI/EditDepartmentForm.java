@@ -7,6 +7,8 @@ package GUI;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import Logic.*;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,6 +18,7 @@ import javax.swing.JOptionPane;
 public class EditDepartmentForm extends javax.swing.JFrame {
     private Department selectedDepartment;
     private MainWindow main;
+    ArrayList<Employee> allEmployees = main.allEmployees;
     /**
      * Creates new form EditDepartmentForm
      */
@@ -29,17 +32,42 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         this.setLocation(x, y);
         this.main = main;
         this.selectedDepartment = dept;
-        
         // initialise departments details for edit
-         departmentNameField.setText(dept.getName());
+        departmentNameField.setText(dept.getName());
         locationField.setText(dept.getLocation());
 
-        // Set the department head (if available)
-        if (selectedDepartment.getDepartmentHead() != null) {
-            departmentHeadSelect.setSelectedItem(selectedDepartment.getDepartmentHead().getFirstName());
-        } else {
-            departmentHeadSelect.setSelectedItem("No Department Head");
+        // Populate combo box with employees for HEAD field
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        model.addElement(null); // Add the "No Head" option as the first item
+
+        Employee headEmployee = selectedDepartment.getDepartmentHead();
+
+        // If there is a head, add it as the second option
+        if (headEmployee != null) {
+            String headName = headEmployee.getFirstName() + " " + headEmployee.getSurname();
+            model.addElement(headName);
         }
+
+        // Add the rest of the employees, excluding the current head (to avoid duplicate entry)
+        for (Employee emp : allEmployees) {
+            String empName = emp.getFirstName() + " " + emp.getSurname();
+
+            // Prevent adding the same employee twice if they are already set as the head
+            if (headEmployee == null || !empName.equals(headEmployee.getFirstName() + " " + headEmployee.getSurname())) {
+                model.addElement(empName);
+            }
+        }
+
+        // Apply the model to the combo box
+        departmentHeadSelect.setModel(model);
+
+        // Set the initially selected item
+        if (headEmployee != null) {
+            departmentHeadSelect.setSelectedItem(headEmployee.getFirstName() + " " + headEmployee.getSurname());
+        } else {
+            departmentHeadSelect.setSelectedIndex(0); // Default to "No Head"
+        }
+
     }
 
     /**
@@ -81,6 +109,11 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         jLabel15.setText("Department Head");
 
         departmentHeadSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department head", "Item 2", "Item 3", "Item 4" }));
+        departmentHeadSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                departmentHeadSelectActionPerformed(evt);
+            }
+        });
 
         cancelButton2.setText("Cancel");
         cancelButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -157,31 +190,106 @@ public class EditDepartmentForm extends javax.swing.JFrame {
 
     private void editDepartmentSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDepartmentSaveButtonActionPerformed
         // TODO add your handling code here:
+        try {
+        // Get the department name, location, and selected head
         String departmentName = departmentNameField.getText();
         String location = locationField.getText();
-        String headName = (String) departmentHeadSelect.getSelectedItem();
+        String headName = (String) departmentHeadSelect.getSelectedItem(); 
 
-        // Validate the fields (optional)
-        if (departmentNameField.getText().isEmpty() || locationField.getText().isEmpty()) {
+        if (departmentName.isEmpty() || location.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.");
             return;
         }
 
-        // Get department head (if selected)
         Employee departmentHead = null;
-        if (!headName.equals("No Department Head")) {
-//            departmentHead = findEmployeeByName(headName);
+        Employee previousHead = selectedDepartment.getDepartmentHead(); 
+
+        // Determine the new head
+        if (headName != null && !headName.equals("No Head")) {
+            for (Employee emp : allEmployees) {
+                if (headName.equals(emp.getFirstName() + " " + emp.getSurname())) {
+
+                    // Check if the employee is already a head of another department
+                    if (emp.isIsHead() && (previousHead == null || !previousHead.equals(emp))) {
+                        JOptionPane.showMessageDialog(this, 
+                            "The selected employee is already a head of another department.", 
+                            "Invalid Head Assignment", 
+                            JOptionPane.ERROR_MESSAGE
+                        );
+                        return;
+                    }
+
+                    // Check if the employee is part of the current department
+                    if (emp.getDeptID() == null || emp.getDeptID() != selectedDepartment.getDeptID()) {
+                        JOptionPane.showMessageDialog(this, 
+                            "The selected employee is not part of this department and cannot be assigned as the head.", 
+                            "Invalid Head Assignment", 
+                            JOptionPane.ERROR_MESSAGE
+                        );
+                        return;
+                    }
+
+                    departmentHead = emp;
+                    break;
+                }
+            }
         }
 
-        // Update the department object
-        selectedDepartment.setName(departmentName);
-        selectedDepartment.setLocation(location);
-        selectedDepartment.setDepartmentHead(departmentHead);
+        // Update the selected department
+        if (selectedDepartment != null) {
+            selectedDepartment.setName(departmentName);
+            selectedDepartment.setLocation(location);
+            selectedDepartment.setDepartmentHead(departmentHead);
 
-        main.refreshDepartmentTable();  
-        main.updateDepartmentDetails(selectedDepartment);
-        this.dispose();  
+            // Update the department in the list
+            for (int i = 0; i < main.departments.size(); i++) {
+                if (main.departments.get(i).getDeptID() == selectedDepartment.getDeptID()) {
+                    main.departments.set(i, selectedDepartment);
+                    break;
+                }
+            }
+
+            // Handle the isHead property
+            if (previousHead != null && !previousHead.equals(departmentHead)) {
+                previousHead.setIsHead(false); 
+            }
+
+            if (departmentHead != null) {
+                departmentHead.setIsHead(true); 
+            }
+
+            // Update UI
+            main.updateDepartmentDetails(selectedDepartment);
+            main.refreshDepartmentTable();
+            main.refreshEmployeeTable();
+        }
+
+        this.dispose();
+
+    } catch (NullPointerException e) {
+        JOptionPane.showMessageDialog(this, 
+            "An unexpected error occurred: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE
+        );
+        e.printStackTrace();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "An error occurred while updating the department: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE
+        );
+        e.printStackTrace();
+    }
+
+
+
+
     }//GEN-LAST:event_editDepartmentSaveButtonActionPerformed
+
+    private void departmentHeadSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentHeadSelectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_departmentHeadSelectActionPerformed
 
     /**
      * @param args the command line arguments
