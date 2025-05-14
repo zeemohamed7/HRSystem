@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 
 public class Department implements Serializable {
-    private static int staticDeptId = 1;
+//    private static int staticDeptId = 1;
     private int deptID;
     private String name;
     private String location;
@@ -23,15 +23,15 @@ public class Department implements Serializable {
     }
 
     //Constructor without department head
-    public Department(String name, String location) {
-        this.deptID = staticDeptId++;
+    public Department(int staticDeptID, String name, String location) {
+        this.deptID = staticDeptID;
         this.name = name;
         this.location = location;
     }
 
     //Constructor with department head
-    public Department(String name, String location, Employee departmentHead) {
-        this.deptID = staticDeptId++;
+    public Department(int staticDeptID, String name, String location, Employee departmentHead) {
+        this.deptID = staticDeptID;
         this.name = name;
         this.location = location;
         this.departmentHead = departmentHead;
@@ -87,15 +87,15 @@ public class Department implements Serializable {
         return 0;
     }
 
-    public static int getStaticDeptId() {
-        return staticDeptId;
-    }
-
-    public static void setStaticDeptId(int staticDeptId) {
-        Department.staticDeptId = staticDeptId;
-    }
-
-    
+//    public static int getStaticDeptId() {
+//        return staticDeptId;
+//    }
+//
+//    public static void setStaticDeptId(int staticDeptId) {
+//        Department.staticDeptId = staticDeptId;
+//    }
+//
+//    
     // Looks up ID name by name
         public static int getIdByDepartmentName(ArrayList<Department> departments, String name) {
         for (Department dept : departments) {

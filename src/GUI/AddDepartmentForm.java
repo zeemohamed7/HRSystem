@@ -22,6 +22,9 @@ public class AddDepartmentForm extends javax.swing.JFrame {
        MainWindow main;
        ArrayList<Department> departments = main.departments;
        ArrayList<Employee> allEmployees = main.allEmployees;
+       
+       private static int staticDeptID = 0;
+
     /**
      * Creates new form AddDepartmentForm
      */
@@ -162,7 +165,8 @@ public class AddDepartmentForm extends javax.swing.JFrame {
     }
 
     // Create new department without assigning a head
-    Department newDepartment = new Department(departmentName, location);
+    staticDeptID++;
+    Department newDepartment = new Department(staticDeptID, departmentName, location);
 
     // Add to departments list
     departments.add(newDepartment);
