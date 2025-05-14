@@ -257,6 +257,9 @@ public class EditDepartmentForm extends javax.swing.JFrame {
             if (departmentHead != null) {
                 departmentHead.setIsHead(true); 
             }
+            
+            JOptionPane.showMessageDialog(this, "Department information updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
 
             // Update UI
             main.updateDepartmentDetails(selectedDepartment);

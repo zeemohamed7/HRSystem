@@ -17,6 +17,8 @@ import java.io.FileReader;
 import javax.swing.JFileChooser;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 
 /**

@@ -1,1 +1,9 @@
-COMPANY TOTAL: BHD 0.00
+Department: it
+-----------------------------------
+Employee ID: 1
+Name: ghhg hghh
+2-Week Pay: BHD 2423.08
+
+Department Total: BHD 2423.08
+
+COMPANY TOTAL: BHD 2423.08
