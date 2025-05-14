@@ -45,7 +45,6 @@ public class MainWindow extends javax.swing.JFrame {
     
     private Employee selectedEmployee;
     private Department selectedDepartment;
-    private DefaultTableModel deptModel;
 
         @SuppressWarnings("unchecked")
     public void deserializeData() {
@@ -76,10 +75,8 @@ public class MainWindow extends javax.swing.JFrame {
         initComponents();
         deserializeData();
         initialiseEmployeesTable();
+        initialiseDepartmentsTable();
         initSearchListener();
-
-        payLevels = new ArrayList();
-        
 
         payLevels.add("Select Annual Salary");
         payLevels.add("Level 1 - BHD 44,245.75");
@@ -147,20 +144,20 @@ public class MainWindow extends javax.swing.JFrame {
 
         
         
-        String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
-
-        // Create the table model
-        deptModel = new DefaultTableModel(departmentColumnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Make all cells non-editable
-            }
-        };
-
-
-        // Set model to the department table
-        departmentsTable.setModel(deptModel);
-
+//        String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
+//
+//        // Create the table model
+//        deptModel = new DefaultTableModel(departmentColumnNames, 0) {
+//            @Override
+//            public boolean isCellEditable(int row, int column) {
+//                return false; // Make all cells non-editable
+//            }
+//        };
+//
+//
+//        // Set model to the department table
+//        departmentsTable.setModel(deptModel);
+//
 
     }
     
@@ -232,13 +229,42 @@ public class MainWindow extends javax.swing.JFrame {
     employeesTable.setModel(model);
     refreshEmployeeTable();
     }
+    private void initialiseDepartmentsTable() {
+        String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
+
+        // Create the table model for departments
+        DefaultTableModel deptModel = new DefaultTableModel(departmentColumnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make all cells non-editable
+            }
+        };
+
+        try {
+            // Populate table
+            for (Department dept : departments) {  
+                deptModel.addRow(new Object[]{
+                    dept.getDeptID(), 
+                    dept.getName(), 
+                    dept.getLocation(),
+                    dept.getDepartmentHead() != null ? dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname() : "No Head"
+                });
+            
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error initializing department table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();  
+        }
+
+        departmentsTable.setModel(deptModel);
+        refreshDepartmentTable(); 
+    }
 
     
 
 
     // show employee detail 
     private void showEmployeeDetails(Employee employee) {
-        selectedEmployee = null; // Reset before assigning
         
         if (employee == null) {
             JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.WARNING_MESSAGE);
@@ -1505,23 +1531,23 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Search field (so it can search as you are typing
     private void initSearchListener() {
-    // Add a document listener to the search field to track typing events
-//    searchEmployeesTextField.getDocument().addDocumentListener(new DocumentListener() {
-//        @Override
-//        public void insertUpdate(DocumentEvent e) {
-//            searchEmployee();  // Called when text is inserted
-//        }
-//
-//        @Override
-//        public void removeUpdate(DocumentEvent e) {
-//            searchEmployee();  // Called when text is removed
-//        }
-//
-//        @Override
-//        public void changedUpdate(DocumentEvent e) {
-//            searchEmployee();  // Called for other changes (e.g., formatting)
-//        }
-//    });
+//     Add a document listener to the search field to track typing events
+    searchEmployeesTextField.getDocument().addDocumentListener(new DocumentListener() {
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            searchEmployee();  // Called when text is inserted
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            searchEmployee();  // Called when text is removed
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            searchEmployee();  // Called for other changes (e.g., formatting)
+        }
+    });
 }
    private void searchEmployee() {
     String query = searchEmployeesTextField.getText().trim().toLowerCase();
