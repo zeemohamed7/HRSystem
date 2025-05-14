@@ -1,1 +1,33 @@
-COMPANY TOTAL: BHD 0.00
+Department: IT
+-----------------------------------
+Employee ID: 1
+Name: Zahraa Hubail
+2-Week Pay: BHD 3705.24
+
+Department Total: BHD 3705.24
+
+Department: IT
+-----------------------------------
+Employee ID: 1
+Name: Zahraa Hubail
+2-Week Pay: BHD 3705.24
+
+Department Total: BHD 3705.24
+
+Department: IT
+-----------------------------------
+Employee ID: 1
+Name: Zahraa Hubail
+2-Week Pay: BHD 3705.24
+
+Department Total: BHD 3705.24
+
+Department: Marketing
+-----------------------------------
+Employee ID: 1
+Name: Zahraa Hubail
+2-Week Pay: BHD 3705.24
+
+Department Total: BHD 3705.24
+
+COMPANY TOTAL: BHD 14820.98
