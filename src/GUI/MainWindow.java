@@ -37,9 +37,9 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     
-    public static ArrayList<Employee> allEmployees;
-    public static ArrayList<Department> departments;
-    public static ArrayList<String> payLevels;
+    public static ArrayList<Employee> allEmployees = new ArrayList();
+    public static ArrayList<Department> departments = new ArrayList();
+    public static ArrayList<String> payLevels = new ArrayList();
         
 
     
@@ -47,14 +47,37 @@ public class MainWindow extends javax.swing.JFrame {
     private Department selectedDepartment;
     private DefaultTableModel deptModel;
 
+        @SuppressWarnings("unchecked")
+    public void deserializeData() {
+        try {
+            FileInputStream fileIn = new FileInputStream("HRSystem.dat");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
 
+            // Read the objects in the same order they were written
+            allEmployees = (ArrayList<Employee>) in.readObject();
+            departments = (ArrayList<Department>) in.readObject();
+
+            in.close();
+            fileIn.close();
+
+            System.out.println("Data successfully loaded from HRSystem.dat");
+
+        } catch (FileNotFoundException e) {
+            System.out.println("No previous data found. Starting fresh.");
+            // Optionally, you can call your clean start method here
+            // initializeWithStartupData();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
             
     public MainWindow() {
+        
         initComponents();
+        deserializeData();
+        initialiseEmployeesTable();
         initSearchListener();
-              
-        allEmployees = new ArrayList();
-        departments = new ArrayList();
+
         payLevels = new ArrayList();
         
 
@@ -120,7 +143,6 @@ public class MainWindow extends javax.swing.JFrame {
 
         
         // all function init for data
-        initialiseEmployeesTable();
         populateDepartmentsComboBox();
 
         
@@ -141,6 +163,9 @@ public class MainWindow extends javax.swing.JFrame {
 
 
     }
+    
+
+
     
     private String getAnnualPayByLevel(int payLevel) {
     switch (payLevel) {
@@ -179,6 +204,7 @@ public class MainWindow extends javax.swing.JFrame {
     try {
         // Populate the table with employee data
         for (Employee emp : allEmployees) {
+            System.out.println(emp.getFirstName());
             int id = emp.getEmployeeId();
             String fullName = emp.getFirstName() + " " + emp.getSurname();  
 
@@ -204,6 +230,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Set model to employees table
     employeesTable.setModel(model);
+    refreshEmployeeTable();
     }
 
     
