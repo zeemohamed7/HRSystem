@@ -9,8 +9,15 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import Logic.*;
 import java.util.ArrayList;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import javax.swing.JFileChooser;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
 
 /**
  *
@@ -539,6 +546,9 @@ public class MainWindow extends javax.swing.JFrame {
         MainFrame.setPreferredSize(new java.awt.Dimension(1380, 1000));
         MainFrame.setLayout(new java.awt.CardLayout());
 
+        LoginPanel.setBackground(new java.awt.Color(250, 244, 222));
+        LoginPanel.setForeground(new java.awt.Color(250, 235, 187));
+        LoginPanel.setToolTipText("");
         LoginPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -585,6 +595,8 @@ public class MainWindow extends javax.swing.JFrame {
         });
         LoginPanel.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 330, -1, -1));
 
+        loginButton.setBackground(new java.awt.Color(0, 51, 102));
+        loginButton.setForeground(new java.awt.Color(255, 255, 255));
         loginButton.setText("Log in");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -594,6 +606,8 @@ public class MainWindow extends javax.swing.JFrame {
         LoginPanel.add(loginButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 370, -1, -1));
         LoginPanel.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 400, 318, 5));
 
+        jButton2.setBackground(new java.awt.Color(136, 156, 176));
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Load Default Data");
         LoginPanel.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, -1, -1));
 
@@ -1646,7 +1660,147 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_locationDetailPageActionPerformed
 
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
-        // TODO add your handling code here:
+        // Check if there are any employees
+        if (allEmployees == null || allEmployees.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No employees found to generate payroll report.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            // Determine the file path for the payroll report
+            String userHome = System.getProperty("user.home");
+            File payrollDir = new File(userHome, "HRSystemReports");
+            if (!payrollDir.exists()) {
+                if (!payrollDir.mkdirs()) {
+                    throw new IOException("Failed to create reports directory: " + payrollDir.getAbsolutePath());
+                }
+            }
+            
+            File payrollFile = new File(payrollDir, "payroll.txt");
+            
+            // Ensure file can be created and written
+            if (payrollFile.exists()) {
+                if (!payrollFile.delete()) {
+                    throw new IOException("Cannot overwrite existing file: " + payrollFile.getAbsolutePath());
+                }
+            }
+            
+            if (!payrollFile.createNewFile()) {
+                throw new IOException("Cannot create payroll report file: " + payrollFile.getAbsolutePath());
+            }
+            
+            // Additional check for write permissions
+            if (!payrollFile.canWrite()) {
+                // Try to set writable
+                if (!payrollFile.setWritable(true)) {
+                    throw new IOException("No write permissions for file: " + payrollFile.getAbsolutePath());
+                }
+            }
+
+            try (PrintWriter writer = new PrintWriter(payrollFile)) {
+                // Company-wide total
+                double companyTotal = 0.0;
+
+                // Sort departments to ensure consistent ordering
+                ArrayList<Department> sortedDepartments = new ArrayList<>(departments);
+                sortedDepartments.sort((d1, d2) -> d1.getName().compareTo(d2.getName()));
+
+                // Iterate through departments
+                for (Department dept : sortedDepartments) {
+                    // Department header
+                    writer.println("Department: " + dept.getName());
+                    writer.println("-----------------------------------");
+
+                    // Department total
+                    double departmentTotal = 0.0;
+
+                    // Find and write employees in this department
+                    for (Employee emp : allEmployees) {
+                        if (emp.getDeptID() != null && emp.getDeptID() == dept.getDeptID()) {
+                            // Calculate 2-week pay (1/26th of annual salary)
+                            double biweeklyPay = calculateBiweeklyPay(emp.getPayLevel());
+                            
+                            // Write employee details
+                            writer.printf("Employee ID: %d\n", emp.getEmployeeId());
+                            writer.printf("Name: %s %s\n", emp.getFirstName(), emp.getSurname());
+                            writer.printf("2-Week Pay: BHD %.2f\n\n", biweeklyPay);
+
+                            // Update totals
+                            departmentTotal += biweeklyPay;
+                            companyTotal += biweeklyPay;
+                        }
+                    }
+
+                    // Department total
+                    writer.printf("Department Total: BHD %.2f\n\n", departmentTotal);
+                }
+
+                // Company total
+                writer.printf("COMPANY TOTAL: BHD %.2f\n", companyTotal);
+            }
+
+            // Update report text pane
+            try (BufferedReader reader = new BufferedReader(new FileReader(payrollFile))) {
+                StringBuilder content = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+                reportTextPane.setText(content.toString());
+            }
+
+            // Get the project directory
+            String projectDir = System.getProperty("user.dir");
+            File downloadFile = new File(projectDir, "payroll.txt");
+            
+            try {
+                // Copy the file to project directory
+                Files.copy(payrollFile.toPath(), downloadFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Payroll report saved to:\n" + downloadFile.getAbsolutePath(), 
+                    "Report Saved", 
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            } catch (IOException downloadEx) {
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Error saving file:\n" + downloadEx.getMessage(), 
+                    "Save Error", 
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+        } catch (IOException e) {
+            // Print full stack trace for detailed debugging
+            e.printStackTrace();
+            
+            // Log error details
+            System.err.println("Payroll Report Generation Error: " + e.getMessage());
+            System.err.println("File Path: " + System.getProperty("user.home") + "/HRSystemReports/payroll.txt");
+            System.err.println("Current Working Directory: " + System.getProperty("user.dir"));
+            
+            // Show user-friendly error message
+            JOptionPane.showMessageDialog(this, 
+                "Error generating payroll report:\n" + 
+                e.getMessage() + 
+                "\n\nPlease check file permissions and try again.", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Print full stack trace for unexpected errors
+            e.printStackTrace();
+            
+            // Log unexpected error details
+            System.err.println("Unexpected Error: " + e.getMessage());
+            
+            // Show user-friendly error message
+            JOptionPane.showMessageDialog(this, 
+                "Unexpected error:\n" + e.getMessage() + 
+                "\n\nPlease contact support.", 
+                "Critical Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
     private void payrollReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payrollReportButtonActionPerformed
@@ -1884,6 +2038,29 @@ public void refreshEmployeeTable() {
         }
     }
 
+    // Helper method to calculate biweekly pay based on pay level
+    private double calculateBiweeklyPay(int payLevel) {
+        // Pay levels and their corresponding annual salaries
+        double[] payLevelSalaries = {
+            0.0,     // Level 0 (placeholder)
+            45000.0, // Level 1
+            54000.0, // Level 2
+            63000.0, // Level 3
+            72000.0, // Level 4
+            81000.0, // Level 5
+            71258.22, // Level 6
+            80946.95, // Level 7
+            96336.34  // Level 8
+        };
+
+        // Validate pay level
+        if (payLevel < 1 || payLevel >= payLevelSalaries.length) {
+            return 0.0; // Default to 0 if pay level is invalid
+        }
+
+        // Calculate biweekly pay (1/26th of annual salary)
+        return payLevelSalaries[payLevel] / 26.0;
+    }
 
 
 public void updateDepartmentDetails(Department updatedDepartment) {
