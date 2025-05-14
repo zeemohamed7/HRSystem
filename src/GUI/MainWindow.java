@@ -527,6 +527,9 @@ public class MainWindow extends javax.swing.JFrame {
         MainFrame.setPreferredSize(new java.awt.Dimension(1380, 1000));
         MainFrame.setLayout(new java.awt.CardLayout());
 
+        LoginPanel.setBackground(new java.awt.Color(250, 244, 222));
+        LoginPanel.setForeground(new java.awt.Color(250, 235, 187));
+        LoginPanel.setToolTipText("");
         LoginPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -573,6 +576,8 @@ public class MainWindow extends javax.swing.JFrame {
         });
         LoginPanel.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 330, -1, -1));
 
+        loginButton.setBackground(new java.awt.Color(0, 51, 102));
+        loginButton.setForeground(new java.awt.Color(255, 255, 255));
         loginButton.setText("Log in");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -582,6 +587,8 @@ public class MainWindow extends javax.swing.JFrame {
         LoginPanel.add(loginButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 370, -1, -1));
         LoginPanel.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 400, 318, 5));
 
+        jButton2.setBackground(new java.awt.Color(136, 156, 176));
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Load Default Data");
         LoginPanel.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, -1, -1));
 
