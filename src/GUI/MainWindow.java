@@ -21,7 +21,9 @@ public class MainWindow extends javax.swing.JFrame {
     
     public static ArrayList<Employee> allEmployees;
     public static ArrayList<Department> departments;
-    
+    public static ArrayList<String> payLevels;
+        
+
     
     private Employee selectedEmployee;
     private Department selectedDepartment;
@@ -34,8 +36,20 @@ public class MainWindow extends javax.swing.JFrame {
               
         allEmployees = new ArrayList();
         departments = new ArrayList();
+        payLevels = new ArrayList();
         
 
+        payLevels.add("Select Annual Salary");
+        payLevels.add("Level 1 - BHD 44,245.75");
+        payLevels.add("Level 2 - BHD 48,670.32");
+        payLevels.add("Level 3 - BHD 53,537.35");
+        payLevels.add("Level 4 - BHD 58,891.09");
+        payLevels.add("Level 5 - BHD 64,780.20");
+        payLevels.add("Level 6 - BHD 71,258.22");
+        payLevels.add("Level 7 - BHD 80,946.95");
+        payLevels.add("Level 8 - BHD 96,336.34");
+        
+        
         
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
@@ -108,43 +122,69 @@ public class MainWindow extends javax.swing.JFrame {
 
 
     }
+    
+    private String getAnnualPayByLevel(int payLevel) {
+    switch (payLevel) {
+        case 1:
+            return "BHD 44,245.75";
+        case 2:
+            return "BHD 48,670.32";
+        case 3:
+            return "BHD 53,537.35";
+        case 4:
+            return "BHD 58,891.09";
+        case 5:
+            return "BHD 64,780.20";
+        case 6:
+            return "BHD 71,258.22";
+        case 7:
+            return "BHD 80,946.95";
+        case 8:
+            return "BHD 96,336.34";
+        default:
+            return "Not Available"; // If pay level is out of range
+    }
+    }
 
     private void initialiseEmployeesTable() {
-        String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Pay Level"};
+    String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Pay"};
 
-        // Create table with model
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        try {
-            // Populate the table with employee data
-            for (Employee emp : allEmployees) {
-                int id = emp.getEmployeeId();
-                String fullName = emp.getFirstName() + " " + emp.getSurname();  
-
-                String department = "No Department";
-                if (emp.getDeptID() != null) {
-                    department = Department.getDepartmentNameById(departments, emp.getDeptID()); // emp.getDeptID() can be null so might throw exception
-                }
-
-                char gender = emp.getGender();
-                int payLevel = emp.getPayLevel();
-
-                // Add the row to the model
-                Object[] row = {id, fullName, department, gender, payLevel};
-                model.addRow(row);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();  
+    // Create table with model
+    DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
         }
+    };
 
-        // Set model to employees table
-        employeesTable.setModel(model);
+    try {
+        // Populate the table with employee data
+        for (Employee emp : allEmployees) {
+            int id = emp.getEmployeeId();
+            String fullName = emp.getFirstName() + " " + emp.getSurname();  
+
+            String department = "No Department";
+            if (emp.getDeptID() != null) {
+                department = Department.getDepartmentNameById(departments, emp.getDeptID()); // emp.getDeptID() can be null so might throw exception
+            }
+
+            char gender = emp.getGender();
+            int payLevel = emp.getPayLevel(); // Assuming payLevel is an integer
+
+            // Map pay level to annual pay
+            String annualPay = getAnnualPayByLevel(payLevel);
+
+            // Add the row to the model
+            Object[] row = {id, fullName, department, gender, annualPay};
+            model.addRow(row);
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();  
+    }
+
+    // Set model to employees table
+    employeesTable.setModel(model);
     }
 
     
@@ -171,7 +211,7 @@ public class MainWindow extends javax.swing.JFrame {
             firstNameDetailPage.setText(employee.getFirstName());
             surnameDetailPage.setText(employee.getSurname());
             genderDetailPage.setText(employee.getGender() == 'M' ? "Male" : "Female");
-            payLevelDetailPage.setText(Integer.toString(employee.getPayLevel()));
+            payLevelDetailPage.setText("Level " + employee.getPayLevel() + " " + getAnnualPayByLevel(employee.getPayLevel()));
             addressDetailPage.setText(employee.getAddress());
 
             String department = "No Department";
@@ -765,6 +805,11 @@ public class MainWindow extends javax.swing.JFrame {
         departmentDetailPage.setEditable(false);
 
         payLevelDetailPage.setEditable(false);
+        payLevelDetailPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payLevelDetailPageActionPerformed(evt);
+            }
+        });
 
         jLabel32.setText("Address");
 
@@ -1659,43 +1704,50 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     }//GEN-LAST:event_departmentsListSelectActionPerformed
+
+    private void payLevelDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelDetailPageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_payLevelDetailPageActionPerformed
    
     
  
-    public void refreshEmployeeTable() {
-        // Get the selected department from the combo box
-        String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
+public void refreshEmployeeTable() {
+    // Get the selected department from the combo box
+    String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
 
-        // Default to "All Departments" if selectedDepartment is null
-        if (selectedDepartment == null) {
-            selectedDepartment = "All Departments";
+    // Default to "All Departments" if selectedDepartment is null
+    if (selectedDepartment == null) {
+        selectedDepartment = "All Departments";
+    }
+
+    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+    model.setRowCount(0);  // Clear existing rows
+
+    // Loop through all employees
+    for (Employee emp : allEmployees) {
+        int id = emp.getEmployeeId();
+        String fullName = emp.getFirstName() + " " + emp.getSurname();
+        Integer deptId = emp.getDeptID();
+        String department = "No Department";  // Default value if no department is assigned
+
+        if (deptId != null) {
+            department = Department.getDepartmentNameById(departments, deptId);
         }
 
-        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-        model.setRowCount(0);  // Clear existing rows
+        // Filter employees based on the selected department
+        if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
+            char gender = emp.getGender();
+            int payLevel = emp.getPayLevel();
 
-        // Loop through all employees
-        for (Employee emp : allEmployees) {
-            int id = emp.getEmployeeId();
-            String fullName = emp.getFirstName() + " " + emp.getSurname();  // Concatenate first and last name
-            Integer deptId = emp.getDeptID();
-            String department = "No Department";  // Default value if no department is assigned
+            // Get the annual pay based on the pay level
+            String annualPay = getAnnualPayByLevel(payLevel);
 
-            if (deptId != null) {
-                department = Department.getDepartmentNameById(departments, deptId);
-            }
-
-            // Filter employees based on the selected department
-            if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
-                char gender = emp.getGender();
-                int payLevel = emp.getPayLevel();
-
-                // Add the row to the model
-                Object[] row = {id, fullName, department, gender, payLevel};
-                model.addRow(row);
-            }
+            // Add the row to the model
+            Object[] row = {id, fullName, department, gender, annualPay};
+            model.addRow(row);
         }
     }
+}
 
         public void refreshDepartmentTable() {
             // Assuming you have a JTable named departmentTable

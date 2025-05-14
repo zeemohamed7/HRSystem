@@ -57,15 +57,10 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         
         // populate pay level
         payLevelForEmployeeCombo1.removeAllItems();
-        payLevelForEmployeeCombo1.addItem("Select Annual Salary");
-        payLevelForEmployeeCombo1.addItem("Level 1 - BHD 44,245.75");
-        payLevelForEmployeeCombo1.addItem("Level 2 - BHD 48,670.32");
-        payLevelForEmployeeCombo1.addItem("Level 3 - BHD 53,537.35");
-        payLevelForEmployeeCombo1.addItem("Level 4 - BHD 58,891.09");
-        payLevelForEmployeeCombo1.addItem("Level 5 - BHD 64,780.20");
-        payLevelForEmployeeCombo1.addItem("Level 6 - BHD 71,258.22");
-        payLevelForEmployeeCombo1.addItem("Level 7 - BHD 80,946.95");
-        payLevelForEmployeeCombo1.addItem("Level 8 - BHD 96,336.34");
+        
+        for (String payLevel : main.payLevels) {
+            payLevelForEmployeeCombo1.addItem(payLevel);
+        }
     }
 
     /**
