@@ -22,8 +22,8 @@ public class AddDepartmentForm extends javax.swing.JFrame {
        MainWindow main;
        ArrayList<Department> departments = main.departments;
        ArrayList<Employee> allEmployees = main.allEmployees;
-       
-       private static int staticDeptID = 0;
+       int staticDeptID = main.staticDeptID;
+
 
     /**
      * Creates new form AddDepartmentForm

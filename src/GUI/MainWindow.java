@@ -41,6 +41,9 @@ public class MainWindow extends javax.swing.JFrame {
     public static ArrayList<Department> departments = new ArrayList();
     public static ArrayList<String> payLevels = new ArrayList();
         
+    public static int staticEmployeeID = 0;
+    public static int staticDeptID = 0;
+
 
     
     private Employee selectedEmployee;
@@ -55,6 +58,8 @@ public class MainWindow extends javax.swing.JFrame {
             // Read the objects in the same order they were written
             allEmployees = (ArrayList<Employee>) in.readObject();
             departments = (ArrayList<Department>) in.readObject();
+            staticEmployeeID = (Integer) in.readObject();
+            staticDeptID = (Integer) in.readObject();
 
             in.close();
             fileIn.close();
@@ -1524,6 +1529,7 @@ public class MainWindow extends javax.swing.JFrame {
     // Hide the main window
     setVisible(false);
     AddEmployeeForm addEmployeeForm = new AddEmployeeForm(this);
+    staticEmployeeID++;
     addEmployeeForm.setVisible(true);
 
            
@@ -1637,6 +1643,8 @@ public class MainWindow extends javax.swing.JFrame {
                 ObjectOutputStream out = new ObjectOutputStream(fileOut);
                 out.writeObject(allEmployees);
                 out.writeObject(departments);
+                out.writeObject(staticEmployeeID);
+                out.writeObject(staticDeptID);
             } catch (IOException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
