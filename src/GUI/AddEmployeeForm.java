@@ -268,13 +268,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
             lastNameField1.requestFocus();
             return;
         }
-
-        if (address.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Address is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            addressField1.requestFocus();
-            return;
-        }
-
+        
         // Validate gender selection
         char gender;
         if (maleButton1.isSelected()) {
@@ -284,6 +278,24 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Please select a gender.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
+        }
+        
+        if (address.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Address is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            addressField1.requestFocus();
+            return;
+        }
+
+        // Get selected department (can be null)
+        String selectedDepartmentName = (String) departmentForEmployeeCombo1.getSelectedItem();
+        Integer departmentId = null;
+        
+        if (selectedDepartmentName != null && !selectedDepartmentName.equals("No Department")) {
+            try {
+                departmentId = Department.getIdByDepartmentName(departments, selectedDepartmentName);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error retrieving department information: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
 
         // Get salary from combo box
@@ -302,17 +314,6 @@ public class AddEmployeeForm extends javax.swing.JFrame {
             return;
         }
 
-        // Get selected department (can be null)
-        String selectedDepartmentName = (String) departmentForEmployeeCombo1.getSelectedItem();
-        Integer departmentId = null;
-        
-        if (selectedDepartmentName != null && !selectedDepartmentName.equals("No Department")) {
-            try {
-                departmentId = Department.getIdByDepartmentName(departments, selectedDepartmentName);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error retrieving department information: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
 
         // Create new employee
         Employee newEmployee;
