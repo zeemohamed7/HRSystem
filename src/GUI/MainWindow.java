@@ -4,6 +4,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -17,37 +18,33 @@ import java.io.FileReader;
 import javax.swing.JFileChooser;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
  * @author zainab
  */
 public class MainWindow extends javax.swing.JFrame {
+
     /**
      * Creates new form MainWindow
      */
-    
     public static ArrayList<Employee> allEmployees;
     public static ArrayList<Department> departments;
     public static ArrayList<String> payLevels;
-        
 
-    
     private Employee selectedEmployee;
     private Department selectedDepartment;
     private DefaultTableModel deptModel;
 
-
-            
     public MainWindow() {
         initComponents();
         initSearchListener();
-              
+
         allEmployees = new ArrayList();
         departments = new ArrayList();
         payLevels = new ArrayList();
-        
 
         payLevels.add("Select Annual Salary");
         payLevels.add("Level 1 - BHD 44,245.75");
@@ -58,14 +55,12 @@ public class MainWindow extends javax.swing.JFrame {
         payLevels.add("Level 6 - BHD 71,258.22");
         payLevels.add("Level 7 - BHD 80,946.95");
         payLevels.add("Level 8 - BHD 96,336.34");
-        
-        
-        
+
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
-        
+
         // Add login and dashboard panel to main panel
         // Add generate pay report button
         JButton generatePayReportButton = new JButton("Generate Pay Report");
@@ -73,18 +68,15 @@ public class MainWindow extends javax.swing.JFrame {
         generatePayReportButton.setBackground(new Color(0, 102, 102));
         generatePayReportButton.setForeground(Color.WHITE);
         generatePayReportButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        
+
         // Add button to dashboard
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setBackground(new Color(255, 255, 255));
         buttonPanel.add(generatePayReportButton);
-        
+
         // Add panels to main frame
         MainFrame.add(LoginPanel, "login");
         MainFrame.add(DashboardPanel, "dashboard");
-        
-       
-        
 
         // DashboardPanel
         DashboardPanel.setLayout(new BorderLayout());
@@ -95,7 +87,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         // Right side (header + content)
         headerPanel.setPreferredSize(new Dimension(0, 60));
-        rightPanel.setLayout(new BorderLayout()); 
+        rightPanel.setLayout(new BorderLayout());
         rightPanel.add(headerPanel, BorderLayout.NORTH);
         rightPanel.add(contentPanel, BorderLayout.CENTER);
 
@@ -109,13 +101,10 @@ public class MainWindow extends javax.swing.JFrame {
         contentPanel.add(departmentDetailPanel, "departmentDetail");
         contentPanel.add(payrollPanel, "payroll");
 
-        
         // all function init for data
         initialiseEmployeesTable();
         populateDepartmentsComboBox();
 
-        
-        
         String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
 
         // Create the table model
@@ -126,84 +115,79 @@ public class MainWindow extends javax.swing.JFrame {
             }
         };
 
-
         // Set model to the department table
         departmentsTable.setModel(deptModel);
 
+    }
 
-    }
-    
     private String getAnnualPayByLevel(int payLevel) {
-    switch (payLevel) {
-        case 1:
-            return "BHD 44,245.75";
-        case 2:
-            return "BHD 48,670.32";
-        case 3:
-            return "BHD 53,537.35";
-        case 4:
-            return "BHD 58,891.09";
-        case 5:
-            return "BHD 64,780.20";
-        case 6:
-            return "BHD 71,258.22";
-        case 7:
-            return "BHD 80,946.95";
-        case 8:
-            return "BHD 96,336.34";
-        default:
-            return "Not Available"; // If pay level is out of range
-    }
+        switch (payLevel) {
+            case 1:
+                return "BHD 44,245.75";
+            case 2:
+                return "BHD 48,670.32";
+            case 3:
+                return "BHD 53,537.35";
+            case 4:
+                return "BHD 58,891.09";
+            case 5:
+                return "BHD 64,780.20";
+            case 6:
+                return "BHD 71,258.22";
+            case 7:
+                return "BHD 80,946.95";
+            case 8:
+                return "BHD 96,336.34";
+            default:
+                return "Not Available"; // If pay level is out of range
+        }
     }
 
     private void initialiseEmployeesTable() {
-    String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Pay"};
+        String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Pay"};
 
-    // Create table with model
-    DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
-
-    try {
-        // Populate the table with employee data
-        for (Employee emp : allEmployees) {
-            int id = emp.getEmployeeId();
-            String fullName = emp.getFirstName() + " " + emp.getSurname();  
-
-            String department = "No Department";
-            if (emp.getDeptID() != null) {
-                department = Department.getDepartmentNameById(departments, emp.getDeptID()); // emp.getDeptID() can be null so might throw exception
+        // Create table with model
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
+        };
 
-            char gender = emp.getGender();
-            int payLevel = emp.getPayLevel(); // Assuming payLevel is an integer
+        try {
+            // Populate the table with employee data
+            for (Employee emp : allEmployees) {
+                int id = emp.getEmployeeId();
+                String fullName = emp.getFirstName() + " " + emp.getSurname();
 
-            // Map pay level to annual pay
-            String annualPay = getAnnualPayByLevel(payLevel);
+                String department = "No Department";
+                if (emp.getDeptID() != null) {
+                    department = Department.getDepartmentNameById(departments, emp.getDeptID()); // emp.getDeptID() can be null so might throw exception
+                }
 
-            // Add the row to the model
-            Object[] row = {id, fullName, department, gender, annualPay};
-            model.addRow(row);
+                char gender = emp.getGender();
+                int payLevel = emp.getPayLevel(); // Assuming payLevel is an integer
+
+                // Map pay level to annual pay
+                String annualPay = getAnnualPayByLevel(payLevel);
+
+                // Add the row to the model
+                Object[] row = {id, fullName, department, gender, annualPay};
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();  
+
+        // Set model to employees table
+        employeesTable.setModel(model);
     }
-
-    // Set model to employees table
-    employeesTable.setModel(model);
-    }
-
-    
-
 
     // show employee detail 
     private void showEmployeeDetails(Employee employee) {
         selectedEmployee = null; // Reset before assigning
-        
+
         if (employee == null) {
             JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.WARNING_MESSAGE);
             return;
@@ -236,43 +220,40 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
 
-    
-    
     // show department detail 
     private void showDepartmentDetails(Department dept) {
         selectedDepartment = dept;
 
-
-    if (dept == null) {
-        JOptionPane.showMessageDialog(this, "No department selected.", "Error", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-
-    // Show department detail page
-    CardLayout cl = (CardLayout) contentPanel.getLayout();
-    cl.show(contentPanel, "departmentDetail");
-
-    try {
-        // Display department data
-        departmentNameDetailPage.setText(dept.getName());
-        idDepartmentDetailPage.setText(Integer.toString(dept.getDeptID()));
-        locationDetailPage.setText(dept.getLocation());
-        deptHeadDetail.setText(null);
-
-        // Display department head, if applicable
-    // Check if the selected department is not null before accessing it
-    if (selectedDepartment != null) {
-        Employee headEmployee = selectedDepartment.getDepartmentHead();
-
-        // Display department head, if applicable
-        if (headEmployee != null) {
-            deptHeadDetail.setText(headEmployee.getFirstName() + " " + headEmployee.getSurname());
-        } else {
-            deptHeadDetail.setText(null);
+        if (dept == null) {
+            JOptionPane.showMessageDialog(this, "No department selected.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-    } else {
-        deptHeadDetail.setText(null);
-    }
+
+        // Show department detail page
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "departmentDetail");
+
+        try {
+            // Display department data
+            departmentNameDetailPage.setText(dept.getName());
+            idDepartmentDetailPage.setText(Integer.toString(dept.getDeptID()));
+            locationDetailPage.setText(dept.getLocation());
+            deptHeadDetail.setText(null);
+
+            // Display department head, if applicable
+            // Check if the selected department is not null before accessing it
+            if (selectedDepartment != null) {
+                Employee headEmployee = selectedDepartment.getDepartmentHead();
+
+                // Display department head, if applicable
+                if (headEmployee != null) {
+                    deptHeadDetail.setText(headEmployee.getFirstName() + " " + headEmployee.getSurname());
+                } else {
+                    deptHeadDetail.setText(null);
+                }
+            } else {
+                deptHeadDetail.setText(null);
+            }
 
 //        String headName = null;
 //        System.out.println(headName);
@@ -283,113 +264,61 @@ public class MainWindow extends javax.swing.JFrame {
 //            }
 //        }
 //        deptHeadDetail.setText(headName);
+            // Display employees in the department
+            StringBuilder employeeDetails = new StringBuilder();
+            boolean hasEmployees = false;
 
-        // Display employees in the department
-        StringBuilder employeeDetails = new StringBuilder();
-        boolean hasEmployees = false;
-
-        for (Employee employee : allEmployees) {
-            if (employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
-                hasEmployees = true;
-                employeeDetails.append("ID: ").append(employee.getEmployeeId())
-                               .append(", Name: ").append(employee.getFirstName())
-                               .append(" ").append(employee.getSurname())
-                               .append("\n");
+            for (Employee employee : allEmployees) {
+                if (employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
+                    hasEmployees = true;
+                    employeeDetails.append("ID: ").append(employee.getEmployeeId())
+                            .append(", Name: ").append(employee.getFirstName())
+                            .append(" ").append(employee.getSurname())
+                            .append("\n");
+                }
             }
+
+            if (!hasEmployees) {
+                employeeDetails.append("No employees in this department.");
+            }
+
+            employeeListArea.setText(employeeDetails.toString());
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error displaying department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-
-        if (!hasEmployees) {
-            employeeDetails.append("No employees in this department.");
-        }
-
-        employeeListArea.setText(employeeDetails.toString());
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error displaying department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
     }
-}
 
-    
-
-
-    
-    
     // pagination function
     public void updatePagination(int totalPages, int currentPage) {
-    paginationPanel.removeAll();
+        paginationPanel.removeAll();
 
-    // prev button
-    JButton prevButton = new JButton("Previous");
-    prevButton.setEnabled(currentPage > 1);
+        // prev button
+        JButton prevButton = new JButton("Previous");
+        prevButton.setEnabled(currentPage > 1);
 //    prevButton.addActionListener(e -> goToPage(currentPage - 1));
-    paginationPanel.add(prevButton);
+        paginationPanel.add(prevButton);
 
-    // page number buttons
-    for (int i = 1; i <= totalPages; i++) {
-        JButton pageButton = new JButton(String.valueOf(i));
-        if (i == currentPage) {
-            pageButton.setEnabled(false); // Highlight current page
-        }
-        int page = i;
+        // page number buttons
+        for (int i = 1; i <= totalPages; i++) {
+            JButton pageButton = new JButton(String.valueOf(i));
+            if (i == currentPage) {
+                pageButton.setEnabled(false); // Highlight current page
+            }
+            int page = i;
 //        pageButton.addActionListener(e -> goToPage(page));
-        paginationPanel.add(pageButton);
-    }
+            paginationPanel.add(pageButton);
+        }
 
-    // next button
-    JButton nextButton = new JButton("Next");
-    nextButton.setEnabled(currentPage < totalPages);
+        // next button
+        JButton nextButton = new JButton("Next");
+        nextButton.setEnabled(currentPage < totalPages);
 //    nextButton.addActionListener(e -> goToPage(currentPage + 1));
-    paginationPanel.add(nextButton);
+        paginationPanel.add(nextButton);
 
-    paginationPanel.revalidate();
-    paginationPanel.repaint();
-}
-
-    
-    public void showSuccessToast(JFrame parent, String message) {
-        JWindow toast = new JWindow(parent); 
-        toast.setLayout(new BorderLayout());
-
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setOpaque(true);
-        label.setBackground(new Color(60, 179, 113)); 
-        label.setForeground(Color.WHITE);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        toast.add(label, BorderLayout.CENTER);
-        toast.pack();
-
-        // Get location relative to parent window
-        int x = parent.getX() + parent.getWidth() - toast.getWidth() - 20;
-        int y = parent.getY() + parent.getHeight() - toast.getHeight() - 50;
-        toast.setLocation(x, y);
-
-        toast.setVisible(true);
-
-        // Auto-close after 3 seconds
-        new Timer(3000, e -> toast.dispose()).start();
-    }
-    public void showErrorToast(JFrame parent, String message) {
-        JWindow toast = new JWindow(parent); 
-        toast.setLayout(new BorderLayout());
-
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setOpaque(true);
-        label.setBackground(new Color(220, 53, 69)); 
-        label.setForeground(Color.WHITE);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        toast.add(label, BorderLayout.CENTER);
-        toast.pack();
-
-        // Get location relative to parent window
-        int x = parent.getX() + parent.getWidth() - toast.getWidth() - 20;
-        int y = parent.getY() + parent.getHeight() - toast.getHeight() - 50;
-        toast.setLocation(x, y);
-
-        toast.setVisible(true);
-
-        // Auto-close after 3 seconds
-        new Timer(3000, e -> toast.dispose()).start();
+        paginationPanel.revalidate();
+        paginationPanel.repaint();
     }
 
     public void populateDepartmentsComboBox() {
@@ -400,14 +329,11 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
 
-
-    
-        /**
+    /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -1419,90 +1345,93 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void employeesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesButtonActionPerformed
         // TODO add your handling code here:
-        CardLayout cl = (CardLayout)(contentPanel.getLayout());
+        CardLayout cl = (CardLayout) (contentPanel.getLayout());
         cl.show(contentPanel, "employees");
 
     }//GEN-LAST:event_employeesButtonActionPerformed
 
     private void addEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeButtonActionPerformed
         // TODO add your handling code here:
-    // Create and show the AddEmployeeForm
-    // Hide the main window
-    setVisible(false);
-    AddEmployeeForm addEmployeeForm = new AddEmployeeForm(this);
-    addEmployeeForm.setVisible(true);
+        // Create and show the AddEmployeeForm
+        // Hide the main window
+        setVisible(false);
+        AddEmployeeForm addEmployeeForm = new AddEmployeeForm(this);
+        addEmployeeForm.setVisible(true);
 
-           
+
     }//GEN-LAST:event_addEmployeeButtonActionPerformed
 
     // Search field (so it can search as you are typing
     private void initSearchListener() {
-    // Add a document listener to the search field to track typing events
-    searchEmployeesTextField.getDocument().addDocumentListener(new DocumentListener() {
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            searchEmployee();  // Called when text is inserted
-        }
+        // Add a document listener to the search field to track typing events
+        searchEmployeesTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchEmployee();  // Called when text is inserted
+            }
 
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            searchEmployee();  // Called when text is removed
-        }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchEmployee();  // Called when text is removed
+            }
 
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            searchEmployee();  // Called for other changes (e.g., formatting)
-        }
-    });
-}
-   private void searchEmployee() {
-    String query = searchEmployeesTextField.getText().trim().toLowerCase();
-    
-    // If the query is empty, just return and don't filter the employees
-    if (query.isEmpty()) {
-        return;  
-    }
-
-    // Create a list to store the filtered results
-    ArrayList<Employee> searchResults = new ArrayList<>();
-
-    // Loop through all employees and filter by the search query
-    for (Employee employee : allEmployees) {
-        // Check if the first name or surname contains the query (case-insensitive)
-        if (employee.getFirstName().toLowerCase().startsWith(query) || // starts with because we need exact matching from the start, not contains
-            employee.getSurname().toLowerCase().startsWith(query)) {
-            searchResults.add(employee);
-        }
-    }
-
-    // Clear the current rows in the table (assuming you have a JTable)
-    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-    model.setRowCount(0);  // This clears all rows from the table
-
-
-    // Populate the table with the filtered search results
-    for (Employee emp : searchResults) {
-        // Combine first name and surname to create Full Name
-        String fullName = emp.getFirstName() + " " + emp.getSurname();
-        // Handle case where deptID might be null
-        String departmentName = "No Department"; // Default value if no department
-        if (emp.getDeptID() != null) {
-            departmentName = Department.getDepartmentNameById(departments, emp.getDeptID());
-        }
-
-        
-        // Add the employee details to the table
-        model.addRow(new Object[]{
-            emp.getEmployeeId(),  // Assuming you have employee ID
-            fullName,             // Full Name (First + Surname)
-            departmentName,  
-            emp.getGender(),      // Gender
-            emp.getPayLevel()     // Pay Level (Annual Salary)
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchEmployee();  // Called for other changes (e.g., formatting)
+            }
         });
     }
-}
 
-    
+    private void searchEmployee() {
+        String query = searchEmployeesTextField.getText().trim().toLowerCase();
+
+        // If the query is empty, just return and don't filter the employees
+        if (query.isEmpty()) {
+            return;
+        }
+
+        // Create a list to store the filtered results
+        ArrayList<Employee> searchResults = new ArrayList<>();
+
+        // Loop through all employees and filter by the search query
+        for (Employee employee : allEmployees) {
+            String fullName = employee.getFirstName().toLowerCase().trim() + " " + employee.getSurname().toLowerCase().trim();
+
+            // Check if the first name or surname contains the query (case-insensitive)
+            if (employee.getFirstName().toLowerCase().startsWith(query)
+                    || employee.getSurname().toLowerCase().startsWith(query)
+                    || fullName.startsWith(query)
+                    || fullName.contains(query)) {
+                searchResults.add(employee);
+            }
+        }
+
+        // Clear the current rows in the table (assuming you have a JTable)
+        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+        model.setRowCount(0);  // This clears all rows from the table
+
+        // Populate the table with the filtered search results
+        for (Employee emp : searchResults) {
+            // Combine first name and surname to create Full Name
+            String fullName = emp.getFirstName().toLowerCase().trim() + " " + emp.getSurname().toLowerCase().trim();
+            // Handle case where deptID might be null
+            String departmentName = "No Department"; // Default value if no department
+            if (emp.getDeptID() != null) {
+                departmentName = Department.getDepartmentNameById(departments, emp.getDeptID());
+            }
+
+            // Add the employee details to the table
+            model.addRow(new Object[]{
+                emp.getEmployeeId(), // Assuming you have employee ID
+                fullName, // Full Name (First + Surname)
+                departmentName,
+                emp.getGender(), // Gender
+                emp.getPayLevel() // Pay Level (Annual Salary)
+            });
+        }
+    }
+
+
     private void searchEmployeesTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchEmployeesTextFieldActionPerformed
         // TODO add your handling code here:
 
@@ -1515,7 +1444,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void departmentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsButtonActionPerformed
         // TODO add your handling code here:
-        CardLayout cl = (CardLayout)(contentPanel.getLayout());
+        CardLayout cl = (CardLayout) (contentPanel.getLayout());
         cl.show(contentPanel, "departments");
     }//GEN-LAST:event_departmentsButtonActionPerformed
 
@@ -1541,7 +1470,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void generatePayReportButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // Check if there are any employees
-        
 
     }
 
@@ -1552,41 +1480,40 @@ public class MainWindow extends javax.swing.JFrame {
     private void employeesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeesTableMouseClicked
         // TODO add your handling code here:
 
-    int selectedRow = employeesTable.getSelectedRow();
+        int selectedRow = employeesTable.getSelectedRow();
 
-    if (selectedRow != -1) {
-        Object employeeIdObj = employeesTable.getValueAt(selectedRow, 0);
+        if (selectedRow != -1) {
+            Object employeeIdObj = employeesTable.getValueAt(selectedRow, 0);
 
-        if (employeeIdObj instanceof Integer) {
-            int employeeId = (Integer) employeeIdObj;
-            Employee selectedEmployee = null;
+            if (employeeIdObj instanceof Integer) {
+                int employeeId = (Integer) employeeIdObj;
+                Employee selectedEmployee = null;
 
-            if (allEmployees != null) {
-                for (Employee emp : allEmployees) {
-                    if (emp.getEmployeeId() == employeeId) {
-                        selectedEmployee = emp;
-                        break;
+                if (allEmployees != null) {
+                    for (Employee emp : allEmployees) {
+                        if (emp.getEmployeeId() == employeeId) {
+                            selectedEmployee = emp;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (selectedEmployee != null) {
-                showEmployeeDetails(selectedEmployee);
+                if (selectedEmployee != null) {
+                    showEmployeeDetails(selectedEmployee);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Employee not found.");
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "Employee not found.");
+                JOptionPane.showMessageDialog(this, "Invalid Employee ID.");
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Invalid Employee ID.");
         }
-    }
     }//GEN-LAST:event_employeesTableMouseClicked
 
     private void editEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEmployeeButtonActionPerformed
         // TODO add your handling code here:
-        
+
         EditEmployeeForm editForm = new EditEmployeeForm(this, selectedEmployee);
         editForm.setVisible(true);
-
 
 
     }//GEN-LAST:event_editEmployeeButtonActionPerformed
@@ -1598,7 +1525,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void departmentsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_departmentsTableMouseClicked
         // TODO add your handling code here:
         // fake data to test detail page
-    int selectedRow = departmentsTable.getSelectedRow();
+        int selectedRow = departmentsTable.getSelectedRow();
 
         if (selectedRow != -1) {
             Object deptIdObj = departmentsTable.getValueAt(selectedRow, 0);
@@ -1675,20 +1602,20 @@ public class MainWindow extends javax.swing.JFrame {
                     throw new IOException("Failed to create reports directory: " + payrollDir.getAbsolutePath());
                 }
             }
-            
+
             File payrollFile = new File(payrollDir, "payroll.txt");
-            
+
             // Ensure file can be created and written
             if (payrollFile.exists()) {
                 if (!payrollFile.delete()) {
                     throw new IOException("Cannot overwrite existing file: " + payrollFile.getAbsolutePath());
                 }
             }
-            
+
             if (!payrollFile.createNewFile()) {
                 throw new IOException("Cannot create payroll report file: " + payrollFile.getAbsolutePath());
             }
-            
+
             // Additional check for write permissions
             if (!payrollFile.canWrite()) {
                 // Try to set writable
@@ -1719,7 +1646,7 @@ public class MainWindow extends javax.swing.JFrame {
                         if (emp.getDeptID() != null && emp.getDeptID() == dept.getDeptID()) {
                             // Calculate 2-week pay (1/26th of annual salary)
                             double biweeklyPay = calculateBiweeklyPay(emp.getPayLevel());
-                            
+
                             // Write employee details
                             writer.printf("Employee ID: %d\n", emp.getEmployeeId());
                             writer.printf("Name: %s %s\n", emp.getFirstName(), emp.getSurname());
@@ -1752,263 +1679,255 @@ public class MainWindow extends javax.swing.JFrame {
             // Get the project directory
             String projectDir = System.getProperty("user.dir");
             File downloadFile = new File(projectDir, "payroll.txt");
-            
+
             try {
                 // Copy the file to project directory
                 Files.copy(payrollFile.toPath(), downloadFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                
+
                 JOptionPane.showMessageDialog(
-                    this, 
-                    "Payroll report saved to:\n" + downloadFile.getAbsolutePath(), 
-                    "Report Saved", 
-                    JOptionPane.INFORMATION_MESSAGE
+                        this,
+                        "Payroll report saved to:\n" + downloadFile.getAbsolutePath(),
+                        "Report Saved",
+                        JOptionPane.INFORMATION_MESSAGE
                 );
             } catch (IOException downloadEx) {
                 JOptionPane.showMessageDialog(
-                    this, 
-                    "Error saving file:\n" + downloadEx.getMessage(), 
-                    "Save Error", 
-                    JOptionPane.ERROR_MESSAGE
+                        this,
+                        "Error saving file:\n" + downloadEx.getMessage(),
+                        "Save Error",
+                        JOptionPane.ERROR_MESSAGE
                 );
             }
         } catch (IOException e) {
             // Print full stack trace for detailed debugging
             e.printStackTrace();
-            
+
             // Log error details
             System.err.println("Payroll Report Generation Error: " + e.getMessage());
             System.err.println("File Path: " + System.getProperty("user.home") + "/HRSystemReports/payroll.txt");
             System.err.println("Current Working Directory: " + System.getProperty("user.dir"));
-            
+
             // Show user-friendly error message
-            JOptionPane.showMessageDialog(this, 
-                "Error generating payroll report:\n" + 
-                e.getMessage() + 
-                "\n\nPlease check file permissions and try again.", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Error generating payroll report:\n"
+                    + e.getMessage()
+                    + "\n\nPlease check file permissions and try again.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             // Print full stack trace for unexpected errors
             e.printStackTrace();
-            
+
             // Log unexpected error details
             System.err.println("Unexpected Error: " + e.getMessage());
-            
+
             // Show user-friendly error message
-            JOptionPane.showMessageDialog(this, 
-                "Unexpected error:\n" + e.getMessage() + 
-                "\n\nPlease contact support.", 
-                "Critical Error", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Unexpected error:\n" + e.getMessage()
+                    + "\n\nPlease contact support.",
+                    "Critical Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
     private void payrollReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payrollReportButtonActionPerformed
         // TODO add your handling code here:
-        CardLayout cl = (CardLayout)(contentPanel.getLayout());
+        CardLayout cl = (CardLayout) (contentPanel.getLayout());
         cl.show(contentPanel, "payroll");
     }//GEN-LAST:event_payrollReportButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
-        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this employee?", 
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this employee?",
                 "DELETE EMPLOYEE", 2, JOptionPane.YES_NO_OPTION);
-      
-       if(confirm == JOptionPane.YES_OPTION){
-       
-       //remove the employee from the data source
-       deleteEmployee(selectedEmployee);
-       JOptionPane.showMessageDialog(this, "Employee deleted succefully.");
-       
-       employeeDetailPanel.setVisible(false);
-       
-    // Switch back to Employee Panel 
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, "employeePanel");
-       
-       }
-        
+
+        if (confirm == JOptionPane.YES_OPTION) {
+
+            //remove the employee from the data source
+            deleteEmployee(selectedEmployee);
+            JOptionPane.showMessageDialog(this, "Employee deleted succefully.");
+
+            employeeDetailPanel.setVisible(false);
+
+            // Switch back to Employee Panel 
+            CardLayout cl = (CardLayout) contentPanel.getLayout();
+            cl.show(contentPanel, "employeePanel");
+
+        }
+
     }//GEN-LAST:event_deleteButtonActionPerformed
-    private void deleteEmployee(Employee employee){
-    allEmployees.remove(employee);
-    refreshEmployeeTable();
+    private void deleteEmployee(Employee employee) {
+        allEmployees.remove(employee);
+        refreshEmployeeTable();
     }
-    
-    
+
+
     private void deleteButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButton1ActionPerformed
         // TODO add your handling code here:
-         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this department?",
-                 "DELETE DEPARTMENT", 2);
-        
-        if(confirm == JOptionPane.YES_OPTION){
-             if (confirm == JOptionPane.YES_OPTION) {
-        boolean hasEmployees = false;
-          int i = 0;
-        
-         // Use while loop to check if any employee is in the selected department
-        if (allEmployees != null) {
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this department?",
+                "DELETE DEPARTMENT", 2);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (confirm == JOptionPane.YES_OPTION) {
+                boolean hasEmployees = false;
+                int i = 0;
+
+                // Use while loop to check if any employee is in the selected department
+                if (allEmployees != null) {
                     while (i < allEmployees.size()) {
-            Employee emp = allEmployees.get(i);
-            if (emp.getDeptID() != null && emp.getDeptID() == selectedDepartment.getDeptID()) {
-                hasEmployees = true;
-                break;
+                        Employee emp = allEmployees.get(i);
+                        if (emp.getDeptID() != null && emp.getDeptID() == selectedDepartment.getDeptID()) {
+                            hasEmployees = true;
+                            break;
+                        }
+                        i++;
+                    }
+                }
+
+                if (hasEmployees) {
+                    JOptionPane.showMessageDialog(this,
+                            "Cannot delete department. It still has employees assigned to it.",
+                            "Delete Failed",
+                            0);
+                } else {
+                    deleteDepartment(selectedDepartment);
+                    JOptionPane.showMessageDialog(this, "Department deleted successfully.");
+                    departmentDetailPanel.setVisible(false);
+
+                    // Switch back to Department Panel 
+                    CardLayout cl = (CardLayout) contentPanel.getLayout();
+                    cl.show(contentPanel, "departmentPanel");
+                }
             }
-            i++;
+
+            // Refresh UI
+            refreshEmployeeTable();
+            refreshDepartmentTable();
         }
-        }
 
 
-        if (hasEmployees) {
-            JOptionPane.showMessageDialog(this, 
-                "Cannot delete department. It still has employees assigned to it.",
-                "Delete Failed", 
-                0);
-        } else {
-            deleteDepartment(selectedDepartment);
-            JOptionPane.showMessageDialog(this, "Department deleted successfully.");
-            departmentDetailPanel.setVisible(false);
-
-            // Switch back to Department Panel 
-            CardLayout cl = (CardLayout) contentPanel.getLayout();
-            cl.show(contentPanel, "departmentPanel");
-        }
-    }
-
-    // Refresh UI
-    refreshEmployeeTable();
-    refreshDepartmentTable();
-}
-            
-            
-  
     }//GEN-LAST:event_deleteButton1ActionPerformed
- private void deleteDepartment(Department department){
+    private void deleteDepartment(Department department) {
         departments.remove(department);
         refreshDepartmentsComboBox();
     }
-    
-    
-    
-    
-    
-    
+
+
     private void departmentsListSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsListSelectActionPerformed
 // TODO add your handling code here:
-    try {
-        String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
-        
-        if (selectedDepartment == null || selectedDepartment.equals("All Departments")) {
-            selectedDepartment = "All Departments";
-        }
+        try {
+            String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
 
-        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-        model.setRowCount(0); // Clear the table
-
-        for (Employee emp : allEmployees) {
-            Integer deptID = emp.getDeptID();
-            String department = "No Department"; // Default for employees with no department
-
-            // If deptID is not null, fetch the department name
-            if (deptID != null) {
-                department = Department.getDepartmentNameById(departments, deptID);
+            if (selectedDepartment == null || selectedDepartment.equals("All Departments")) {
+                selectedDepartment = "All Departments";
             }
 
-            // Check if "All Departments" is selected or the department matches
-            if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
-                int id = emp.getEmployeeId();
-                String fullName = emp.getFirstName() + " " + emp.getSurname();
-                char gender = emp.getGender();
-                int payLevel = emp.getPayLevel();
+            DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+            model.setRowCount(0); // Clear the table
 
-                Object[] row = {id, fullName, department, gender, payLevel};
-                model.addRow(row);
+            for (Employee emp : allEmployees) {
+                Integer deptID = emp.getDeptID();
+                String department = "No Department"; // Default for employees with no department
+
+                // If deptID is not null, fetch the department name
+                if (deptID != null) {
+                    department = Department.getDepartmentNameById(departments, deptID);
+                }
+
+                // Check if "All Departments" is selected or the department matches
+                if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
+                    int id = emp.getEmployeeId();
+                    String fullName = emp.getFirstName() + " " + emp.getSurname();
+                    char gender = emp.getGender();
+                    int payLevel = emp.getPayLevel();
+
+                    Object[] row = {id, fullName, department, gender, payLevel};
+                    model.addRow(row);
+                }
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An error occurred while updating the employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace(); // Optional for debugging
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "An error occurred while updating the employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace(); // Optional for debugging
-    }
 
     }//GEN-LAST:event_departmentsListSelectActionPerformed
 
     private void payLevelDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_payLevelDetailPageActionPerformed
-   
-    
- 
-public void refreshEmployeeTable() {
-    // Get the selected department from the combo box
-    String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
 
-    // Default to "All Departments" if selectedDepartment is null
-    if (selectedDepartment == null) {
-        selectedDepartment = "All Departments";
-    }
+    public void refreshEmployeeTable() {
+        // Get the selected department from the combo box
+        String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
 
-    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-    model.setRowCount(0);  // Clear existing rows
-
-    // Loop through all employees
-    for (Employee emp : allEmployees) {
-        int id = emp.getEmployeeId();
-        String fullName = emp.getFirstName() + " " + emp.getSurname();
-        Integer deptId = emp.getDeptID();
-        String department = "No Department";  // Default value if no department is assigned
-
-        if (deptId != null) {
-            department = Department.getDepartmentNameById(departments, deptId);
+        // Default to "All Departments" if selectedDepartment is null
+        if (selectedDepartment == null) {
+            selectedDepartment = "All Departments";
         }
 
-        // Filter employees based on the selected department
-        if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
-            char gender = emp.getGender();
-            int payLevel = emp.getPayLevel();
+        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+        model.setRowCount(0);  // Clear existing rows
 
-            // Get the annual pay based on the pay level
-            String annualPay = getAnnualPayByLevel(payLevel);
+        // Loop through all employees
+        for (Employee emp : allEmployees) {
+            int id = emp.getEmployeeId();
+            String fullName = emp.getFirstName() + " " + emp.getSurname();
+            Integer deptId = emp.getDeptID();
+            String department = "No Department";  // Default value if no department is assigned
 
-            // Add the row to the model
-            Object[] row = {id, fullName, department, gender, annualPay};
-            model.addRow(row);
-        }
-    }
-}
+            if (deptId != null) {
+                department = Department.getDepartmentNameById(departments, deptId);
+            }
 
-        public void refreshDepartmentTable() {
-            // Assuming you have a JTable named departmentTable
-            DefaultTableModel model = (DefaultTableModel) departmentsTable.getModel();
+            // Filter employees based on the selected department
+            if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
+                char gender = emp.getGender();
+                int payLevel = emp.getPayLevel();
 
-            // Clear existing rows
-            model.setRowCount(0);
+                // Get the annual pay based on the pay level
+                String annualPay = getAnnualPayByLevel(payLevel);
 
-            // Populate table
-            for (Department dept : departments) {  
-                // Add department data as rows
-                model.addRow(new Object[]{
-                    dept.getDeptID(), 
-                    dept.getName(), 
-                    dept.getLocation(),
-                    dept.getDepartmentHead() != null ? dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname() : "No Head"
-                });
+                // Add the row to the model
+                Object[] row = {id, fullName, department, gender, annualPay};
+                model.addRow(row);
             }
         }
+    }
 
-        public void refreshDepartmentsComboBox() {
+    public void refreshDepartmentTable() {
+        // Assuming you have a JTable named departmentTable
+        DefaultTableModel model = (DefaultTableModel) departmentsTable.getModel();
+
+        // Clear existing rows
+        model.setRowCount(0);
+
+        // Populate table
+        for (Department dept : departments) {
+            // Add department data as rows
+            model.addRow(new Object[]{
+                dept.getDeptID(),
+                dept.getName(),
+                dept.getLocation(),
+                dept.getDepartmentHead() != null ? dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname() : "No Head"
+            });
+        }
+    }
+
+    public void refreshDepartmentsComboBox() {
         departmentsListSelect.removeAllItems();  // Clear all existing items
 
         // Add "All Departments" option at the top
         departmentsListSelect.addItem("All Departments");
-        
 
         // Now re-populate the combo box with the updated list of departments
         for (Department dept : departments) {
             departmentsListSelect.addItem(dept.getName());  // Add department names
         }
-        
+
         refreshEmployeeTable();
-}
-        public void updateEmployeeDetails(Employee updatedEmployee) {
+    }
+
+    public void updateEmployeeDetails(Employee updatedEmployee) {
         try {
             if (selectedEmployee != null && selectedEmployee.getEmployeeId() == updatedEmployee.getEmployeeId()) {
                 // Update the displayed information
@@ -2020,9 +1939,9 @@ public void refreshEmployeeTable() {
                 // Find and display the department name
                 String departmentName = "No Department";
                 if (departments != null) {
-                    if(updatedEmployee.getDeptID() != null) {
+                    if (updatedEmployee.getDeptID() != null) {
                         departmentName = Department.getDepartmentNameById(departments, updatedEmployee.getDeptID());
-                        }
+                    }
                 }
 
                 departmentDetailPage.setText(departmentName);
@@ -2042,7 +1961,7 @@ public void refreshEmployeeTable() {
     private double calculateBiweeklyPay(int payLevel) {
         // Pay levels and their corresponding annual salaries
         double[] payLevelSalaries = {
-            0.0,     // Level 0 (placeholder)
+            0.0, // Level 0 (placeholder)
             45000.0, // Level 1
             54000.0, // Level 2
             63000.0, // Level 3
@@ -2050,7 +1969,7 @@ public void refreshEmployeeTable() {
             81000.0, // Level 5
             71258.22, // Level 6
             80946.95, // Level 7
-            96336.34  // Level 8
+            96336.34 // Level 8
         };
 
         // Validate pay level
@@ -2062,39 +1981,36 @@ public void refreshEmployeeTable() {
         return payLevelSalaries[payLevel] / 26.0;
     }
 
+    public void updateDepartmentDetails(Department updatedDepartment) {
+        try {
+            if (selectedDepartment != null && selectedDepartment.getDeptID() == updatedDepartment.getDeptID()) {
+                // Update the department name
+                departmentNameDetailPage.setText(updatedDepartment.getName());
 
-public void updateDepartmentDetails(Department updatedDepartment) {
-    try {
-        if (selectedDepartment != null && selectedDepartment.getDeptID() == updatedDepartment.getDeptID()) {
-        // Update the department name
-        departmentNameDetailPage.setText(updatedDepartment.getName());
+                // Update the department ID
+                idDepartmentDetailPage.setText(Integer.toString(updatedDepartment.getDeptID()));
 
-        // Update the department ID
-        idDepartmentDetailPage.setText(Integer.toString(updatedDepartment.getDeptID()));
+                // Update the department location
+                locationDetailPage.setText(updatedDepartment.getLocation());
 
-        // Update the department location
-        locationDetailPage.setText(updatedDepartment.getLocation());
+                // Update the department head
+                Employee head = updatedDepartment.getDepartmentHead();
+                if (head != null) {
+                    System.out.println(head.getFirstName() + " " + head.getSurname());
+                    deptHeadDetail.setText(head.getFirstName() + " " + head.getSurname());
+                } else {
+                    deptHeadDetail.setText(null);
+                }
+            }
 
-        // Update the department head
-        Employee head = updatedDepartment.getDepartmentHead();
-        if (head != null) {
-            System.out.println(head.getFirstName() + " " + head.getSurname());
-            deptHeadDetail.setText(head.getFirstName() + " " + head.getSurname());
-        } else {
-            deptHeadDetail.setText(null);
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "There was a problem updating the department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();  // Optional for debugging
         }
-    }  
-
-    } catch (NullPointerException e) {
-        JOptionPane.showMessageDialog(this, "There was a problem updating the department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();  // Optional for debugging
     }
-}
 
-    
-    
     /**
      * @param args the command line arguments
      */
