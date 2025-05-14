@@ -379,7 +379,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         }
 
         // Validate that all required fields are filled
-        if (firstName.isEmpty() || surname.isEmpty() || gender == ' ' || payLevel == -1) {
+        if (firstName.isEmpty() || surname.isEmpty() || gender == ' ' || payLevel == -1 || address.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all required fields and select valid options.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
