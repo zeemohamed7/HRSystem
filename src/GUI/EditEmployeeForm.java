@@ -428,12 +428,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
     
     private void departmentEditComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentEditComboActionPerformed
         // TODO add your handling code here:
-        
-        // loop through and add all departments
-        
-        // save employee to department
-        
-        // remove employee from previous department
+
     }//GEN-LAST:event_departmentEditComboActionPerformed
 
     private void payLevelEditComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelEditComboActionPerformed

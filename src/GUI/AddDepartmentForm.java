@@ -39,15 +39,6 @@ public class AddDepartmentForm extends javax.swing.JFrame {
         
         this.setLocation(x, y);
         
-        // populate combo box with employees for HEAD field
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
-        model.addElement(null); // Default option
-
-        for (Employee emp : allEmployees) {
-            model.addElement(emp.getFirstName() + " " + emp.getSurname());
-        }
-
-        departmentHeadSelect.setModel(model);
         
     }
 
@@ -64,8 +55,6 @@ public class AddDepartmentForm extends javax.swing.JFrame {
         departmentNameField = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         locationField = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
-        departmentHeadSelect = new javax.swing.JComboBox<>();
         cancelButton2 = new javax.swing.JButton();
         addDepartmentConfirmButton = new javax.swing.JButton();
 
@@ -86,10 +75,6 @@ public class AddDepartmentForm extends javax.swing.JFrame {
                 locationFieldActionPerformed(evt);
             }
         });
-
-        jLabel15.setText("Department Head");
-
-        departmentHeadSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department head", "Item 2", "Item 3", "Item 4" }));
 
         cancelButton2.setText("Cancel");
         cancelButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -120,9 +105,7 @@ public class AddDepartmentForm extends javax.swing.JFrame {
                         .addComponent(jLabel9)
                         .addComponent(departmentNameField)
                         .addComponent(jLabel10)
-                        .addComponent(locationField, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
-                        .addComponent(jLabel15)
-                        .addComponent(departmentHeadSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(locationField, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -136,15 +119,11 @@ public class AddDepartmentForm extends javax.swing.JFrame {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(locationField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel15)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(departmentHeadSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton2)
                     .addComponent(addDepartmentConfirmButton))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -165,10 +144,8 @@ public class AddDepartmentForm extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButton2ActionPerformed
 
     private void addDepartmentConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentConfirmButtonActionPerformed
-        // Get values from form fields
-        String departmentName = departmentNameField.getText().trim();
+       String departmentName = departmentNameField.getText().trim();
         String location = locationField.getText().trim();
-        String headEmployeeName = (String) departmentHeadSelect.getSelectedItem();
 
         // Validate input
         if (departmentName.isEmpty()) {
@@ -181,42 +158,8 @@ public class AddDepartmentForm extends javax.swing.JFrame {
             return;
         }
 
-        // Validate department head selection
-        Employee departmentHead = null;
-        
-        // if head provided
-        if (headEmployeeName != null) {
-            // Find the employee by name
-            for (Employee emp : main.allEmployees) {
-                String fullName = emp.getFirstName() + " " + emp.getSurname();
-                if (fullName.equals(headEmployeeName)) {
-                    // Check if the employee is already a head of another department
-                    if (emp.isIsHead()) {
-                        JOptionPane.showMessageDialog(this, "Selected employee is already a head of another department.");
-                        return;
-                    }
-
-                    // Check if the employee is already assigned to another department
-                    if (emp.getDeptID() != null) {
-                        JOptionPane.showMessageDialog(this, "Selected employee is already part of another department.");
-                        return;
-                    }
-
-                    departmentHead = emp;
-                    break;
-                }
-            }
-        }
-
-        // Create new department
+        // Create new department without assigning a head
         Department newDepartment = new Department(departmentName, location);
-        newDepartment.setDepartmentHead(departmentHead);
-
-        // If a head is assigned, update the employee status
-        if (departmentHead != null) {
-            departmentHead.setIsHead(true);
-            departmentHead.setDeptID(newDepartment.getDeptID());
-        }
 
         // Add to departments list
         departments.add(newDepartment);
@@ -275,10 +218,8 @@ public class AddDepartmentForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addDepartmentConfirmButton;
     private javax.swing.JButton cancelButton2;
-    private javax.swing.JComboBox<String> departmentHeadSelect;
     private javax.swing.JTextField departmentNameField;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField locationField;
     // End of variables declaration//GEN-END:variables

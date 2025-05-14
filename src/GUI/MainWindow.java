@@ -190,18 +190,13 @@ public class MainWindow extends javax.swing.JFrame {
     
     // show department detail 
     private void showDepartmentDetails(Department dept) {
-        
+        selectedDepartment = dept;
 
 
     if (dept == null) {
         JOptionPane.showMessageDialog(this, "No department selected.", "Error", JOptionPane.WARNING_MESSAGE);
         return;
     }
-
-    selectedDepartment = dept;
-        System.out.println("NEW STUFF SHOW:");
-        System.out.println(selectedDepartment.getName());
-        System.out.println(selectedDepartment.getDepartmentHead());
 
     // Show department detail page
     CardLayout cl = (CardLayout) contentPanel.getLayout();
@@ -215,12 +210,20 @@ public class MainWindow extends javax.swing.JFrame {
         deptHeadDetail.setText(null);
 
         // Display department head, if applicable
-        if(selectedDepartment.getDepartmentHead() != null) {
-            Employee headEmployee = selectedDepartment.getDepartmentHead();
+    // Check if the selected department is not null before accessing it
+    if (selectedDepartment != null) {
+        Employee headEmployee = selectedDepartment.getDepartmentHead();
+
+        // Display department head, if applicable
+        if (headEmployee != null) {
             deptHeadDetail.setText(headEmployee.getFirstName() + " " + headEmployee.getSurname());
         } else {
             deptHeadDetail.setText(null);
         }
+    } else {
+        deptHeadDetail.setText(null);
+    }
+
 //        String headName = null;
 //        System.out.println(headName);
 //        for (Employee employee : allEmployees) {
@@ -1572,20 +1575,23 @@ public class MainWindow extends javax.swing.JFrame {
           int i = 0;
         
          // Use while loop to check if any employee is in the selected department
-        while (i < allEmployees.size()) {
+        if (allEmployees != null) {
+                    while (i < allEmployees.size()) {
             Employee emp = allEmployees.get(i);
-            if (emp.getDeptID() == selectedDepartment.getDeptID()) {
+            if (emp.getDeptID() != null && emp.getDeptID() == selectedDepartment.getDeptID()) {
                 hasEmployees = true;
                 break;
             }
             i++;
         }
+        }
+
 
         if (hasEmployees) {
             JOptionPane.showMessageDialog(this, 
                 "Cannot delete department. It still has employees assigned to it.",
                 "Delete Failed", 
-                2);
+                0);
         } else {
             deleteDepartment(selectedDepartment);
             JOptionPane.showMessageDialog(this, "Department deleted successfully.");
@@ -1777,9 +1783,7 @@ public void updateDepartmentDetails(Department updatedDepartment) {
             deptHeadDetail.setText(null);
         }
     }  
-        System.out.println("NEW STUFF UPDATE:");
-        System.out.println(selectedDepartment.getName());
-        System.out.println(selectedDepartment.getDepartmentHead());
+
     } catch (NullPointerException e) {
         JOptionPane.showMessageDialog(this, "There was a problem updating the department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     } catch (Exception e) {

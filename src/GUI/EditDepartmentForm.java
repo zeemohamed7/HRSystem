@@ -190,58 +190,82 @@ public class EditDepartmentForm extends javax.swing.JFrame {
 
     private void editDepartmentSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDepartmentSaveButtonActionPerformed
         // TODO add your handling code here:
-            String departmentName = departmentNameField.getText();
-    String location = locationField.getText();
-    String headName = (String) departmentHeadSelect.getSelectedItem(); 
+// Get the department name, location, and selected head
+String departmentName = departmentNameField.getText();
+String location = locationField.getText();
+String headName = (String) departmentHeadSelect.getSelectedItem(); 
 
-    if (departmentName.isEmpty() || location.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please fill in all fields.");
-        return;
-    }
+if (departmentName.isEmpty() || location.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+    return;
+}
 
-    Employee departmentHead = null;
-    Employee previousHead = selectedDepartment.getDepartmentHead(); // Get the current head before updating
+Employee departmentHead = null;
+Employee previousHead = selectedDepartment.getDepartmentHead(); 
 
-    // Determine the new head
-    if (headName != null && !headName.equals("No Head")) {
-        for (Employee emp : allEmployees) {
-            if (headName.equals(emp.getFirstName() + " " + emp.getSurname())) {
-                departmentHead = emp;
-                break;
+// Determine the new head
+if (headName != null && !headName.equals("No Head")) {
+    for (Employee emp : allEmployees) {
+        if (headName.equals(emp.getFirstName() + " " + emp.getSurname())) {
+            
+            // Check if the employee is already a head of another department
+            if (emp.isIsHead() && (previousHead == null || !previousHead.equals(emp))) {
+                JOptionPane.showMessageDialog(this, 
+                    "The selected employee is already a head of another department.", 
+                    "Invalid Head Assignment", 
+                    JOptionPane.ERROR_MESSAGE
+                );
+                return;
             }
-        }
-    }
 
-    // Update the selected department
-    if (selectedDepartment != null) {
-        selectedDepartment.setName(departmentName);
-        selectedDepartment.setLocation(location);
-        selectedDepartment.setDepartmentHead(departmentHead);
-
-        // Update the department in the list
-        for (int i = 0; i < main.departments.size(); i++) {
-            if (main.departments.get(i).getDeptID() == selectedDepartment.getDeptID()) {
-                main.departments.set(i, selectedDepartment);
-                break;
+            // Check if the employee is part of the current department
+            if (emp.getDeptID() == null || emp.getDeptID() != selectedDepartment.getDeptID()) {
+                JOptionPane.showMessageDialog(this, 
+                    "The selected employee is not part of this department and cannot be assigned as the head.", 
+                    "Invalid Head Assignment", 
+                    JOptionPane.ERROR_MESSAGE
+                );
+                return;
             }
-        }
 
-        // Handle the isHead property
-        if (previousHead != null && !previousHead.equals(departmentHead)) {
-            previousHead.setIsHead(false); // Previous head is no longer a head
+            departmentHead = emp;
+            break;
         }
+    }
+}
 
-        if (departmentHead != null) {
-            departmentHead.setIsHead(true); // New head is now the head
+// Update the selected department
+if (selectedDepartment != null) {
+    selectedDepartment.setName(departmentName);
+    selectedDepartment.setLocation(location);
+    selectedDepartment.setDepartmentHead(departmentHead);
+
+    // Update the department in the list
+    for (int i = 0; i < main.departments.size(); i++) {
+        if (main.departments.get(i).getDeptID() == selectedDepartment.getDeptID()) {
+            main.departments.set(i, selectedDepartment);
+            break;
         }
-
-        // Update UI
-        main.updateDepartmentDetails(selectedDepartment);
-        main.refreshDepartmentTable();
-        main.refreshEmployeeTable();
     }
 
-    this.dispose();
+    // Handle the isHead property
+    if (previousHead != null && !previousHead.equals(departmentHead)) {
+        previousHead.setIsHead(false); 
+    }
+
+    if (departmentHead != null) {
+        departmentHead.setIsHead(true); 
+    }
+
+    // Update UI
+    main.updateDepartmentDetails(selectedDepartment);
+    main.refreshDepartmentTable();
+    main.refreshEmployeeTable();
+}
+
+this.dispose();
+
+
 
     }//GEN-LAST:event_editDepartmentSaveButtonActionPerformed
 
