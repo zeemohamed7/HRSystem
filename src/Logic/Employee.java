@@ -4,11 +4,13 @@
  */
 package Logic;
 
+import java.io.Serializable;
+
 /**
  *
  * @author zainab
  */
-public class Employee {
+public class Employee implements Serializable {
     private static int staticEmployeeId = 1;
     private int employeeId;
     private String firstName;
@@ -108,6 +110,14 @@ public class Employee {
 
     public void setDeptID(Integer deptID) {
         this.deptID = deptID;
+    }
+
+    public static int getStaticEmployeeId() {
+        return staticEmployeeId;
+    }
+
+    public static void setStaticEmployeeId(int staticEmployeeId) {
+        Employee.staticEmployeeId = staticEmployeeId;
     }
     
     

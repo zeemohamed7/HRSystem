@@ -67,6 +67,8 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         } else {
             departmentHeadSelect.setSelectedIndex(0); // Default to "No Head"
         }
+        
+//        initDepartmentHeadSelect(dept);
 
     }
 
@@ -84,7 +86,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         locationField = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        departmentHeadSelect = new javax.swing.JComboBox<>();
+        departmentHeadSelect = new javax.swing.JComboBox();
         cancelButton2 = new javax.swing.JButton();
         editDepartmentSaveButton = new javax.swing.JButton();
 
@@ -108,7 +110,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
 
         jLabel15.setText("Department Head");
 
-        departmentHeadSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department head", "Item 2", "Item 3", "Item 4" }));
+        departmentHeadSelect.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select department head", "Item 2", "Item 3", "Item 4" }));
         departmentHeadSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 departmentHeadSelectActionPerformed(evt);
@@ -173,7 +175,29 @@ public class EditDepartmentForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//    public void initDepartmentHeadSelect( Department dept) {
+//        
+//        boolean headAvailable = false;
+//        
+//        if(dept.getDepartmentHead() != null) {
+//            departmentHeadSelect.addItem(dept.getDepartmentHead().getEmployeeId());
+//            headAvailable = true;
+//        } else {
+//            departmentHeadSelect.addItem("");
+//        }
+//        
+//        for(Employee emp : allEmployees) {
+//            if(emp.getDeptID() == dept.getDeptID()) {
+//                if(headAvailable == true && emp == dept.getDepartmentHead()) {
+//                    
+//                } else {
+//                    departmentHeadSelect.addItem(emp.getEmployeeId());
+//                }
+//            }
+//        }
+//    
+//}
+             
     private void departmentNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentNameFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_departmentNameFieldActionPerformed
@@ -281,9 +305,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         );
         e.printStackTrace();
     }
-
-
-
+ 
 
     }//GEN-LAST:event_editDepartmentSaveButtonActionPerformed
 
@@ -328,7 +350,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton2;
-    private javax.swing.JComboBox<String> departmentHeadSelect;
+    private javax.swing.JComboBox departmentHeadSelect;
     private javax.swing.JTextField departmentNameField;
     private javax.swing.JButton editDepartmentSaveButton;
     private javax.swing.JLabel jLabel10;

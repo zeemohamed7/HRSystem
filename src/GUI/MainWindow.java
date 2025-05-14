@@ -13,10 +13,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javax.swing.JFileChooser;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -421,9 +428,9 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtUserName = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         loginButton = new javax.swing.JButton();
@@ -439,7 +446,7 @@ public class MainWindow extends javax.swing.JFrame {
         rightPanel = new javax.swing.JPanel();
         headerPanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblUserName = new javax.swing.JLabel();
         logoPanel = new javax.swing.JPanel();
         contentPanel = new javax.swing.JPanel();
         employeesPanel = new javax.swing.JPanel();
@@ -566,23 +573,23 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel3.setText("Username");
         LoginPanel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, -1, -1));
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtUserName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtUserNameActionPerformed(evt);
             }
         });
-        LoginPanel.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 200, 319, -1));
+        LoginPanel.add(txtUserName, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 200, 319, -1));
 
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
         jLabel4.setText("Password");
         LoginPanel.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 240, -1, -1));
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtPasswordActionPerformed(evt);
             }
         });
-        LoginPanel.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 260, 319, -1));
+        LoginPanel.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 260, 319, -1));
 
         jLabel5.setText("Forgot password?");
         LoginPanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 340, -1, -1));
@@ -667,14 +674,14 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(departmentsButton)
                 .addGap(18, 18, 18)
                 .addComponent(payrollReportButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 351, Short.MAX_VALUE)
+                .addGap(315, 315, 315)
                 .addComponent(exitButton)
-                .addGap(286, 286, 286))
+                .addContainerGap(322, Short.MAX_VALUE))
         );
 
         jLabel7.setText("HRConnect");
 
-        jLabel8.setText("John Doe");
+        lblUserName.setText("John Doe");
 
         javax.swing.GroupLayout logoPanelLayout = new javax.swing.GroupLayout(logoPanel);
         logoPanel.setLayout(logoPanelLayout);
@@ -697,7 +704,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 390, Short.MAX_VALUE)
-                .addComponent(jLabel8)
+                .addComponent(lblUserName)
                 .addGap(178, 178, 178))
         );
         headerPanelLayout.setVerticalGroup(
@@ -706,7 +713,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel8))
+                    .addComponent(lblUserName))
                 .addGap(29, 29, 29))
             .addGroup(headerPanelLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
@@ -1398,13 +1405,13 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtUserNameActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
@@ -1412,8 +1419,40 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         // TODO add your handling code here:
-        CardLayout cl = (CardLayout) MainFrame.getLayout();
-        cl.show(MainFrame, "dashboard");
+        
+        //Verifing that input is not null
+        if(txtUserName.getText().isEmpty()|| txtPassword.getText().isEmpty()) {
+            
+            JOptionPane.showMessageDialog(this, "Username and Password should not be empty!", "Invalid Input", 2);
+            
+        } else {
+            
+            //Checkig if the serialization file exists
+            File file = new File("HRSystem.dat");
+
+            if (file.exists() && file.length() > 0) {
+                // De Serialize the information 
+                try {
+                    FileInputStream fileIn = new FileInputStream("HRSystem.dat");
+                    ObjectInputStream in = new ObjectInputStream(fileIn);
+                    allEmployees = (ArrayList<Employee>)in.readObject();
+                    departments = (ArrayList<Department>)in.readObject();
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+      
+            }
+            
+            CardLayout cl = (CardLayout) MainFrame.getLayout();
+            cl.show(MainFrame, "dashboard");
+            lblUserName.setText(txtUserName.getText());
+        }
+        
+        
 
     }//GEN-LAST:event_loginButtonActionPerformed
 
@@ -1438,22 +1477,22 @@ public class MainWindow extends javax.swing.JFrame {
     // Search field (so it can search as you are typing
     private void initSearchListener() {
     // Add a document listener to the search field to track typing events
-    searchEmployeesTextField.getDocument().addDocumentListener(new DocumentListener() {
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            searchEmployee();  // Called when text is inserted
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            searchEmployee();  // Called when text is removed
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            searchEmployee();  // Called for other changes (e.g., formatting)
-        }
-    });
+//    searchEmployeesTextField.getDocument().addDocumentListener(new DocumentListener() {
+//        @Override
+//        public void insertUpdate(DocumentEvent e) {
+//            searchEmployee();  // Called when text is inserted
+//        }
+//
+//        @Override
+//        public void removeUpdate(DocumentEvent e) {
+//            searchEmployee();  // Called when text is removed
+//        }
+//
+//        @Override
+//        public void changedUpdate(DocumentEvent e) {
+//            searchEmployee();  // Called for other changes (e.g., formatting)
+//        }
+//    });
 }
    private void searchEmployee() {
     String query = searchEmployeesTextField.getText().trim().toLowerCase();
@@ -1536,6 +1575,18 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_searchDepartmentsFieldFocusGained
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+
+    //Serializing the emplyees & departments array lists and the static ID count for employees & departments
+            try {
+                FileOutputStream fileOut = new FileOutputStream("HRSystem.dat");
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(allEmployees);
+                out.writeObject(departments);
+            } catch (IOException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    
+    // Exit the System
         System.exit(0);
     }//GEN-LAST:event_exitButtonActionPerformed
 
@@ -2195,7 +2246,6 @@ public void updateDepartmentDetails(Department updatedDepartment) {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane;
@@ -2204,8 +2254,7 @@ public void updateDepartmentDetails(Department updatedDepartment) {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel lblUserName;
     private javax.swing.JTextField locationDetailPage;
     private javax.swing.JButton loginButton;
     private javax.swing.JPanel logoPanel;
@@ -2221,5 +2270,7 @@ public void updateDepartmentDetails(Department updatedDepartment) {
     private javax.swing.JTextField searchEmployeesTextField;
     private javax.swing.JPanel sidemenuPanel;
     private javax.swing.JTextField surnameDetailPage;
+    private javax.swing.JTextField txtPassword;
+    private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables
 }

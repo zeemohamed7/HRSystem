@@ -4,6 +4,7 @@
  */
 package Logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * @author zainab
  */
 
-public class Department {
+public class Department implements Serializable {
     private static int staticDeptId = 1;
     private int deptID;
     private String name;
@@ -86,6 +87,15 @@ public class Department {
         return 0;
     }
 
+    public static int getStaticDeptId() {
+        return staticDeptId;
+    }
+
+    public static void setStaticDeptId(int staticDeptId) {
+        Department.staticDeptId = staticDeptId;
+    }
+
+    
     // Looks up ID name by name
         public static int getIdByDepartmentName(ArrayList<Department> departments, String name) {
         for (Department dept : departments) {
