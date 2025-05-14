@@ -19,6 +19,10 @@ public class AddEmployeeForm extends javax.swing.JFrame {
        MainWindow main;
        ArrayList<Department> departments = main.departments;
        ArrayList<Employee> allEmployees = main.allEmployees;
+       private static int employeeId = 0;
+
+       
+
     /**
      * Creates new form AddEmployeeForm
      */
@@ -317,10 +321,11 @@ public class AddEmployeeForm extends javax.swing.JFrame {
 
         // Create new employee
         Employee newEmployee;
+        employeeId++;
         if (departmentId == null) {
-            newEmployee = new Employee(firstName, lastName, gender, address, payLevel);
+            newEmployee = new Employee(employeeId, firstName, lastName, gender, address, payLevel);
         } else {
-            newEmployee = new Employee(firstName, lastName, gender, address, payLevel, departmentId);
+            newEmployee = new Employee(employeeId, firstName, lastName, gender, address, payLevel, departmentId);
         }
 
         // Add to employees list

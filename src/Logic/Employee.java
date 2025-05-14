@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author zainab
  */
 public class Employee implements Serializable {
-    private static int staticEmployeeId = 1;
+//    private int staticEmployeeId = 1;
     private int employeeId;
     private String firstName;
     private String surname;
@@ -24,8 +24,8 @@ public class Employee implements Serializable {
     public Employee() {
     }
 
-    public Employee(String firstName, String surname, char gender, String address, int payLevel) {
-        this.employeeId = staticEmployeeId++;
+    public Employee(int employeeId, String firstName, String surname, char gender, String address, int payLevel) {
+        this.employeeId = employeeId;
         this.firstName = firstName;
         this.surname = surname;
         this.gender = gender;
@@ -36,8 +36,8 @@ public class Employee implements Serializable {
 
     }
     
-    public Employee(String firstName, String surname, char gender, String address, int payLevel, int deptID) {
-        this.employeeId = staticEmployeeId++;
+    public Employee(int employeeId, String firstName, String surname, char gender, String address, int payLevel, int deptID) {
+        this.employeeId = employeeId;
         this.firstName = firstName;
         this.surname = surname;
         this.gender = gender;
@@ -112,13 +112,13 @@ public class Employee implements Serializable {
         this.deptID = deptID;
     }
 
-    public static int getStaticEmployeeId() {
-        return staticEmployeeId;
-    }
-
-    public static void setStaticEmployeeId(int staticEmployeeId) {
-        Employee.staticEmployeeId = staticEmployeeId;
-    }
+//    public static int getStaticEmployeeId() {
+//        return staticEmployeeId;
+//    }
+//
+//    public static void setStaticEmployeeId(int staticEmployeeId) {
+//        Employee.staticEmployeeId = staticEmployeeId;
+//    }
     
     
     

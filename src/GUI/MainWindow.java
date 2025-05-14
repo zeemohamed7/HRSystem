@@ -201,8 +201,8 @@ public class MainWindow extends javax.swing.JFrame {
     try {
         // Populate the table with employee data
         for (Employee emp : allEmployees) {
-            System.out.println(emp.getFirstName());
             int id = emp.getEmployeeId();
+            System.out.println(id);
             String fullName = emp.getFirstName() + " " + emp.getSurname();  
 
             String department = "No Department";
@@ -1976,7 +1976,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             // Switch back to Department Panel 
             CardLayout cl = (CardLayout) contentPanel.getLayout();
-            cl.show(contentPanel, "departmentPanel");
+            cl.show(contentPanel, "departments");
         }
     }
 
