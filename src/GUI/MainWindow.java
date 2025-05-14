@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import Logic.*;
 import java.util.ArrayList;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -33,6 +35,7 @@ public class MainWindow extends javax.swing.JFrame {
             
     public MainWindow() {
         initComponents();
+        initSearchListener();
               
         allEmployees = new ArrayList();
         departments = new ArrayList();
@@ -1418,8 +1421,77 @@ public class MainWindow extends javax.swing.JFrame {
            
     }//GEN-LAST:event_addEmployeeButtonActionPerformed
 
+    // Search field (so it can search as you are typing
+    private void initSearchListener() {
+    // Add a document listener to the search field to track typing events
+    searchEmployeesTextField.getDocument().addDocumentListener(new DocumentListener() {
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            searchEmployee();  // Called when text is inserted
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            searchEmployee();  // Called when text is removed
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            searchEmployee();  // Called for other changes (e.g., formatting)
+        }
+    });
+}
+   private void searchEmployee() {
+    String query = searchEmployeesTextField.getText().trim().toLowerCase();
+    
+    // If the query is empty, just return and don't filter the employees
+    if (query.isEmpty()) {
+        return;  
+    }
+
+    // Create a list to store the filtered results
+    ArrayList<Employee> searchResults = new ArrayList<>();
+
+    // Loop through all employees and filter by the search query
+    for (Employee employee : allEmployees) {
+        // Check if the first name or surname contains the query (case-insensitive)
+        if (employee.getFirstName().toLowerCase().startsWith(query) || // starts with because we need exact matching from the start, not contains
+            employee.getSurname().toLowerCase().startsWith(query)) {
+            searchResults.add(employee);
+        }
+    }
+
+    // Clear the current rows in the table (assuming you have a JTable)
+    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+    model.setRowCount(0);  // This clears all rows from the table
+
+
+    // Populate the table with the filtered search results
+    for (Employee emp : searchResults) {
+        // Combine first name and surname to create Full Name
+        String fullName = emp.getFirstName() + " " + emp.getSurname();
+        // Handle case where deptID might be null
+        String departmentName = "No Department"; // Default value if no department
+        if (emp.getDeptID() != null) {
+            departmentName = Department.getDepartmentNameById(departments, emp.getDeptID());
+        }
+
+        
+        // Add the employee details to the table
+        model.addRow(new Object[]{
+            emp.getEmployeeId(),  // Assuming you have employee ID
+            fullName,             // Full Name (First + Surname)
+            departmentName,  
+            emp.getGender(),      // Gender
+            emp.getPayLevel()     // Pay Level (Annual Salary)
+        });
+    }
+}
+
+    
     private void searchEmployeesTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchEmployeesTextFieldActionPerformed
         // TODO add your handling code here:
+
     }//GEN-LAST:event_searchEmployeesTextFieldActionPerformed
 
     private void searchEmployeesTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchEmployeesTextFieldFocusGained
