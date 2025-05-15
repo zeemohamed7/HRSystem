@@ -514,6 +514,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel16.setText("Are you sure you want to delete this? This action cannot be undone.");
 
+        cancelButton3.setBackground(new java.awt.Color(102, 102, 102));
+        cancelButton3.setForeground(new java.awt.Color(255, 255, 255));
         cancelButton3.setText("Cancel");
         cancelButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -521,6 +523,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        confirmDeleteButton.setBackground(new java.awt.Color(183, 29, 29));
+        confirmDeleteButton.setForeground(new java.awt.Color(255, 255, 255));
         confirmDeleteButton.setText("Delete");
 
         javax.swing.GroupLayout ConfirmDeleteLayout = new javax.swing.GroupLayout(ConfirmDelete.getContentPane());
@@ -626,6 +630,13 @@ public class MainWindow extends javax.swing.JFrame {
 
         MainFrame.add(LoginPanel, "login");
 
+        DashboardPanel.setBackground(new java.awt.Color(0, 0, 51));
+
+        sidemenuPanel.setBackground(new java.awt.Color(0, 0, 51));
+        sidemenuPanel.setForeground(new java.awt.Color(255, 255, 255));
+
+        employeesButton.setBackground(new java.awt.Color(136, 156, 176));
+        employeesButton.setForeground(new java.awt.Color(255, 255, 255));
         employeesButton.setText("Employees");
         employeesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -633,6 +644,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        departmentsButton.setBackground(new java.awt.Color(136, 156, 176));
+        departmentsButton.setForeground(new java.awt.Color(255, 255, 255));
         departmentsButton.setText("Departments");
         departmentsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -640,6 +653,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        payrollReportButton.setBackground(new java.awt.Color(136, 156, 176));
+        payrollReportButton.setForeground(new java.awt.Color(255, 255, 255));
         payrollReportButton.setText("Payroll Report");
         payrollReportButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -647,6 +662,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        exitButton.setBackground(new java.awt.Color(102, 102, 102));
+        exitButton.setForeground(new java.awt.Color(255, 255, 255));
         exitButton.setText("Exit");
         exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -761,8 +778,10 @@ public class MainWindow extends javax.swing.JFrame {
         );
 
         jLabel17.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel17.setText("Employee Detail");
+        jLabel17.setText("Employee Details");
 
+        editEmployeeButton.setBackground(new java.awt.Color(0, 0, 51));
+        editEmployeeButton.setForeground(new java.awt.Color(255, 255, 255));
         editEmployeeButton.setText("Edit");
         editEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -770,6 +789,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        deleteButton.setBackground(new java.awt.Color(183, 29, 29));
+        deleteButton.setForeground(new java.awt.Color(255, 255, 255));
         deleteButton.setText("Delete");
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -908,6 +929,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
+        backToEmployeesButton.setBackground(new java.awt.Color(0, 0, 51));
+        backToEmployeesButton.setForeground(new java.awt.Color(255, 255, 255));
         backToEmployeesButton.setText("Back to list");
         backToEmployeesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -943,7 +966,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(editEmployeeButton)
                     .addComponent(deleteButton)
                     .addComponent(backToEmployeesButton))
-                .addGap(34, 34, 34)
+                .addGap(22, 22, 22)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -955,6 +978,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        addEmployeeButton.setBackground(new java.awt.Color(0, 0, 51));
+        addEmployeeButton.setForeground(new java.awt.Color(255, 255, 255));
         addEmployeeButton.setText("+ Add Employee");
         addEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1009,7 +1034,7 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addComponent(addEmployeeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(departmentsListSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(employeeDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -1057,6 +1082,8 @@ public class MainWindow extends javax.swing.JFrame {
             departmentsTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
+        addDepartmentButton.setBackground(new java.awt.Color(0, 0, 51));
+        addDepartmentButton.setForeground(new java.awt.Color(255, 255, 255));
         addDepartmentButton.setText("+ Add Department");
         addDepartmentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1080,6 +1107,8 @@ public class MainWindow extends javax.swing.JFrame {
             .addGap(0, 45, Short.MAX_VALUE)
         );
 
+        backToDepartmentsButton.setBackground(new java.awt.Color(0, 0, 51));
+        backToDepartmentsButton.setForeground(new java.awt.Color(255, 255, 255));
         backToDepartmentsButton.setText("Back to list");
         backToDepartmentsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1087,6 +1116,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        editDepartmentButton.setBackground(new java.awt.Color(0, 0, 51));
+        editDepartmentButton.setForeground(new java.awt.Color(255, 255, 255));
         editDepartmentButton.setText("Edit");
         editDepartmentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1094,6 +1125,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        deleteButton1.setBackground(new java.awt.Color(183, 29, 29));
+        deleteButton1.setForeground(new java.awt.Color(255, 255, 255));
         deleteButton1.setText("Delete");
         deleteButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1259,7 +1292,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(departmentsPanelLayout.createSequentialGroup()
-                        .addGap(121, 121, 121)
+                        .addGap(43, 43, 43)
                         .addComponent(departmentDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(paginationPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1276,6 +1309,8 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel36.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel36.setText("Payroll Report");
 
+        generateReportButton.setBackground(new java.awt.Color(0, 0, 51));
+        generateReportButton.setForeground(new java.awt.Color(255, 255, 255));
         generateReportButton.setText("Generate Report");
         generateReportButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1283,6 +1318,9 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        reportPanel.setBackground(new java.awt.Color(8, 8, 32));
+
+        reportTextPane.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane4.setViewportView(reportTextPane);
 
         javax.swing.GroupLayout reportPanelLayout = new javax.swing.GroupLayout(reportPanel);
@@ -1339,7 +1377,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(rightPanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(1871, Short.MAX_VALUE)))
             .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(rightPanelLayout.createSequentialGroup()
                     .addContainerGap()
@@ -1366,7 +1404,7 @@ public class MainWindow extends javax.swing.JFrame {
         DashboardPanelLayout.setHorizontalGroup(
             DashboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DashboardPanelLayout.createSequentialGroup()
-                .addGap(136, 136, 136)
+                .addGap(170, 170, 170)
                 .addComponent(rightPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(sidemenuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
