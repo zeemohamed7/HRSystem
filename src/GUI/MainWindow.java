@@ -804,12 +804,6 @@ public class MainWindow extends javax.swing.JFrame {
 
                     // Check if department exists and assign employee to the department
                     if (currentDepartment != null && currentDepartment.getDeptID() == deptID) {
-                        // Set the first employee in the department as the department head
-                        if (currentDepartment.getDepartmentHead() == null) {
-                            currentDepartment.setDepartmentHead(emp); // Make this employee the department head
-                            emp.setIsHead(true); // Mark this employee as the head
-                        }
-
                         // Add employee to the allEmployees list
                         allEmployees.add(emp);
                     }
