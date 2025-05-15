@@ -13,23 +13,40 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
- * @author zainab
+ * Name: AddEmployeeForm
+ * @author Zainab
+ * @version 1.0
+ * Purpose: This class represents a GUI form for adding a new employee to the system.
+ * It allows the user to enter first name, last name, gender, address, department, and pay level.
+ * The new employee is added to the main employee list and the employee table is updated.
  */
 public class AddEmployeeForm extends javax.swing.JFrame {
-       MainWindow main;
-       ArrayList<Department> departments = main.departments;
-       ArrayList<Employee> allEmployees = main.allEmployees;
-
-       
+       MainWindow main; //Reference to the main window
+       ArrayList<Department> departments = main.departments;//List of all departments
+       ArrayList<Employee> allEmployees = main.allEmployees;//List of all employees
 
        
 
     /**
-     * Creates new form AddEmployeeForm
+     * Name: AddEmployeeForm (Default Constructor)
+     * Purpose: Default constructor to initialize the form
+     * Input: None
+     * Output: Initialized form window
+     * Effect: GUI window is displayed
      */
     public AddEmployeeForm() {
         initComponents(); 
     }
+    
+     /**
+     * Name: AddEmployeeForm
+     * Purpose: Initializes the form and populates dropdowns using data from main window
+     * @param main The reference to the main window object
+     * Input: main - instance of MainWindow to access data lists
+     * Output: Initialized form with department and pay level dropdowns populated
+     * Effect: Prepares the add employee form with required data
+     */
+    
     public AddEmployeeForm(MainWindow main) {
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -232,7 +249,12 @@ public class AddEmployeeForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Name: cancelEmployeeFormButtonActionPerformed
+     * Purpose: Handles cancellation of the form and returns user to the main window
+     * @param evt The action event
+     * Effect: Main window is shown and this form is closed
+     */
     private void cancelEmployeeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelEmployeeFormButtonActionPerformed
         // TODO add your handling code here:    
     // Show the main window
@@ -241,19 +263,41 @@ public class AddEmployeeForm extends javax.swing.JFrame {
     // Dispose the current form
     dispose();
     }//GEN-LAST:event_cancelEmployeeFormButtonActionPerformed
-
+    /**
+ * Name: maleButton1ActionPerformed
+ * Purpose/description: Handles the action event triggered when the maleButton1 is clicked.
+ * @param evt - the ActionEvent triggered by clicking the maleButton1.
+ * @return void
+ */
     private void maleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maleButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_maleButton1ActionPerformed
-
+/**
+ * Name: firstNameField1ActionPerformed
+ * Purpose/description: Handles the action event when the firstNameField1 triggers an action.
+ *                      Usually occurs when the user presses Enter after editing the first name in this specific field.
+ * @param evt - the ActionEvent triggered by the firstNameField1.
+ * @return void
+ */
     private void firstNameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_firstNameField1ActionPerformed
-
+/**
+ * Name: lastNameField1ActionPerformed
+ * Purpose/description: Handles the action event when the lastNameField1 triggers an action.
+ *                      Usually occurs when the user presses Enter after editing the last name in this specific field.
+ * @param evt - the ActionEvent triggered by the lastNameField1.
+ * @return void
+ */
     private void lastNameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_lastNameField1ActionPerformed
-
+    /**
+     * Name: addEmployeeConfirmButton1ActionPerformed
+     * Purpose: Validates user input and adds a new employee to the list
+     * @param evt The action event triggered by clicking 'Add Employee'
+     * Effect: Adds employee to the system if all fields are valid, updates table and closes the form
+     */
     private void addEmployeeConfirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeConfirmButton1ActionPerformed
         try {
         // Get values from form fields
@@ -358,13 +402,26 @@ public class AddEmployeeForm extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
 
+    /**
+    * Name: payLevelForEmployeeCombo1ActionPerformed
+    * Purpose/description: Handles the action event triggered when an item is selected
+    *                      from the payLevelForEmployeeCombo1 dropdown (combo box).
+    *                      Typically used to update the pay level for an employee based
+    *                      on the user's selection.
+    * @param evt - the ActionEvent generated by selecting an item in the combo box.
+    * @return void
+    */
     private void payLevelForEmployeeCombo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelForEmployeeCombo1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_payLevelForEmployeeCombo1ActionPerformed
 
     /**
-     * @param args the command line arguments
-     */
+    * Launches the Add Employee Form.
+    * Sets the Nimbus look and feel if available,
+    * then creates and shows the form on the Event Dispatch Thread.
+    * 
+    * @param args Command line arguments (not used)
+    */     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
