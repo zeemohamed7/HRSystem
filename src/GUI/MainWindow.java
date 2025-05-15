@@ -43,6 +43,8 @@ public class MainWindow extends javax.swing.JFrame {
         
     public static int staticEmployeeID = 0;
     public static int staticDeptID = 0;
+    private boolean isDefaultDataLoaded = false;
+
 
 
     
@@ -52,6 +54,7 @@ public class MainWindow extends javax.swing.JFrame {
         @SuppressWarnings("unchecked")
     public void deserializeData() {
         try {
+            System.out.println("here");
             FileInputStream fileIn = new FileInputStream("HRSystem.dat");
             ObjectInputStream in = new ObjectInputStream(fileIn);
 
@@ -78,9 +81,6 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
         
         initComponents();
-        deserializeData();
-        initialiseEmployeesTable();
-        initialiseDepartmentsTable();
         initSearchListener();
 
         payLevels.add("Select Annual Salary");
@@ -207,7 +207,6 @@ public class MainWindow extends javax.swing.JFrame {
         // Populate the table with employee data
         for (Employee emp : allEmployees) {
             int id = emp.getEmployeeId();
-            System.out.println(id);
             String fullName = emp.getFirstName() + " " + emp.getSurname();  
 
             String department = "No Department";
@@ -378,86 +377,6 @@ public class MainWindow extends javax.swing.JFrame {
 }
 
     
-
-
-    
-    
-    // pagination function
-    public void updatePagination(int totalPages, int currentPage) {
-    paginationPanel.removeAll();
-
-    // prev button
-    JButton prevButton = new JButton("Previous");
-    prevButton.setEnabled(currentPage > 1);
-//    prevButton.addActionListener(e -> goToPage(currentPage - 1));
-    paginationPanel.add(prevButton);
-
-    // page number buttons
-    for (int i = 1; i <= totalPages; i++) {
-        JButton pageButton = new JButton(String.valueOf(i));
-        if (i == currentPage) {
-            pageButton.setEnabled(false); // Highlight current page
-        }
-        int page = i;
-//        pageButton.addActionListener(e -> goToPage(page));
-        paginationPanel.add(pageButton);
-    }
-
-    // next button
-    JButton nextButton = new JButton("Next");
-    nextButton.setEnabled(currentPage < totalPages);
-//    nextButton.addActionListener(e -> goToPage(currentPage + 1));
-    paginationPanel.add(nextButton);
-
-    paginationPanel.revalidate();
-    paginationPanel.repaint();
-}
-
-    
-    public void showSuccessToast(JFrame parent, String message) {
-        JWindow toast = new JWindow(parent); 
-        toast.setLayout(new BorderLayout());
-
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setOpaque(true);
-        label.setBackground(new Color(60, 179, 113)); 
-        label.setForeground(Color.WHITE);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        toast.add(label, BorderLayout.CENTER);
-        toast.pack();
-
-        // Get location relative to parent window
-        int x = parent.getX() + parent.getWidth() - toast.getWidth() - 20;
-        int y = parent.getY() + parent.getHeight() - toast.getHeight() - 50;
-        toast.setLocation(x, y);
-
-        toast.setVisible(true);
-
-        // Auto-close after 3 seconds
-        new Timer(3000, e -> toast.dispose()).start();
-    }
-    public void showErrorToast(JFrame parent, String message) {
-        JWindow toast = new JWindow(parent); 
-        toast.setLayout(new BorderLayout());
-
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setOpaque(true);
-        label.setBackground(new Color(220, 53, 69)); 
-        label.setForeground(Color.WHITE);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        toast.add(label, BorderLayout.CENTER);
-        toast.pack();
-
-        // Get location relative to parent window
-        int x = parent.getX() + parent.getWidth() - toast.getWidth() - 20;
-        int y = parent.getY() + parent.getHeight() - toast.getHeight() - 50;
-        toast.setLocation(x, y);
-
-        toast.setVisible(true);
-
-        // Auto-close after 3 seconds
-        new Timer(3000, e -> toast.dispose()).start();
-    }
 
     public void populateDepartmentsComboBox() {
         departmentsListSelect.removeAllItems();
@@ -676,6 +595,11 @@ public class MainWindow extends javax.swing.JFrame {
         jButton2.setBackground(new java.awt.Color(136, 156, 176));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Load Default Data");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         LoginPanel.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Helvetica Neue", 0, 8)); // NOI18N
@@ -1481,32 +1405,32 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         //Verifing that input is not null
-        if(txtUserName.getText().isEmpty()|| txtPassword.getText().isEmpty()) {
-            
-            JOptionPane.showMessageDialog(this, "Username and Password should not be empty!", "Invalid Input", 2);
-            
+        if (txtUserName.getText().isEmpty() || txtPassword.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(MainWindow.this, "Username and Password should not be empty!", 
+                                          "Invalid Input", JOptionPane.ERROR_MESSAGE);
         } else {
-            
-            //Checkig if the serialization file exists
+            //Check if the serialization file exists
             File file = new File("HRSystem.dat");
 
             if (file.exists() && file.length() > 0) {
-                // De Serialize the information 
+                // Deserialize the information from the HRSystem.dat file
                 try {
                     FileInputStream fileIn = new FileInputStream("HRSystem.dat");
                     ObjectInputStream in = new ObjectInputStream(fileIn);
-                    allEmployees = (ArrayList<Employee>)in.readObject();
-                    departments = (ArrayList<Department>)in.readObject();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
+                    allEmployees = (ArrayList<Employee>) in.readObject();
+                    departments = (ArrayList<Department>) in.readObject();
+                } catch (IOException | ClassNotFoundException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 }
-      
             }
-            
+            System.out.println("isDefaultDataLoaded is " + isDefaultDataLoaded );
+         if (!isDefaultDataLoaded) {
+        // Load default data if it hasn't been deserialized yet
+            deserializeData();
+        } 
+        initialiseEmployeesTable();
+        initialiseDepartmentsTable();
+            // Switch to the dashboard screen after successful login
             CardLayout cl = (CardLayout) MainFrame.getLayout();
             cl.show(MainFrame, "dashboard");
             lblUserName.setText(txtUserName.getText());
@@ -1529,7 +1453,6 @@ public class MainWindow extends javax.swing.JFrame {
     // Hide the main window
     setVisible(false);
     AddEmployeeForm addEmployeeForm = new AddEmployeeForm(this);
-    staticEmployeeID++;
     addEmployeeForm.setVisible(true);
 
            
@@ -1637,20 +1560,33 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
 
+    // Prompt the user to ask if they want to save changes before exiting
+    int option = JOptionPane.showConfirmDialog(this, "Do you want to save changes before exiting?", 
+            "Save Changes", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+    // If the user chooses 'Yes' (option 0)
+    if (option == JOptionPane.YES_OPTION) {
     //Serializing the emplyees & departments array lists and the static ID count for employees & departments
-            try {
-                FileOutputStream fileOut = new FileOutputStream("HRSystem.dat");
-                ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                out.writeObject(allEmployees);
-                out.writeObject(departments);
-                out.writeObject(staticEmployeeID);
-                out.writeObject(staticDeptID);
-            } catch (IOException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    
-    // Exit the System
+        try {
+            FileOutputStream fileOut = new FileOutputStream("HRSystem.dat");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(allEmployees);
+            out.writeObject(departments);
+            out.writeObject(staticEmployeeID);
+            out.writeObject(staticDeptID);
+            
+            JOptionPane.showMessageDialog(this, "Information saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            System.exit(0);
+
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    } 
+    // Exit without saving
+    else if (option == JOptionPane.NO_OPTION) {
         System.exit(0);
+    }
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void generatePayReportButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2048,6 +1984,80 @@ public class MainWindow extends javax.swing.JFrame {
     private void payLevelDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_payLevelDetailPageActionPerformed
+
+public void loadDefaultData() {
+    try (BufferedReader reader = new BufferedReader(new FileReader("startup.txt"))) {
+        String line;
+        Department currentDepartment = null;
+
+        while ((line = reader.readLine()) != null) {
+            if (line.trim().isEmpty()) continue;
+
+            // Split line by commas to get data
+            String[] parts = line.split(",");
+
+            // Process department
+            if (parts[0].equalsIgnoreCase("department")) {
+                int deptID = Integer.parseInt(parts[1]);
+                String deptName = parts[2];
+                String location = parts[3];
+
+                // Create a new department
+                currentDepartment = new Department(deptID, deptName, location);
+                departments.add(currentDepartment);
+
+            } 
+            // Process employee
+            else if (parts[0].equalsIgnoreCase("employee")) {
+                int empID = Integer.parseInt(parts[1]);
+                String firstName = parts[2];
+                String surname = parts[3];
+                char gender = parts[4].charAt(0);
+                String address = parts[5];
+                int payLevel = Integer.parseInt(parts[6]);
+                int deptID = Integer.parseInt(parts[7]);
+
+                // Create new employee
+                Employee emp = new Employee(empID, firstName, surname, gender, address, payLevel, deptID);
+
+                // Check if department exists and assign employee to the department
+                if (currentDepartment != null && currentDepartment.getDeptID() == deptID) {
+                    // Set the first employee in the department as the department head
+                    if (currentDepartment.getDepartmentHead() == null) {
+                        currentDepartment.setDepartmentHead(emp); // Make this employee the department head
+                        emp.setIsHead(true); // Mark this employee as the head
+                    }
+
+                    // Add employee to the allEmployees list
+                    System.out.println("load");
+                    allEmployees.add(emp);
+                }
+            }
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(MainWindow.this, "Error loading default data: " + e.getMessage(),
+                                      "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+}
+
+
+    
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        // Clear the current data before loading default data
+        allEmployees.clear();
+        departments.clear();
+
+        // Load data from startup.txt
+        loadDefaultData();
+        isDefaultDataLoaded = true;
+
+        // Optionally, show a message dialog to inform the user
+        JOptionPane.showMessageDialog(MainWindow.this, "Default data loaded successfully!", 
+                                      "Success", JOptionPane.INFORMATION_MESSAGE);
+
+    }//GEN-LAST:event_jButton2ActionPerformed
    
     
  
@@ -2192,7 +2202,6 @@ public void updateDepartmentDetails(Department updatedDepartment) {
         // Update the department head
         Employee head = updatedDepartment.getDepartmentHead();
         if (head != null) {
-            System.out.println(head.getFirstName() + " " + head.getSurname());
             deptHeadDetail.setText(head.getFirstName() + " " + head.getSurname());
         } else {
             deptHeadDetail.setText(null);

@@ -1,0 +1,10 @@
+department,1,IT,New York
+employee,101,John,Doe,M,1234 Elm St,3,1
+employee,102,Jane,Smith,F,5678 Oak St,2,1
+employee,103,Michael,Johnson,M,1357 Pine St,4,1
+department,2,HR,Los Angeles
+employee,201,Emily,White,F,2345 Birch St,1,2
+employee,202,David,Green,M,6789 Maple St,5,2
+department,3,Finance,Chicago
+employee,301,William,Martin,M,3456 Cedar St,6,3
+employee,302,Olivia,Walker,F,7890 Pine St,7,3

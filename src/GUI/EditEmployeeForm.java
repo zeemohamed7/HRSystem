@@ -393,7 +393,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
             selectedEmployee.setDeptID(deptID);
             selectedEmployee.setPayLevel(payLevel);
 
-            // Update the allEmployees list
+            // Update the allEmployees list - is this needed??
             for (int i = 0; i < main.allEmployees.size(); i++) {
                 if (main.allEmployees.get(i).getEmployeeId() == selectedEmployee.getEmployeeId()) {
                     main.allEmployees.set(i, selectedEmployee);
