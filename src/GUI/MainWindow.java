@@ -811,7 +811,6 @@ public class MainWindow extends javax.swing.JFrame {
                         }
 
                         // Add employee to the allEmployees list
-                        System.out.println("load");
                         allEmployees.add(emp);
                     }
                 }

@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
+
 import Logic.*;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -11,62 +12,62 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * Name: AddEmployeeForm
+ *
  * @author Zainab
- * @version 1.0
- * Purpose: This class represents a GUI form for adding a new employee to the system.
- * It allows the user to enter first name, last name, gender, address, department, and pay level.
- * The new employee is added to the main employee list and the employee table is updated.
+ * @version 1.0 Purpose: This class represents a GUI form for adding a new
+ * employee to the system. It allows the user to enter first name, last name,
+ * gender, address, department, and pay level. The new employee is added to the
+ * main employee list and the employee table is updated.
  */
 public class AddEmployeeForm extends javax.swing.JFrame {
-       MainWindow main; //Reference to the main window
-       ArrayList<Department> departments = main.departments;//List of all departments
-       ArrayList<Employee> allEmployees = main.allEmployees;//List of all employees
 
-       
+    MainWindow main; // Reference to the main window
+    ArrayList<Department> departments; // Declare without initializing here
+    ArrayList<Employee> allEmployees; // Declare without initializing here
 
     /**
-     * Name: AddEmployeeForm (Default Constructor)
-     * Purpose: Default constructor to initialize the form
-     * Input: None
-     * Output: Initialized form window
+     * Name: AddEmployeeForm (Default Constructor) Purpose: Default constructor
+     * to initialize the form Input: None Output: Initialized form window
      * Effect: GUI window is displayed
      */
     public AddEmployeeForm() {
-        initComponents(); 
+        initComponents();
     }
-    
-     /**
-     * Name: AddEmployeeForm
-     * Purpose: Initializes the form and populates dropdowns using data from main window
-     * @param main The reference to the main window object
-     * Input: main - instance of MainWindow to access data lists
-     * Output: Initialized form with department and pay level dropdowns populated
-     * Effect: Prepares the add employee form with required data
+
+    /**
+     * Name: AddEmployeeForm Purpose: Initializes the form and populates
+     * dropdowns using data from main window
+     *
+     * @param main The reference to the main window object Input: main -
+     * instance of MainWindow to access data lists Output: Initialized form with
+     * department and pay level dropdowns populated Effect: Prepares the add
+     * employee form with required data
      */
-    
     public AddEmployeeForm(MainWindow main) {
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-       this.main = main;
+        this.main = main;
+        this.departments = main.departments;
+        this.allEmployees = main.allEmployees;
 
-                        
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
-        
+
         this.setLocation(x, y);
 
         // When the form is disposed, make the main window visible again
         addWindowListener(new java.awt.event.WindowAdapter() {
-        @Override
-        public void windowClosed(java.awt.event.WindowEvent evt) {
-            main.setVisible(true);
-        }
-    });
-        
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                main.setVisible(true);
+            }
+        });
+
         // populate combo box
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         model.addElement(null); // Default option
@@ -76,10 +77,10 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         }
 
         departmentForEmployeeCombo1.setModel(model);
-        
+
         // populate pay level
         payLevelForEmployeeCombo1.removeAllItems();
-        
+
         for (String payLevel : main.payLevels) {
             payLevelForEmployeeCombo1.addItem(payLevel);
         }
@@ -250,178 +251,185 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * Name: cancelEmployeeFormButtonActionPerformed
-     * Purpose: Handles cancellation of the form and returns user to the main window
-     * @param evt The action event
-     * Effect: Main window is shown and this form is closed
+     * Name: cancelEmployeeFormButtonActionPerformed Purpose: Handles
+     * cancellation of the form and returns user to the main window
+     *
+     * @param evt The action event Effect: Main window is shown and this form is
+     * closed
      */
     private void cancelEmployeeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelEmployeeFormButtonActionPerformed
         // TODO add your handling code here:    
-    // Show the main window
-    main.setVisible(true);
+        // Show the main window
+        main.setVisible(true);
 
-    // Dispose the current form
-    dispose();
+        // Dispose the current form
+        dispose();
     }//GEN-LAST:event_cancelEmployeeFormButtonActionPerformed
     /**
- * Name: maleButton1ActionPerformed
- * Purpose/description: Handles the action event triggered when the maleButton1 is clicked.
- * @param evt - the ActionEvent triggered by clicking the maleButton1.
- * @return void
- */
+     * Name: maleButton1ActionPerformed Purpose/description: Handles the action
+     * event triggered when the maleButton1 is clicked.
+     *
+     * @param evt - the ActionEvent triggered by clicking the maleButton1.
+     * @return void
+     */
     private void maleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maleButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_maleButton1ActionPerformed
-/**
- * Name: firstNameField1ActionPerformed
- * Purpose/description: Handles the action event when the firstNameField1 triggers an action.
- *                      Usually occurs when the user presses Enter after editing the first name in this specific field.
- * @param evt - the ActionEvent triggered by the firstNameField1.
- * @return void
- */
+    /**
+     * Name: firstNameField1ActionPerformed Purpose/description: Handles the
+     * action event when the firstNameField1 triggers an action. Usually occurs
+     * when the user presses Enter after editing the first name in this specific
+     * field.
+     *
+     * @param evt - the ActionEvent triggered by the firstNameField1.
+     * @return void
+     */
     private void firstNameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_firstNameField1ActionPerformed
-/**
- * Name: lastNameField1ActionPerformed
- * Purpose/description: Handles the action event when the lastNameField1 triggers an action.
- *                      Usually occurs when the user presses Enter after editing the last name in this specific field.
- * @param evt - the ActionEvent triggered by the lastNameField1.
- * @return void
- */
+    /**
+     * Name: lastNameField1ActionPerformed Purpose/description: Handles the
+     * action event when the lastNameField1 triggers an action. Usually occurs
+     * when the user presses Enter after editing the last name in this specific
+     * field.
+     *
+     * @param evt - the ActionEvent triggered by the lastNameField1.
+     * @return void
+     */
     private void lastNameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_lastNameField1ActionPerformed
     /**
-     * Name: addEmployeeConfirmButton1ActionPerformed
-     * Purpose: Validates user input and adds a new employee to the list
-     * @param evt The action event triggered by clicking 'Add Employee'
-     * Effect: Adds employee to the system if all fields are valid, updates table and closes the form
+     * Name: addEmployeeConfirmButton1ActionPerformed Purpose: Validates user
+     * input and adds a new employee to the list
+     *
+     * @param evt The action event triggered by clicking 'Add Employee' Effect:
+     * Adds employee to the system if all fields are valid, updates table and
+     * closes the form
      */
     private void addEmployeeConfirmButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeConfirmButton1ActionPerformed
         try {
-        // Get values from form fields
-        String firstName = firstNameField1.getText().trim();
-        String lastName = lastNameField1.getText().trim();
-        String address = addressField1.getText().trim();
+            // Get values from form fields
+            String firstName = firstNameField1.getText().trim();
+            String lastName = lastNameField1.getText().trim();
+            String address = addressField1.getText().trim();
 
-        // Validate required fields
-        if (firstName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "First name is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            firstNameField1.requestFocus();
-            return;
-        }
-
-        if (lastName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Last name is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            lastNameField1.requestFocus();
-            return;
-        }
-        
-        // Validate gender selection
-        char gender;
-        if (maleButton1.isSelected()) {
-            gender = 'M';
-        } else if (femaleButton1.isSelected()) {
-            gender = 'F';
-        } else {
-            JOptionPane.showMessageDialog(this, "Please select a gender.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        if (address.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Address is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            addressField1.requestFocus();
-            return;
-        }
-
-        // Get selected department (can be null)
-        String selectedDepartmentName = (String) departmentForEmployeeCombo1.getSelectedItem();
-        Integer departmentId = null;
-        
-        if (selectedDepartmentName != null && !selectedDepartmentName.equals("No Department")) {
-            try {
-                departmentId = Department.getIdByDepartmentName(departments, selectedDepartmentName);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error retrieving department information: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            // Validate required fields
+            if (firstName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "First name is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                firstNameField1.requestFocus();
+                return;
             }
+
+            if (lastName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Last name is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                lastNameField1.requestFocus();
+                return;
+            }
+
+            // Validate gender selection
+            char gender;
+            if (maleButton1.isSelected()) {
+                gender = 'M';
+            } else if (femaleButton1.isSelected()) {
+                gender = 'F';
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a gender.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (address.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Address is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                addressField1.requestFocus();
+                return;
+            }
+
+            // Get selected department (can be null)
+            String selectedDepartmentName = (String) departmentForEmployeeCombo1.getSelectedItem();
+            Integer departmentId = null;
+
+            if (selectedDepartmentName != null && !selectedDepartmentName.equals("No Department")) {
+                try {
+                    departmentId = Department.getIdByDepartmentName(departments, selectedDepartmentName);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Error retrieving department information: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            // Get salary from combo box
+            String salaryStr = (String) payLevelForEmployeeCombo1.getSelectedItem();
+            if (salaryStr == null || salaryStr.equals("Select Annual Salary")) {
+                JOptionPane.showMessageDialog(this, "Please select a valid pay level.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            int payLevel;
+            try {
+                // Extract level number (e.g., "Level 1" -> 1)
+                payLevel = Integer.parseInt(salaryStr.split(" - ")[0].substring(6));
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                JOptionPane.showMessageDialog(this, "Invalid pay level format.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Create new employee
+            Employee newEmployee;
+            main.staticEmployeeID++;
+            if (departmentId == null) {
+                newEmployee = new Employee(main.staticEmployeeID, firstName, lastName, gender, address, payLevel);
+            } else {
+                newEmployee = new Employee(main.staticEmployeeID, firstName, lastName, gender, address, payLevel, departmentId);
+            }
+
+            // Add to employees list
+            main.allEmployees.add(newEmployee);
+
+            // Update employees table
+            main.refreshEmployeeTable();
+
+            // Clear form fields
+            firstNameField1.setText("");
+            lastNameField1.setText("");
+            addressField1.setText("");
+            payLevelForEmployeeCombo1.setSelectedIndex(0);
+            departmentForEmployeeCombo1.setSelectedIndex(0);
+
+            // Show success message
+            JOptionPane.showMessageDialog(this, "Employee added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            // Close the form
+            main.setVisible(true);
+            this.dispose();
+
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Unexpected error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-
-        // Get salary from combo box
-        String salaryStr = (String) payLevelForEmployeeCombo1.getSelectedItem();
-        if (salaryStr == null || salaryStr.equals("Select Annual Salary")) {
-            JOptionPane.showMessageDialog(this, "Please select a valid pay level.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int payLevel;
-        try {
-            // Extract level number (e.g., "Level 1" -> 1)
-            payLevel = Integer.parseInt(salaryStr.split(" - ")[0].substring(6));
-        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            JOptionPane.showMessageDialog(this, "Invalid pay level format.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-
-        // Create new employee
-        Employee newEmployee;
-        main.staticEmployeeID++;
-        if (departmentId == null) {
-            newEmployee = new Employee(main.staticEmployeeID, firstName, lastName, gender, address, payLevel);
-        } else {
-            newEmployee = new Employee(main.staticEmployeeID, firstName, lastName, gender, address, payLevel, departmentId);
-        }
-
-        // Add to employees list
-        main.allEmployees.add(newEmployee);
-
-        // Update employees table
-        main.refreshEmployeeTable();
-
-        // Clear form fields
-        firstNameField1.setText("");
-        lastNameField1.setText("");
-        addressField1.setText("");
-        payLevelForEmployeeCombo1.setSelectedIndex(0);
-        departmentForEmployeeCombo1.setSelectedIndex(0);
-
-        // Show success message
-        JOptionPane.showMessageDialog(this, "Employee added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-        // Close the form
-        main.setVisible(true);
-        this.dispose();
-
-    } catch (NullPointerException e) {
-        JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Unexpected error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_addEmployeeConfirmButton1ActionPerformed
 
     /**
-    * Name: payLevelForEmployeeCombo1ActionPerformed
-    * Purpose/description: Handles the action event triggered when an item is selected
-    *                      from the payLevelForEmployeeCombo1 dropdown (combo box).
-    *                      Typically used to update the pay level for an employee based
-    *                      on the user's selection.
-    * @param evt - the ActionEvent generated by selecting an item in the combo box.
-    * @return void
-    */
+     * Name: payLevelForEmployeeCombo1ActionPerformed Purpose/description:
+     * Handles the action event triggered when an item is selected from the
+     * payLevelForEmployeeCombo1 dropdown (combo box). Typically used to update
+     * the pay level for an employee based on the user's selection.
+     *
+     * @param evt - the ActionEvent generated by selecting an item in the combo
+     * box.
+     * @return void
+     */
     private void payLevelForEmployeeCombo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelForEmployeeCombo1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_payLevelForEmployeeCombo1ActionPerformed
 
     /**
-    * Launches the Add Employee Form.
-    * Sets the Nimbus look and feel if available,
-    * then creates and shows the form on the Event Dispatch Thread.
-    * 
-    * @param args Command line arguments (not used)
-    */     
+     * Launches the Add Employee Form. Sets the Nimbus look and feel if
+     * available, then creates and shows the form on the Event Dispatch Thread.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
