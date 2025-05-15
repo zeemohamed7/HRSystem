@@ -16,60 +16,56 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * This is a Java Swing GUI class that provides a form for adding new departments
- * to the system. It interacts with the main application window to update
- * department data and GUI components.
- * 
+ * This is a Java Swing GUI class that provides a form for adding new
+ * departments to the system. It interacts with the main application window to
+ * update department data and GUI components.
+ *
  * @author Zainab
  * @version 1.0
  */
-
 public class AddDepartmentForm extends javax.swing.JFrame {
-    
-       MainWindow main;//Reference to the main application window to access shared data and methods.
-       ArrayList<Department> departments = main.departments;//List of departments fetched from the main window.
-       ArrayList<Employee> allEmployees = main.allEmployees;
 
+    MainWindow main;//Reference to the main application window to access shared data and methods.
+    ArrayList<Department> departments = main.departments;//List of departments fetched from the main window.
+    ArrayList<Employee> allEmployees = main.allEmployees;
 
-
-   /**
+    /**
      * Name: AddDepartmentForm
-     * 
+     *
      * Default constructor for AddDepartmentForm.
-     * 
-     * Purpose: Initializes the form components but does NOT set 'main' or load data.
-     * Input: none
-     * Output: none
-     * Effect: Creates the form window but it is not linked to main data yet.
+     *
+     * Purpose: Initializes the form components but does NOT set 'main' or load
+     * data. Input: none Output: none Effect: Creates the form window but it is
+     * not linked to main data yet.
      */
     public AddDepartmentForm() {
         initComponents();
     }
-    
-     /**
+
+    /**
      * Name: AddDepartmentForm
-     * 
-     * Parameterized constructor to initialize AddDepartmentForm with reference to main window.
-     * 
+     *
+     * Parameterized constructor to initialize AddDepartmentForm with reference
+     * to main window.
+     *
      * @param main The main application window object to access shared data.
-     * 
-     * Purpose: To create the form and properly link it to the main application data.
-     * Input: MainWindow object to get department and employee data.
-     * Output: none
-     * Effect: Initializes components, sets 'main', and centers form on screen.
+     *
+     * Purpose: To create the form and properly link it to the main application
+     * data. Input: MainWindow object to get department and employee data.
+     * Output: none Effect: Initializes components, sets 'main', and centers
+     * form on screen.
      */
     public AddDepartmentForm(MainWindow main) {
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.main = main;
-                        
+
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
-        
+
         this.setLocation(x, y);
-        
-        
+
     }
 
     /**
@@ -160,133 +156,126 @@ public class AddDepartmentForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
  /**
      * Name: departmentNameFieldActionPerformed
-     * 
+     *
      * Event handler for the departmentNameField action event.
-     * 
+     *
      * @param evt The action event triggered by user input.
-     * 
-     * Purpose: Placeholder for handling action on the department name text field.
-     * Input: Action event
-     * Output: none
-     * Effect: Currently does nothing.
+     *
+     * Purpose: Placeholder for handling action on the department name text
+     * field. Input: Action event Output: none Effect: Currently does nothing.
      */
     private void departmentNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentNameFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_departmentNameFieldActionPerformed
-/**
+    /**
      * Name: locationFieldActionPerformed
-     * 
+     *
      * Event handler for the locationField action event.
-     * 
+     *
      * @param evt The action event triggered by user input.
-     * 
+     *
      * Purpose: Placeholder for handling action on the location text field.
-     * Input: Action event
-     * Output: none
-     * Effect: Currently does nothing.
+     * Input: Action event Output: none Effect: Currently does nothing.
      */
     private void locationFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_locationFieldActionPerformed
     /**
      * Name: cancelButton2ActionPerformed
-     * 
+     *
      * Event handler for the Cancel button.
-     * 
+     *
      * @param evt The action event triggered by clicking Cancel.
-     * 
+     *
      * Purpose: To close the AddDepartmentForm and return to the main window.
-     * Input: Action event
-     * Output: none
-     * Effect: Makes main window visible and disposes this form.
+     * Input: Action event Output: none Effect: Makes main window visible and
+     * disposes this form.
      */
     private void cancelButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton2ActionPerformed
         // TODO add your handling code here:
-    main.setVisible(true);
-    dispose();
+        main.setVisible(true);
+        dispose();
     }//GEN-LAST:event_cancelButton2ActionPerformed
-/**
+    /**
      * Name: addDepartmentConfirmButtonActionPerformed
-     * 
+     *
      * Event handler for the Add Department confirmation button.
-     * 
+     *
      * @param evt The action event triggered by clicking Add Department.
-     * 
-     * Purpose: Validates input, creates a new Department, adds it to the main list,
-     *          updates GUI components, and closes the form.
-     * Input: Action event
-     * Output: none
-     * Effect: Updates main window department data and UI, shows error dialogs if needed.
+     *
+     * Purpose: Validates input, creates a new Department, adds it to the main
+     * list, updates GUI components, and closes the form. Input: Action event
+     * Output: none Effect: Updates main window department data and UI, shows
+     * error dialogs if needed.
      */
     private void addDepartmentConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentConfirmButtonActionPerformed
-       try {
-    String departmentName = departmentNameField.getText().trim();
-    String location = locationField.getText().trim();
+        try {
+            String departmentName = departmentNameField.getText().trim();
+            String location = locationField.getText().trim();
 
-    // Validate input
-    if (departmentName.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Department name cannot be empty.", "Input Error", JOptionPane.WARNING_MESSAGE);
-        departmentNameField.requestFocus();
-        return;
-    }
+            // Validate input
+            if (departmentName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Department name cannot be empty.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                departmentNameField.requestFocus();
+                return;
+            }
 
-    if (location.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Location cannot be empty.", "Input Error", JOptionPane.WARNING_MESSAGE);
-        locationField.requestFocus();
-        return;
-    }
+            if (location.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Location cannot be empty.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                locationField.requestFocus();
+                return;
+            }
 
-    // Create new department without assigning a head
-    main.staticDeptID++;
-    Department newDepartment = new Department(main.staticDeptID, departmentName, location);
+            // Create new department without assigning a head
+            main.staticDeptID++;
+            Department newDepartment = new Department(main.staticDeptID, departmentName, location);
 
-    // Add to departments list
-    departments.add(newDepartment);
+            // Add to departments list
+            departments.add(newDepartment);
 
-    // Update departments table
-    main.refreshDepartmentTable();
+            // Update departments table
+            main.refreshDepartmentTable();
 
-    // Clear form fields
-    departmentNameField.setText("");
-    locationField.setText("");
+            // Clear form fields
+            departmentNameField.setText("");
+            locationField.setText("");
 
-    // Refresh combo box and close the form
-    main.populateDepartmentsComboBox();
-    main.refreshDepartmentsComboBox();
-    main.setVisible(true);
-    this.dispose();
+            // Refresh combo box and close the form
+            main.populateDepartmentsComboBox();
+            main.refreshDepartmentsComboBox();
+            main.setVisible(true);
+            this.dispose();
 
-} catch (NullPointerException e) {
-    JOptionPane.showMessageDialog(this, 
-        "An unexpected error occurred: " + e.getMessage(), 
-        "Error", 
-        JOptionPane.ERROR_MESSAGE
-    );
-    e.printStackTrace();
-} catch (Exception e) {
-    JOptionPane.showMessageDialog(this, 
-        "An error occurred while creating the department: " + e.getMessage(), 
-        "Error", 
-        JOptionPane.ERROR_MESSAGE
-    );
-    e.printStackTrace();
-}
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this,
+                    "An unexpected error occurred: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            e.printStackTrace();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "An error occurred while creating the department: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            e.printStackTrace();
+        }
 
     }//GEN-LAST:event_addDepartmentConfirmButtonActionPerformed
 
     /**
-    /**
-     * @param args the command line arguments
-     * Name: main
+     * /
+     *
+     **
+     * @param args the command line arguments Name: main
      *
      * Main method to run the AddDepartmentForm standalone for testing.
-     * 
+     *
      * @param args Command line arguments .
-     * 
-     * Purpose: Launches the form UI.
-     * Input: Command line arguments.
-     * Output: none
-     * Effect: Creates and displays the AddDepartmentForm window.
+     *
+     * Purpose: Launches the form UI. Input: Command line arguments. Output:
+     * none Effect: Creates and displays the AddDepartmentForm window.
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

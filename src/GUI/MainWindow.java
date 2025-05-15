@@ -4,6 +4,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -27,34 +28,118 @@ import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-
 /**
  *
- * @author zainab
+ * MainWindow is the primary JFrame for managing employees, departments, and
+ * payroll. It handles GUI initialization, data loading, and user interactions.
+ *
+ * @author Zainab
+ * @version 1.0
  */
 public class MainWindow extends javax.swing.JFrame {
+
     /**
      * Creates new form MainWindow
      */
-    
-    public static ArrayList<Employee> allEmployees = new ArrayList();
-    public static ArrayList<Department> departments = new ArrayList();
-    public static ArrayList<String> payLevels = new ArrayList();
-        
+    // change these to private later
+    public ArrayList<Employee> allEmployees;
+    public ArrayList<Department> departments;
+    public ArrayList<String> payLevels;
+
     public static int staticEmployeeID = 0;
     public static int staticDeptID = 0;
     private boolean isDefaultDataLoaded = false;
 
+    private Employee selectedEmployee;//The currently selected Employee in the UI.
+    private Department selectedDepartment;//The currently selected Department in the UI.
 
+    /**
+     * Name: MainWindow
+     *
+     *
+     * Purpose: Constructs the main window frame, initializes all GUI
+     * components, loads initial data, and sets up listeners. Input: None
+     * Output: None Effect: Initializes the frame and prepares the GUI for user
+     * interaction.
+     */
+    public MainWindow() {
 
-    
-    private Employee selectedEmployee;
-    private Department selectedDepartment;
+        initComponents();
+        initSearchListener();
 
-        @SuppressWarnings("unchecked")
+        payLevels.add("Select Annual Salary");
+        payLevels.add("Level 1 - BHD 44,245.75");
+        payLevels.add("Level 2 - BHD 48,670.32");
+        payLevels.add("Level 3 - BHD 53,537.35");
+        payLevels.add("Level 4 - BHD 58,891.09");
+        payLevels.add("Level 5 - BHD 64,780.20");
+        payLevels.add("Level 6 - BHD 71,258.22");
+        payLevels.add("Level 7 - BHD 80,946.95");
+        payLevels.add("Level 8 - BHD 96,336.34");
+
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+        this.setLocation(x, y);
+
+        // Add login and dashboard panel to main panel
+        // Add generate pay report button
+        JButton generatePayReportButton = new JButton("Generate Pay Report");
+        generatePayReportButton.addActionListener(this::generatePayReportButtonActionPerformed);
+        generatePayReportButton.setBackground(new Color(0, 102, 102));
+        generatePayReportButton.setForeground(Color.WHITE);
+        generatePayReportButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        // Add button to dashboard
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setBackground(new Color(255, 255, 255));
+        buttonPanel.add(generatePayReportButton);
+
+        // Add panels to main frame
+        MainFrame.add(LoginPanel, "login");
+        MainFrame.add(DashboardPanel, "dashboard");
+
+        // DashboardPanel
+        DashboardPanel.setLayout(new BorderLayout());
+
+        // Sidebar
+        sidemenuPanel.setPreferredSize(new Dimension(200, 0));
+        DashboardPanel.add(sidemenuPanel, BorderLayout.WEST);
+
+        // Right side (header + content)
+        headerPanel.setPreferredSize(new Dimension(0, 60));
+        rightPanel.setLayout(new BorderLayout());
+        rightPanel.add(headerPanel, BorderLayout.NORTH);
+        rightPanel.add(contentPanel, BorderLayout.CENTER);
+
+        // Add right side to dashboard
+        DashboardPanel.add(rightPanel, BorderLayout.CENTER);
+
+        // Add employees, departments and payroll report to content panel
+        contentPanel.add(employeesPanel, "employees");
+        contentPanel.add(employeeDetailPanel, "employeeDetail");
+        contentPanel.add(departmentsPanel, "departments");
+        contentPanel.add(departmentDetailPanel, "departmentDetail");
+        contentPanel.add(payrollPanel, "payroll");
+
+        // all function init for data
+        populateDepartmentsComboBox();
+
+    }
+
+    /**
+     * Name: deserializeData
+     *
+     * Purpose: Reads and deserializes the data from the "HRSystem.dat" file to
+     * restore the state of all employees, departments, and static IDs.
+     *
+     * @throws FileNotFoundException If the "HRSystem.dat" file does not exist.
+     * @throws IOException If an error occurs while reading the file.
+     * @throws ClassNotFoundException If a class in the serialized file cannot
+     * be found.
+     */
     public void deserializeData() {
         try {
-            System.out.println("here");
             FileInputStream fileIn = new FileInputStream("HRSystem.dat");
             ObjectInputStream in = new ObjectInputStream(fileIn);
 
@@ -77,162 +162,98 @@ public class MainWindow extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-            
-    public MainWindow() {
-        
-        initComponents();
-        initSearchListener();
 
-        payLevels.add("Select Annual Salary");
-        payLevels.add("Level 1 - BHD 44,245.75");
-        payLevels.add("Level 2 - BHD 48,670.32");
-        payLevels.add("Level 3 - BHD 53,537.35");
-        payLevels.add("Level 4 - BHD 58,891.09");
-        payLevels.add("Level 5 - BHD 64,780.20");
-        payLevels.add("Level 6 - BHD 71,258.22");
-        payLevels.add("Level 7 - BHD 80,946.95");
-        payLevels.add("Level 8 - BHD 96,336.34");
-        
-        
-        
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
-        int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
-        this.setLocation(x, y);
-        
-        // Add login and dashboard panel to main panel
-        // Add generate pay report button
-        JButton generatePayReportButton = new JButton("Generate Pay Report");
-        generatePayReportButton.addActionListener(this::generatePayReportButtonActionPerformed);
-        generatePayReportButton.setBackground(new Color(0, 102, 102));
-        generatePayReportButton.setForeground(Color.WHITE);
-        generatePayReportButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        
-        // Add button to dashboard
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.setBackground(new Color(255, 255, 255));
-        buttonPanel.add(generatePayReportButton);
-        
-        // Add panels to main frame
-        MainFrame.add(LoginPanel, "login");
-        MainFrame.add(DashboardPanel, "dashboard");
-        
-       
-        
-
-        // DashboardPanel
-        DashboardPanel.setLayout(new BorderLayout());
-
-        // Sidebar
-        sidemenuPanel.setPreferredSize(new Dimension(200, 0));
-        DashboardPanel.add(sidemenuPanel, BorderLayout.WEST);
-
-        // Right side (header + content)
-        headerPanel.setPreferredSize(new Dimension(0, 60));
-        rightPanel.setLayout(new BorderLayout()); 
-        rightPanel.add(headerPanel, BorderLayout.NORTH);
-        rightPanel.add(contentPanel, BorderLayout.CENTER);
-
-        // Add right side to dashboard
-        DashboardPanel.add(rightPanel, BorderLayout.CENTER);
-
-        // Add employees, departments and payroll report to content panel
-        contentPanel.add(employeesPanel, "employees");
-        contentPanel.add(employeeDetailPanel, "employeeDetail");
-        contentPanel.add(departmentsPanel, "departments");
-        contentPanel.add(departmentDetailPanel, "departmentDetail");
-        contentPanel.add(payrollPanel, "payroll");
-
-        
-        // all function init for data
-        populateDepartmentsComboBox();
-
-        
-        
-//        String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
-//
-//        // Create the table model
-//        deptModel = new DefaultTableModel(departmentColumnNames, 0) {
-//            @Override
-//            public boolean isCellEditable(int row, int column) {
-//                return false; // Make all cells non-editable
-//            }
-//        };
-//
-//
-//        // Set model to the department table
-//        departmentsTable.setModel(deptModel);
-//
-
-    }
-    
-
-
-    
+    /**
+     * Name: getAnnualPayByLevel
+     *
+     *
+     * Purpose: Returns the salary string for a given pay level.
+     *
+     * @param payLevel The integer pay level from 1 to 8.
+     * @return The corresponding salary string or "Not Available" if invalid.
+     */
     private String getAnnualPayByLevel(int payLevel) {
-    switch (payLevel) {
-        case 1:
-            return "BHD 44,245.75";
-        case 2:
-            return "BHD 48,670.32";
-        case 3:
-            return "BHD 53,537.35";
-        case 4:
-            return "BHD 58,891.09";
-        case 5:
-            return "BHD 64,780.20";
-        case 6:
-            return "BHD 71,258.22";
-        case 7:
-            return "BHD 80,946.95";
-        case 8:
-            return "BHD 96,336.34";
-        default:
-            return "Not Available"; // If pay level is out of range
-    }
+        switch (payLevel) {
+            case 1:
+                return "BHD 44,245.75";
+            case 2:
+                return "BHD 48,670.32";
+            case 3:
+                return "BHD 53,537.35";
+            case 4:
+                return "BHD 58,891.09";
+            case 5:
+                return "BHD 64,780.20";
+            case 6:
+                return "BHD 71,258.22";
+            case 7:
+                return "BHD 80,946.95";
+            case 8:
+                return "BHD 96,336.34";
+            default:
+                return "Not Available"; // If pay level is out of range
+        }
     }
 
+    /**
+     * Name: initialiseEmployeesTable
+     *
+     * Purpose: Populates the employees table with current employee data.
+     *
+     * Input: None Output: None Effect: Updates the employees table model with
+     * rows of employee info.
+     */
     private void initialiseEmployeesTable() {
-    String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Pay"};
+        String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Pay"};
 
-    // Create table with model
-    DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
-
-    try {
-        // Populate the table with employee data
-        for (Employee emp : allEmployees) {
-            int id = emp.getEmployeeId();
-            String fullName = emp.getFirstName() + " " + emp.getSurname();  
-
-            String department = "No Department";
-            if (emp.getDeptID() != null) {
-                department = Department.getDepartmentNameById(departments, emp.getDeptID()); // emp.getDeptID() can be null so might throw exception
+        // Create table with model
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
+        };
 
-            char gender = emp.getGender();
-            int payLevel = emp.getPayLevel(); // Assuming payLevel is an integer
+        try {
+            // Populate the table with employee data
+            for (Employee emp : allEmployees) {
+                int id = emp.getEmployeeId();
+                String fullName = emp.getFirstName() + " " + emp.getSurname();
 
-            // Map pay level to annual pay
-            String annualPay = getAnnualPayByLevel(payLevel);
+                String department = "No Department";
+                if (emp.getDeptID() != null) {
+                    department = Department.getDepartmentNameById(departments, emp.getDeptID()); // emp.getDeptID() can be null so might throw exception
+                }
 
-            // Add the row to the model
-            Object[] row = {id, fullName, department, gender, annualPay};
-            model.addRow(row);
+                char gender = emp.getGender();
+                int payLevel = emp.getPayLevel(); // Assuming payLevel is an integer
+
+                // Map pay level to annual pay
+                String annualPay = getAnnualPayByLevel(payLevel);
+
+                // Add the row to the model
+                Object[] row = {id, fullName, department, gender, annualPay};
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();  
+
+        // Set model to employees table
+        employeesTable.setModel(model);
+        refreshEmployeeTable();
     }
 
-    // Set model to employees table
-    employeesTable.setModel(model);
-    refreshEmployeeTable();
-    }
+    /**
+     * Name: initialiseDepartmentsTable
+     *
+     * Purpose: Initializes the department table by setting up column names and
+     * populating the table with department data, including department head
+     * information.
+     *
+     * @throws Exception If an error occurs while accessing the department data.
+     */
     private void initialiseDepartmentsTable() {
         String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
 
@@ -246,30 +267,34 @@ public class MainWindow extends javax.swing.JFrame {
 
         try {
             // Populate table
-            for (Department dept : departments) {  
+            for (Department dept : departments) {
                 deptModel.addRow(new Object[]{
-                    dept.getDeptID(), 
-                    dept.getName(), 
+                    dept.getDeptID(),
+                    dept.getName(),
                     dept.getLocation(),
                     dept.getDepartmentHead() != null ? dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname() : "No Head"
                 });
-            
+
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error initializing department table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();  
+            e.printStackTrace();
         }
 
         departmentsTable.setModel(deptModel);
-        refreshDepartmentTable(); 
+        refreshDepartmentTable();
     }
 
-    
-
-
-    // show employee detail 
+    /**
+     * Name: showEmployeeDetails Purpose: To populate and display the employee
+     * detail view with data from the given employee object. Input: Employee
+     * employee - the employee whose details are to be displayed. Output: None.
+     * Effect: Updates the UI to show the selected employee's information.
+     *
+     * @param employee The employee object containing the details to display.
+     */
     private void showEmployeeDetails(Employee employee) {
-        
+
         if (employee == null) {
             JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.WARNING_MESSAGE);
             return;
@@ -302,43 +327,76 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
 
-    
-    
-    // show department detail 
+    /**
+     * Name: deleteEmployee
+     *
+     * @author Raghad Purpose: Removes a specified employee from the
+     * allEmployees list and updates the employee table display.
+     *
+     * @param employee The Employee object to be removed from the list.
+     */
+
+    private void deleteEmployee(Employee employee) {
+        allEmployees.remove(employee);
+        refreshEmployeeTable();
+    }
+
+    /**
+     * /** Name: deleteDepartment
+     *
+     * @author Raghad Purpose/description: Deletes the given department from the
+     * list and refreshes related UI components.
+     * @param department - the department object to be removed.
+     * @return void - this method does not return any value.
+     */
+
+    private void deleteDepartment(Department department) {
+        departments.remove(department);
+        refreshDepartmentsComboBox();
+    }
+
+    /**
+     * Name: showDepartmentDetails Purpose: To populate and display the
+     * department detail view with data from the given department object. Input:
+     * Department dept - the department whose details are to be displayed.
+     * Output: None. Effect: Updates the UI to show the selected department's
+     * information including its head and employees.
+     *
+     * @param dept The department object containing the details to display.
+     */
     private void showDepartmentDetails(Department dept) {
         selectedDepartment = dept;
 
-
-    if (dept == null) {
-        JOptionPane.showMessageDialog(this, "No department selected.", "Error", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-
-    // Show department detail page
-    CardLayout cl = (CardLayout) contentPanel.getLayout();
-    cl.show(contentPanel, "departmentDetail");
-
-    try {
-        // Display department data
-        departmentNameDetailPage.setText(dept.getName());
-        idDepartmentDetailPage.setText(Integer.toString(dept.getDeptID()));
-        locationDetailPage.setText(dept.getLocation());
-        deptHeadDetail.setText(null);
-
-        // Display department head, if applicable
-    // Check if the selected department is not null before accessing it
-    if (selectedDepartment != null) {
-        Employee headEmployee = selectedDepartment.getDepartmentHead();
-
-        // Display department head, if applicable
-        if (headEmployee != null) {
-            deptHeadDetail.setText(headEmployee.getFirstName() + " " + headEmployee.getSurname());
-        } else {
-            deptHeadDetail.setText(null);
+        if (dept == null) {
+            JOptionPane.showMessageDialog(this, "No department selected.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-    } else {
-        deptHeadDetail.setText(null);
-    }
+
+        // Show department detail page
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "departmentDetail");
+
+        try {
+            // Display department data
+            departmentNameDetailPage.setText(dept.getName());
+            idDepartmentDetailPage.setText(Integer.toString(dept.getDeptID()));
+            locationDetailPage.setText(dept.getLocation());
+            deptHeadDetail.setText(null);
+
+            // Display department head, if applicable
+            // Check if the selected department is not null before accessing it
+            if (selectedDepartment != null) {
+                Employee headEmployee = selectedDepartment.getDepartmentHead();
+
+                // Display department head, if applicable
+                if (headEmployee != null) {
+                    deptHeadDetail.setText(headEmployee.getFirstName() + " " + headEmployee.getSurname());
+                } else {
+                    deptHeadDetail.setText(null);
+                }
+            } else {
+                deptHeadDetail.setText(null);
+            }
 
 //        String headName = null;
 //        System.out.println(headName);
@@ -349,35 +407,38 @@ public class MainWindow extends javax.swing.JFrame {
 //            }
 //        }
 //        deptHeadDetail.setText(headName);
+            // Display employees in the department
+            StringBuilder employeeDetails = new StringBuilder();
+            boolean hasEmployees = false;
 
-        // Display employees in the department
-        StringBuilder employeeDetails = new StringBuilder();
-        boolean hasEmployees = false;
-
-        for (Employee employee : allEmployees) {
-            if (employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
-                hasEmployees = true;
-                employeeDetails.append("ID: ").append(employee.getEmployeeId())
-                               .append(", Name: ").append(employee.getFirstName())
-                               .append(" ").append(employee.getSurname())
-                               .append("\n");
+            for (Employee employee : allEmployees) {
+                if (employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
+                    hasEmployees = true;
+                    employeeDetails.append("ID: ").append(employee.getEmployeeId())
+                            .append(", Name: ").append(employee.getFirstName())
+                            .append(" ").append(employee.getSurname())
+                            .append("\n");
+                }
             }
+
+            if (!hasEmployees) {
+                employeeDetails.append("No employees in this department.");
+            }
+
+            employeeListArea.setText(employeeDetails.toString());
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error displaying department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-
-        if (!hasEmployees) {
-            employeeDetails.append("No employees in this department.");
-        }
-
-        employeeListArea.setText(employeeDetails.toString());
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error displaying department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
     }
-}
 
-    
-
+    /**
+     * * Name: populateDepartmentsComboBox Purpose: To update the department
+     * dropdown list with current department names. Input: None. Output: None.
+     * Effect: Clears and repopulates the combo box with department names plus a
+     * default "All Departments" option.
+     */
     public void populateDepartmentsComboBox() {
         departmentsListSelect.removeAllItems();
         departmentsListSelect.addItem("All Departments");
@@ -386,14 +447,383 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Name: refreshEmployeeTable Purpose/description: Refreshes the employee
+     * table based on the selected department in the combo box. Input: none
+     * Output: none Effect: Clears the employee table and repopulates it with
+     * employees filtered by selected department, displaying their annual pay.
+     *
+     * @return void - this method does not return any value.
+     */
+    public void refreshEmployeeTable() {
+        // Get the selected department from the combo box
+        String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
 
-    
-        /**
+        // Default to "All Departments" if selectedDepartment is null
+        if (selectedDepartment == null) {
+            selectedDepartment = "All Departments";
+        }
+
+        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+        model.setRowCount(0);  // Clear existing rows
+
+        // Loop through all employees
+        for (Employee emp : allEmployees) {
+            int id = emp.getEmployeeId();
+            String fullName = emp.getFirstName() + " " + emp.getSurname();
+            Integer deptId = emp.getDeptID();
+            String department = "No Department";  // Default value if no department is assigned
+
+            if (deptId != null) {
+                department = Department.getDepartmentNameById(departments, deptId);
+            }
+
+            // Filter employees based on the selected department
+            if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
+                char gender = emp.getGender();
+                int payLevel = emp.getPayLevel();
+
+                // Get the annual pay based on the pay level
+                String annualPay = getAnnualPayByLevel(payLevel);
+
+                // Add the row to the model
+                Object[] row = {id, fullName, department, gender, annualPay};
+                model.addRow(row);
+            }
+        }
+    }
+
+    /**
+     * Name: refreshDepartmentTable Purpose/description: Refreshes the
+     * departments table with the current list of departments. Input: none
+     * Output: none Effect: Clears the departments table and repopulates it with
+     * the latest department data including head info.
+     *
+     * @return void - this method does not return any value.
+     */
+    public void refreshDepartmentTable() {
+        // Assuming you have a JTable named departmentTable
+        DefaultTableModel model = (DefaultTableModel) departmentsTable.getModel();
+
+        // Clear existing rows
+        model.setRowCount(0);
+
+        // Populate table
+        for (Department dept : departments) {
+            // Add department data as rows
+            model.addRow(new Object[]{
+                dept.getDeptID(),
+                dept.getName(),
+                dept.getLocation(),
+                dept.getDepartmentHead() != null ? dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname() : "No Head"
+            });
+        }
+    }
+
+    /**
+     * Name: refreshDepartmentsComboBox Purpose/description: Refreshes the
+     * departments combo box with updated department names. Input: none Output:
+     * none Effect: Clears and repopulates the combo box, adding "All
+     * Departments" option and refreshing the employee table afterwards.
+     *
+     * @return void - this method does not return any value.
+     */
+    public void refreshDepartmentsComboBox() {
+        departmentsListSelect.removeAllItems();  // Clear all existing items
+
+        // Add "All Departments" option at the top
+        departmentsListSelect.addItem("All Departments");
+
+        // Now re-populate the combo box with the updated list of departments
+        for (Department dept : departments) {
+            departmentsListSelect.addItem(dept.getName());  // Add department names
+        }
+
+        refreshEmployeeTable();
+    }
+
+    /**
+     * Name: updateEmployeeDetails Purpose/description: Updates the detail page
+     * fields with the provided employee's information. Input: updatedEmployee -
+     * the employee whose details are to be displayed. Output: none Effect:
+     * Updates UI components with employee's name, address, gender, department,
+     * and pay level.
+     *
+     * @param updatedEmployee - Employee object containing updated information.
+     * @return void - this method does not return any value.
+     */
+    public void updateEmployeeDetails(Employee updatedEmployee) {
+        try {
+            if (selectedEmployee != null && selectedEmployee.getEmployeeId() == updatedEmployee.getEmployeeId()) {
+                // Update the displayed information
+                firstNameDetailPage.setText(updatedEmployee.getFirstName());
+                surnameDetailPage.setText(updatedEmployee.getSurname());
+                addressDetailPage.setText(updatedEmployee.getAddress());
+                genderDetailPage.setText(updatedEmployee.getGender() == 'M' ? "Male" : "Female");
+
+                // Find and display the department name
+                String departmentName = "No Department";
+                if (departments != null) {
+                    if (updatedEmployee.getDeptID() != null) {
+                        departmentName = Department.getDepartmentNameById(departments, updatedEmployee.getDeptID());
+                    }
+                }
+
+                departmentDetailPage.setText(departmentName);
+
+                // Update pay level
+                payLevelDetailPage.setText(Integer.toString(updatedEmployee.getPayLevel()));
+            }
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "There was a problem updating the employee details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();  // Optional for debugging
+        }
+    }
+
+    /**
+     * Name: calculateBiweeklyPay Purpose/description: Calculates the biweekly
+     * pay amount based on the pay level. Input: payLevel - the pay level of the
+     * employee. Output: biweekly pay amount as double. Effect: Returns the
+     * biweekly salary calculated from predefined annual salaries.
+     *
+     * @param payLevel - integer representing employee's pay level.
+     * @return double - calculated biweekly pay amount.
+     */
+    private double calculateBiweeklyPay(int payLevel) {
+        // Pay levels and their corresponding annual salaries
+        double[] payLevelSalaries = {
+            0.0, // Level 0 (placeholder)
+            45000.0, // Level 1
+            54000.0, // Level 2
+            63000.0, // Level 3
+            72000.0, // Level 4
+            81000.0, // Level 5
+            71258.22, // Level 6
+            80946.95, // Level 7
+            96336.34 // Level 8
+        };
+
+        // Validate pay level
+        if (payLevel < 1 || payLevel >= payLevelSalaries.length) {
+            return 0.0; // Default to 0 if pay level is invalid
+        }
+
+        // Calculate biweekly pay (1/26th of annual salary)
+        return payLevelSalaries[payLevel] / 26.0;
+    }
+
+    /**
+     * Name: updateDepartmentDetails Purpose/description: Updates the department
+     * detail fields with the provided department's information. Input:
+     * updatedDepartment - the department whose details are to be displayed.
+     * Output: none Effect: Updates UI components with department name, ID,
+     * location, and department head.
+     *
+     * @param updatedDepartment - Department object containing updated
+     * information.
+     * @return void - this method does not return any value.
+     */
+    public void updateDepartmentDetails(Department updatedDepartment) {
+        try {
+            if (selectedDepartment != null && selectedDepartment.getDeptID() == updatedDepartment.getDeptID()) {
+                // Update the department name
+                departmentNameDetailPage.setText(updatedDepartment.getName());
+
+                // Update the department ID
+                idDepartmentDetailPage.setText(Integer.toString(updatedDepartment.getDeptID()));
+
+                // Update the department location
+                locationDetailPage.setText(updatedDepartment.getLocation());
+
+                // Update the department head
+                Employee head = updatedDepartment.getDepartmentHead();
+                if (head != null) {
+                    deptHeadDetail.setText(head.getFirstName() + " " + head.getSurname());
+                } else {
+                    deptHeadDetail.setText(null);
+                }
+            }
+
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "There was a problem updating the department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();  // Optional for debugging
+        }
+    }
+
+    /**
+     * Name: initSearchListener Purpose: Initializes a document listener on the
+     * employee search text field to enable real-time search functionality as
+     * the user types characters. Input: None Output: None Effect: Attaches
+     * listeners to the text field that trigger employee search logic
+     */
+    private void initSearchListener() {
+//     Add a document listener to the search field to track typing events
+        searchEmployeesTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchEmployee();  // Called when text is inserted
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchEmployee();  // Called when text is removed
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchEmployee();  // Called for other changes (e.g., formatting)
+            }
+        });
+    }
+
+    // maryam
+    /**
+     * Name: searchEmployee Purpose: Filters the employee list based on user
+     * input in the search field and updates the display table. Input: None
+     * Output: None Effect: Shows matching employees in the table based on first
+     * name or surname prefix.
+     */
+    private void searchEmployee() {
+        String query = searchEmployeesTextField.getText().trim().toLowerCase();
+
+        // If the query is empty, just return and don't filter the employees
+        if (query.isEmpty()) {
+            return;
+        }
+
+        // Create a list to store the filtered results
+        ArrayList<Employee> searchResults = new ArrayList<>();
+
+        // Loop through all employees and filter by the search query
+        for (Employee employee : allEmployees) {
+            // Check if the first name or surname contains the query (case-insensitive)
+            if (employee.getFirstName().toLowerCase().startsWith(query)
+                    || // starts with because we need exact matching from the start, not contains
+                    employee.getSurname().toLowerCase().startsWith(query)) {
+                searchResults.add(employee);
+            }
+        }
+
+        // Clear the current rows
+        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+        model.setRowCount(0);  // This clears all rows from the table
+
+        // Populate the table with the filtered search results
+        for (Employee emp : searchResults) {
+            // Combine first name and surname to create Full Name
+            String fullName = emp.getFirstName().toLowerCase().trim() + " " + emp.getSurname().toLowerCase().trim();
+            // Handle case where deptID might be null
+            String departmentName = "No Department"; // Default value if no department
+            if (emp.getDeptID() != null) {
+                departmentName = Department.getDepartmentNameById(departments, emp.getDeptID());
+            }
+
+            // Add the employee details to the table
+            model.addRow(new Object[]{
+                emp.getEmployeeId(), // Assuming you have employee ID
+                fullName, // Full Name (First + Surname)
+                departmentName,
+                emp.getGender(), // Gender
+                getAnnualPayByLevel(emp.getPayLevel()) // Pay Level (Annual Salary)
+            });
+        }
+
+    }
+
+    /**
+     * Name: generatePayReportButtonActionPerformed Purpose: Stub for future
+     * implementation of pay report generation.
+     *
+     * @param evt The ActionEvent triggered by clicking the Generate Pay Report
+     * button.
+     */
+    private void generatePayReportButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // Check if there are any employees
+
+    }
+
+    /**
+     * Name: loadDefaultData Purpose/description: Loads default departments and
+     * employees from the "startup.txt" file. Input: none Output: none Effect:
+     * Initializes the departments and allEmployees lists by reading from the
+     * file. Sets the first employee in each department as the department head.
+     * Displays an error dialog if file reading fails.
+     *
+     * Expected file format ("startup.txt"): - Each line represents either a
+     * department or an employee. - Department line format:
+     * department,<deptID>,<deptName>,<location>
+     * Example: department,1,Finance,Bahrain Tower - Employee line format:
+     * employee,<empID>,<firstName>,<surname>,<gender>,<address>,<payLevel>,<deptID>
+     * Example: employee,101,John,Doe,M,123 Main St,3,1
+     *
+     * @return void - this method does not return any value.
+     */
+    public void loadDefaultData() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("startup.txt"))) {
+            String line;
+            Department currentDepartment = null;
+
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
+                // Split line by commas to get data
+                String[] parts = line.split(",");
+
+                // Process department
+                if (parts[0].equalsIgnoreCase("department")) {
+                    int deptID = Integer.parseInt(parts[1]);
+                    String deptName = parts[2];
+                    String location = parts[3];
+
+                    // Create a new department
+                    currentDepartment = new Department(deptID, deptName, location);
+                    departments.add(currentDepartment);
+
+                } // Process employee
+                else if (parts[0].equalsIgnoreCase("employee")) {
+                    int empID = Integer.parseInt(parts[1]);
+                    String firstName = parts[2];
+                    String surname = parts[3];
+                    char gender = parts[4].charAt(0);
+                    String address = parts[5];
+                    int payLevel = Integer.parseInt(parts[6]);
+                    int deptID = Integer.parseInt(parts[7]);
+
+                    // Create new employee
+                    Employee emp = new Employee(empID, firstName, surname, gender, address, payLevel, deptID);
+
+                    // Check if department exists and assign employee to the department
+                    if (currentDepartment != null && currentDepartment.getDeptID() == deptID) {
+                        // Set the first employee in the department as the department head
+                        if (currentDepartment.getDepartmentHead() == null) {
+                            currentDepartment.setDepartmentHead(emp); // Make this employee the department head
+                            emp.setIsHead(true); // Mark this employee as the head
+                        }
+
+                        // Add employee to the allEmployees list
+                        System.out.println("load");
+                        allEmployees.add(emp);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(MainWindow.this, "Error loading default data: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -1389,25 +1819,57 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Name: txtUserNameActionPerformed Purpose: This method handles the event
+     * when the user presses Enter while focused on the username text field. It
+     * shifts the focus to the password field.
+     *
+     * @param evt The ActionEvent triggered by pressing Enter in the username
+     * field.
+     */
     private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUserNameActionPerformed
-
+    /**
+     * Name: txtPasswordActionPerformed Purpose: This method is called when the
+     * Enter key is pressed in the password field. It attempts to perform the
+     * login operation.
+     *
+     * @param evt The ActionEvent triggered by pressing Enter in the password
+     * field.
+     */
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordActionPerformed
-
+    /**
+     * Name: jCheckBox1ActionPerformed Purpose: Handles the event of toggling
+     * the password visibility checkbox.
+     *
+     * @param evt The ActionEvent triggered when the checkbox is selected or
+     * deselected.
+     */
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox1ActionPerformed
-
+    /**
+     * Name: loginButtonActionPerformed
+     *
+     * Purpose: Handles the login action, verifying the username and password
+     * inputs. If valid, it checks for the serialized data file
+     * ("HRSystem.dat"). If the file exists, it deserializes the data into the
+     * employee and department lists. If default data has not been loaded, it
+     * calls the `deserializeData()` method to initialize data. Updates the
+     * tables and switches to the dashboard view.
+     *
+     * @param evt The ActionEvent triggered by the login button.
+     */
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         // TODO add your handling code here:
-        
+
         //Verifing that input is not null
         if (txtUserName.getText().isEmpty() || txtPassword.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(MainWindow.this, "Username and Password should not be empty!", 
-                                          "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainWindow.this, "Username and Password should not be empty!",
+                    "Invalid Input", JOptionPane.ERROR_MESSAGE);
         } else {
             //Check if the serialization file exists
             File file = new File("HRSystem.dat");
@@ -1423,232 +1885,250 @@ public class MainWindow extends javax.swing.JFrame {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            System.out.println("isDefaultDataLoaded is " + isDefaultDataLoaded );
-         if (!isDefaultDataLoaded) {
-        // Load default data if it hasn't been deserialized yet
-            deserializeData();
-        } 
-        initialiseEmployeesTable();
-        initialiseDepartmentsTable();
+            System.out.println("isDefaultDataLoaded is " + isDefaultDataLoaded);
+            if (!isDefaultDataLoaded) {
+                // Load default data if it hasn't been deserialized yet
+                deserializeData();
+            }
+            initialiseEmployeesTable();
+            initialiseDepartmentsTable();
             // Switch to the dashboard screen after successful login
             CardLayout cl = (CardLayout) MainFrame.getLayout();
             cl.show(MainFrame, "dashboard");
             lblUserName.setText(txtUserName.getText());
         }
-        
-        
+
 
     }//GEN-LAST:event_loginButtonActionPerformed
-
+    /**
+     * Name: employeesButtonActionPerformed Purpose: This method switches the
+     * main content panel to the "employees" view when the Employees button is
+     * clicked.
+     *
+     * @param evt The ActionEvent triggered by clicking the Employees button.
+     */
     private void employeesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesButtonActionPerformed
         // TODO add your handling code here:
-        CardLayout cl = (CardLayout)(contentPanel.getLayout());
+        CardLayout cl = (CardLayout) (contentPanel.getLayout());
         cl.show(contentPanel, "employees");
 
     }//GEN-LAST:event_employeesButtonActionPerformed
-
+    /**
+     * Name: addEmployeeButtonActionPerformed Purpose: Opens the AddEmployeeForm
+     * when the "Add Employee" button is clicked and hides the main window while
+     * the new form is open.
+     *
+     * @param evt The ActionEvent triggered by clicking the Add Employee button.
+     */
     private void addEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeButtonActionPerformed
         // TODO add your handling code here:
-    // Create and show the AddEmployeeForm
-    // Hide the main window
-    setVisible(false);
-    AddEmployeeForm addEmployeeForm = new AddEmployeeForm(this);
-    addEmployeeForm.setVisible(true);
+        // Create and show the AddEmployeeForm
+        // Hide the main window
+        setVisible(false);
+        AddEmployeeForm addEmployeeForm = new AddEmployeeForm(this);
+        addEmployeeForm.setVisible(true);
 
-           
+
     }//GEN-LAST:event_addEmployeeButtonActionPerformed
 
-    // Search field (so it can search as you are typing
-    private void initSearchListener() {
-//     Add a document listener to the search field to track typing events
-    searchEmployeesTextField.getDocument().addDocumentListener(new DocumentListener() {
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            searchEmployee();  // Called when text is inserted
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            searchEmployee();  // Called when text is removed
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            searchEmployee();  // Called for other changes (e.g., formatting)
-        }
-    });
-}
-   private void searchEmployee() {
-    String query = searchEmployeesTextField.getText().trim().toLowerCase();
-    
-    // If the query is empty, just return and don't filter the employees
-    if (query.isEmpty()) {
-        return;  
-    }
-
-    // Create a list to store the filtered results
-    ArrayList<Employee> searchResults = new ArrayList<>();
-
-    // Loop through all employees and filter by the search query
-    for (Employee employee : allEmployees) {
-        // Check if the first name or surname contains the query (case-insensitive)
-        if (employee.getFirstName().toLowerCase().startsWith(query) || // starts with because we need exact matching from the start, not contains
-            employee.getSurname().toLowerCase().startsWith(query)) {
-            searchResults.add(employee);
-        }
-    }
-
-    // Clear the current rows in the table (assuming you have a JTable)
-    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-    model.setRowCount(0);  // This clears all rows from the table
-
-
-    // Populate the table with the filtered search results
-    for (Employee emp : searchResults) {
-        // Combine first name and surname to create Full Name
-        String fullName = emp.getFirstName() + " " + emp.getSurname();
-        // Handle case where deptID might be null
-        String departmentName = "No Department"; // Default value if no department
-        if (emp.getDeptID() != null) {
-            departmentName = Department.getDepartmentNameById(departments, emp.getDeptID());
-        }
-
-        
-        // Add the employee details to the table
-        model.addRow(new Object[]{
-            emp.getEmployeeId(),  // Assuming you have employee ID
-            fullName,             // Full Name (First + Surname)
-            departmentName,  
-            emp.getGender(),      // Gender
-            emp.getPayLevel()     // Pay Level (Annual Salary)
-        });
-    }
-}
-
-    
+    /**
+     * Name: searchEmployeesTextFieldActionPerformed Purpose: Handles actions
+     * when the user presses enter on the employee search field.
+     *
+     * @param evt The ActionEvent triggered by pressing enter in the search
+     * field.
+     */
     private void searchEmployeesTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchEmployeesTextFieldActionPerformed
         // TODO add your handling code here:
 
     }//GEN-LAST:event_searchEmployeesTextFieldActionPerformed
-
+    /**
+     * Name: searchEmployeesTextFieldFocusGained Purpose: Clears default text
+     * when the search field gains focus.
+     *
+     * @param evt The FocusEvent triggered when the search field is focused.
+     */
     private void searchEmployeesTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchEmployeesTextFieldFocusGained
         // TODO add your handling code here:
         searchEmployeesTextField.setText("");
     }//GEN-LAST:event_searchEmployeesTextFieldFocusGained
-
+    /**
+     * Name: departmentsButtonActionPerformed Purpose: Displays the departments
+     * panel.
+     *
+     * @param evt The ActionEvent triggered by clicking the Departments button.
+     */
     private void departmentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsButtonActionPerformed
         // TODO add your handling code here:
-        CardLayout cl = (CardLayout)(contentPanel.getLayout());
+        CardLayout cl = (CardLayout) (contentPanel.getLayout());
         cl.show(contentPanel, "departments");
     }//GEN-LAST:event_departmentsButtonActionPerformed
-
+    /**
+     * Name: addDepartmentButtonActionPerformed Purpose: Opens AddDepartmentForm
+     * and hides main window.
+     *
+     * @param evt The ActionEvent triggered by clicking the Add Department
+     * button.
+     */
     private void addDepartmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentButtonActionPerformed
         // TODO add your handling code here:
         setVisible(false);
         AddDepartmentForm addDeptartmentForm = new AddDepartmentForm(this);
         addDeptartmentForm.setVisible(true);
     }//GEN-LAST:event_addDepartmentButtonActionPerformed
-
+    /**
+     * Name: searchDepartmentsFieldActionPerformed Purpose: Placeholder for
+     * actions on department search field.
+     *
+     * @param evt The ActionEvent triggered when user presses enter in
+     * department search field.
+     */
     private void searchDepartmentsFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDepartmentsFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchDepartmentsFieldActionPerformed
-
+    /**
+     * Name: searchDepartmentsFieldFocusGained Purpose: Clears default text when
+     * the department search field gains focus.
+     *
+     * @param evt The FocusEvent triggered when field gains focus.
+     */
     private void searchDepartmentsFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchDepartmentsFieldFocusGained
         // TODO add your handling code here:
         searchDepartmentsField.setText("");
     }//GEN-LAST:event_searchDepartmentsFieldFocusGained
+    /**
+     * Name: exitButtonActionPerformed
+     *
+     * Purpose: Handles the action of clicking the exit button. Prompts the user
+     * to confirm whether they want to save changes before exiting. If the user
+     * chooses to save, the current state of employees, departments, and static
+     * ID counters are serialized to "HRSystem.dat". Exits the application after
+     * performing the selected action.
+     *
+     * @param evt The ActionEvent triggered by the exit button.
+     */
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
 
-    // Prompt the user to ask if they want to save changes before exiting
-    int option = JOptionPane.showConfirmDialog(this, "Do you want to save changes before exiting?", 
-            "Save Changes", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        // Prompt the user to ask if they want to save changes before exiting
+        int option = JOptionPane.showConfirmDialog(this, "Do you want to save changes before exiting?",
+                "Save Changes", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-    // If the user chooses 'Yes' (option 0)
-    if (option == JOptionPane.YES_OPTION) {
-    //Serializing the emplyees & departments array lists and the static ID count for employees & departments
-        try {
-            FileOutputStream fileOut = new FileOutputStream("HRSystem.dat");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(allEmployees);
-            out.writeObject(departments);
-            out.writeObject(staticEmployeeID);
-            out.writeObject(staticDeptID);
-            
-            JOptionPane.showMessageDialog(this, "Information saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        // If the user chooses 'Yes' (option 0)
+        if (option == JOptionPane.YES_OPTION) {
+            //Serializing the emplyees & departments array lists and the static ID count for employees & departments
+            try {
+                FileOutputStream fileOut = new FileOutputStream("HRSystem.dat");
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(allEmployees);
+                out.writeObject(departments);
+                out.writeObject(staticEmployeeID);
+                out.writeObject(staticDeptID);
 
+                JOptionPane.showMessageDialog(this, "Information saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                System.exit(0);
+
+            } catch (IOException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } // Exit without saving
+        else if (option == JOptionPane.NO_OPTION) {
             System.exit(0);
-
-        } catch (IOException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } 
-    // Exit without saving
-    else if (option == JOptionPane.NO_OPTION) {
-        System.exit(0);
-    }
     }//GEN-LAST:event_exitButtonActionPerformed
 
-    private void generatePayReportButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // Check if there are any employees
-        
-
-    }
-
+    /**
+     * Name: cancelButton3ActionPerformed Purpose: Placeholder for cancel button
+     * actions.
+     *
+     * @param evt The ActionEvent triggered by cancel button.
+     */
     private void cancelButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cancelButton3ActionPerformed
+    /**
+     * Name: employeesTableMouseClicked
+     *
+     * Purpose: Handles the action when a row in the employees table is clicked.
+     * Retrieves the employee ID from the selected row, searches for the
+     * corresponding Employee object in the employee list, and displays the
+     * employee details. Displays error messages if the employee ID is invalid
+     * or the employee is not found.
+     *
+     * @param evt The MouseEvent triggered by clicking on a table row.
+     */
 
     private void employeesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeesTableMouseClicked
         // TODO add your handling code here:
 
-    int selectedRow = employeesTable.getSelectedRow();
+        int selectedRow = employeesTable.getSelectedRow();
 
-    if (selectedRow != -1) {
-        Object employeeIdObj = employeesTable.getValueAt(selectedRow, 0);
+        if (selectedRow != -1) {
+            Object employeeIdObj = employeesTable.getValueAt(selectedRow, 0);
 
-        if (employeeIdObj instanceof Integer) {
-            int employeeId = (Integer) employeeIdObj;
-            Employee selectedEmployee = null;
+            if (employeeIdObj instanceof Integer) {
+                int employeeId = (Integer) employeeIdObj;
+                Employee selectedEmployee = null;
 
-            if (allEmployees != null) {
-                for (Employee emp : allEmployees) {
-                    if (emp.getEmployeeId() == employeeId) {
-                        selectedEmployee = emp;
-                        break;
+                if (allEmployees != null) {
+                    for (Employee emp : allEmployees) {
+                        if (emp.getEmployeeId() == employeeId) {
+                            selectedEmployee = emp;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (selectedEmployee != null) {
-                showEmployeeDetails(selectedEmployee);
+                if (selectedEmployee != null) {
+                    showEmployeeDetails(selectedEmployee);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Employee not found.");
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "Employee not found.");
+                JOptionPane.showMessageDialog(this, "Invalid Employee ID.");
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Invalid Employee ID.");
         }
-    }
     }//GEN-LAST:event_employeesTableMouseClicked
-
+    /**
+     * Name: editEmployeeButtonActionPerformed Purpose: Opens EditEmployeeForm
+     * for selected employee.
+     *
+     * @param evt The ActionEvent triggered by Edit button.
+     */
     private void editEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEmployeeButtonActionPerformed
         // TODO add your handling code here:
-        
+
         EditEmployeeForm editForm = new EditEmployeeForm(this, selectedEmployee);
         editForm.setVisible(true);
 
 
-
     }//GEN-LAST:event_editEmployeeButtonActionPerformed
-
+    /**
+     * Name: idDetailPageActionPerformed Purpose: Placeholder for ID detail page
+     * button action.
+     *
+     * @param evt The ActionEvent triggered by ID detail page button.
+     */
     private void idDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_idDetailPageActionPerformed
+    /**
+     * Name: departmentsTableMouseClicked
+     *
+     * Purpose: Handles the action when a row in the departments table is
+     * clicked. Retrieves the department ID from the selected row, searches for
+     * the corresponding Department object in the department list, and displays
+     * the department details. Displays error messages if the department ID is
+     * invalid or the department is not found.
+     *
+     * @param evt The MouseEvent triggered by clicking on a table row.
+     */
 
     private void departmentsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_departmentsTableMouseClicked
         // TODO add your handling code here:
         // fake data to test detail page
-    int selectedRow = departmentsTable.getSelectedRow();
+        int selectedRow = departmentsTable.getSelectedRow();
 
         if (selectedRow != -1) {
             Object deptIdObj = departmentsTable.getValueAt(selectedRow, 0);
@@ -1676,38 +2156,88 @@ public class MainWindow extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_departmentsTableMouseClicked
-
+    /**
+     * Name: genderDetailPageActionPerformed Purpose/description: Placeholder
+     * method for future implementation of gender detail page behavior.
+     *
+     * @param evt - the action event triggered by the user interaction.
+     * @return void - this method does not return any value.
+     *
+     */
     private void genderDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genderDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_genderDetailPageActionPerformed
-
+    /**
+     * Name: backToEmployeesButtonActionPerformed Purpose/description: Returns
+     * to the employees panel from another view.
+     *
+     * @param evt - the action event triggered by the button click.
+     * @return void - this method does not return any value.
+     */
     private void backToEmployeesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToEmployeesButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "employees");
 
     }//GEN-LAST:event_backToEmployeesButtonActionPerformed
-
+    /**
+     * Name: backToDepartmentsButtonActionPerformed Purpose/description: Returns
+     * to the departments panel from another view.
+     *
+     * @param evt - the action event triggered by the button click.
+     * @return void - this method does not return any value.
+     */
     private void backToDepartmentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToDepartmentsButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "departments");
     }//GEN-LAST:event_backToDepartmentsButtonActionPerformed
-
+    /**
+     * Name: editDepartmentButtonActionPerformed Purpose/description: Opens the
+     * edit form for the selected department.
+     *
+     * @param evt - the action event triggered by the button click.
+     * @return void - this method does not return any value.
+     */
     private void editDepartmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDepartmentButtonActionPerformed
         // TODO add your handling code here:
         EditDepartmentForm editForm = new EditDepartmentForm(this, selectedDepartment);
         editForm.setVisible(true);
 
     }//GEN-LAST:event_editDepartmentButtonActionPerformed
-
+    /**
+     * Name: idDepartmentDetailPageActionPerformed Purpose/description:
+     * Placeholder method for ID field interaction in department detail page.
+     *
+     * @param evt - the action event triggered by the user interaction.
+     * * @return void - this method does not return any value.
+     */
     private void idDepartmentDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idDepartmentDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_idDepartmentDetailPageActionPerformed
-
+    /**
+     * Name: locationDetailPageActionPerformed Purpose/description: Placeholder
+     * method for location field interaction in department detail page.
+     *
+     * @param evt - the action event triggered by the user interaction.
+     * @return void - this method does not return any value.
+     */
     private void locationDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_locationDetailPageActionPerformed
+    /**
+     * Name: generateReportButtonActionPerformed author: Hajar Purpose:
+     * Generates a payroll report for all employees, grouped by department. -
+     * Checks if employees exist to generate the report. - Creates a directory
+     * and payroll report file in the user's home folder. - Writes employee
+     * payroll details and department totals to the file. - Calculates biweekly
+     * pay based on employee pay level. - Displays the generated report content
+     * in a text pane. - Copies the report file to the project directory. -
+     * Handles errors with informative dialogs and logs.
+     *
+     * @param evt The ActionEvent triggered by clicking the Generate Report
+     * button.
+     */
 
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
         // Check if there are any employees
@@ -1725,20 +2255,20 @@ public class MainWindow extends javax.swing.JFrame {
                     throw new IOException("Failed to create reports directory: " + payrollDir.getAbsolutePath());
                 }
             }
-            
+
             File payrollFile = new File(payrollDir, "payroll.txt");
-            
+
             // Ensure file can be created and written
             if (payrollFile.exists()) {
                 if (!payrollFile.delete()) {
                     throw new IOException("Cannot overwrite existing file: " + payrollFile.getAbsolutePath());
                 }
             }
-            
+
             if (!payrollFile.createNewFile()) {
                 throw new IOException("Cannot create payroll report file: " + payrollFile.getAbsolutePath());
             }
-            
+
             // Additional check for write permissions
             if (!payrollFile.canWrite()) {
                 // Try to set writable
@@ -1769,7 +2299,7 @@ public class MainWindow extends javax.swing.JFrame {
                         if (emp.getDeptID() != null && emp.getDeptID() == dept.getDeptID()) {
                             // Calculate 2-week pay (1/26th of annual salary)
                             double biweeklyPay = calculateBiweeklyPay(emp.getPayLevel());
-                            
+
                             // Write employee details
                             writer.printf("Employee ID: %d\n", emp.getEmployeeId());
                             writer.printf("Name: %s %s\n", emp.getFirstName(), emp.getSurname());
@@ -1802,247 +2332,229 @@ public class MainWindow extends javax.swing.JFrame {
             // Get the project directory
             String projectDir = System.getProperty("user.dir");
             File downloadFile = new File(projectDir, "payroll.txt");
-            
+
             try {
                 // Copy the file to project directory
                 Files.copy(payrollFile.toPath(), downloadFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                
+
                 JOptionPane.showMessageDialog(
-                    this, 
-                    "Payroll report saved to:\n" + downloadFile.getAbsolutePath(), 
-                    "Report Saved", 
-                    JOptionPane.INFORMATION_MESSAGE
+                        this,
+                        "Payroll report saved to:\n" + downloadFile.getAbsolutePath(),
+                        "Report Saved",
+                        JOptionPane.INFORMATION_MESSAGE
                 );
             } catch (IOException downloadEx) {
                 JOptionPane.showMessageDialog(
-                    this, 
-                    "Error saving file:\n" + downloadEx.getMessage(), 
-                    "Save Error", 
-                    JOptionPane.ERROR_MESSAGE
+                        this,
+                        "Error saving file:\n" + downloadEx.getMessage(),
+                        "Save Error",
+                        JOptionPane.ERROR_MESSAGE
                 );
             }
         } catch (IOException e) {
             // Print full stack trace for detailed debugging
             e.printStackTrace();
-            
+
             // Log error details
             System.err.println("Payroll Report Generation Error: " + e.getMessage());
             System.err.println("File Path: " + System.getProperty("user.home") + "/HRSystemReports/payroll.txt");
             System.err.println("Current Working Directory: " + System.getProperty("user.dir"));
-            
+
             // Show user-friendly error message
-            JOptionPane.showMessageDialog(this, 
-                "Error generating payroll report:\n" + 
-                e.getMessage() + 
-                "\n\nPlease check file permissions and try again.", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Error generating payroll report:\n"
+                    + e.getMessage()
+                    + "\n\nPlease check file permissions and try again.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             // Print full stack trace for unexpected errors
             e.printStackTrace();
-            
+
             // Log unexpected error details
             System.err.println("Unexpected Error: " + e.getMessage());
-            
+
             // Show user-friendly error message
-            JOptionPane.showMessageDialog(this, 
-                "Unexpected error:\n" + e.getMessage() + 
-                "\n\nPlease contact support.", 
-                "Critical Error", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Unexpected error:\n" + e.getMessage()
+                    + "\n\nPlease contact support.",
+                    "Critical Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_generateReportButtonActionPerformed
 
+    /**
+     * Name: payrollReportButtonActionPerformed Purpose/description: Switches
+     * the view to the payroll report panel.
+     *
+     * @param evt - the action event triggered by the button click.
+     * * @return void - this method does not return any value.
+     */
     private void payrollReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payrollReportButtonActionPerformed
         // TODO add your handling code here:
-        CardLayout cl = (CardLayout)(contentPanel.getLayout());
+        CardLayout cl = (CardLayout) (contentPanel.getLayout());
         cl.show(contentPanel, "payroll");
     }//GEN-LAST:event_payrollReportButtonActionPerformed
-
+    /**
+     * Name: deleteButtonActionPerformed
+     *
+     * @author Raghad Purpose/description: Deletes the selected employee after
+     * user confirmation.
+     * @param evt - the action event triggered by the button click.
+     * @return void - this method does not return any value.
+     */
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
-        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this employee?", 
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this employee?",
                 "DELETE EMPLOYEE", 2, JOptionPane.YES_NO_OPTION);
-      
-       if(confirm == JOptionPane.YES_OPTION){
-       
-       //remove the employee from the data source
-       deleteEmployee(selectedEmployee);
-       JOptionPane.showMessageDialog(this, "Employee deleted succefully.");
-       
-       employeeDetailPanel.setVisible(false);
-       
-    // Switch back to Employee Panel 
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, "employeePanel");
-       
-       }
-        
+
+        if (confirm == JOptionPane.YES_OPTION) {
+
+            //remove the employee from the data source
+            deleteEmployee(selectedEmployee);
+            JOptionPane.showMessageDialog(this, "Employee deleted succefully.");
+
+            employeeDetailPanel.setVisible(false);
+
+            // Switch back to Employee Panel 
+            CardLayout cl = (CardLayout) contentPanel.getLayout();
+            cl.show(contentPanel, "employeePanel");
+
+        }
+
     }//GEN-LAST:event_deleteButtonActionPerformed
-    private void deleteEmployee(Employee employee){
-    allEmployees.remove(employee);
-    refreshEmployeeTable();
-    }
-    
-    
+
+    /**
+     * Name: deleteButton1ActionPerformed
+     *
+     * @author Raghad Purpose/description: Deletes the selected department if no
+     * employees are assigned to it.
+     * @param evt - the action event triggered by the button click.
+     * @return void - this method does not return any value.
+     */
     private void deleteButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButton1ActionPerformed
         // TODO add your handling code here:
-         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this department?",
-                 "DELETE DEPARTMENT", 2);
-        
-        if(confirm == JOptionPane.YES_OPTION){
-             if (confirm == JOptionPane.YES_OPTION) {
-        boolean hasEmployees = false;
-          int i = 0;
-        
-         // Use while loop to check if any employee is in the selected department
-        if (allEmployees != null) {
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this department?",
+                "DELETE DEPARTMENT", 2);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (confirm == JOptionPane.YES_OPTION) {
+                boolean hasEmployees = false;
+                int i = 0;
+
+                // Use while loop to check if any employee is in the selected department
+                if (allEmployees != null) {
                     while (i < allEmployees.size()) {
-            Employee emp = allEmployees.get(i);
-            if (emp.getDeptID() != null && emp.getDeptID() == selectedDepartment.getDeptID()) {
-                hasEmployees = true;
-                break;
+                        Employee emp = allEmployees.get(i);
+                        if (emp.getDeptID() != null && emp.getDeptID() == selectedDepartment.getDeptID()) {
+                            hasEmployees = true;
+                            break;
+                        }
+                        i++;
+                    }
+                }
+
+                if (hasEmployees) {
+                    JOptionPane.showMessageDialog(this,
+                            "Cannot delete department. It still has employees assigned to it.",
+                            "Delete Failed",
+                            0);
+                } else {
+                    deleteDepartment(selectedDepartment);
+                    JOptionPane.showMessageDialog(this, "Department deleted successfully.");
+                    departmentDetailPanel.setVisible(false);
+
+                    // Switch back to Department Panel 
+                    CardLayout cl = (CardLayout) contentPanel.getLayout();
+                    cl.show(contentPanel, "departments");
+                }
             }
-            i++;
+
+            // Refresh UI
+            refreshEmployeeTable();
+            refreshDepartmentTable();
         }
-        }
 
 
-        if (hasEmployees) {
-            JOptionPane.showMessageDialog(this, 
-                "Cannot delete department. It still has employees assigned to it.",
-                "Delete Failed", 
-                0);
-        } else {
-            deleteDepartment(selectedDepartment);
-            JOptionPane.showMessageDialog(this, "Department deleted successfully.");
-            departmentDetailPanel.setVisible(false);
-
-            // Switch back to Department Panel 
-            CardLayout cl = (CardLayout) contentPanel.getLayout();
-            cl.show(contentPanel, "departments");
-        }
-    }
-
-    // Refresh UI
-    refreshEmployeeTable();
-    refreshDepartmentTable();
-}
-            
-            
-  
     }//GEN-LAST:event_deleteButton1ActionPerformed
- private void deleteDepartment(Department department){
-        departments.remove(department);
-        refreshDepartmentsComboBox();
-    }
-    
-    
-    
-    
-    
-    
+
+    /**
+     * Name: departmentsListSelectActionPerformed Purpose/description: Updates
+     * the employees table based on the selected department from the combo box.
+     * Input: evt - the action event triggered by selecting a department.
+     * Output: none Effect: Updates the employees table to show only employees
+     * belonging to the selected department or all employees if "All
+     * Departments" is selected.
+     *
+     * @param evt - the action event triggered by the department selection.
+     * @return void- this method does not return any value.
+     */
     private void departmentsListSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsListSelectActionPerformed
 // TODO add your handling code here:
-    try {
-        String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
-        
-        if (selectedDepartment == null || selectedDepartment.equals("All Departments")) {
-            selectedDepartment = "All Departments";
-        }
+        try {
+            String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
 
-        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-        model.setRowCount(0); // Clear the table
-
-        for (Employee emp : allEmployees) {
-            Integer deptID = emp.getDeptID();
-            String department = "No Department"; // Default for employees with no department
-
-            // If deptID is not null, fetch the department name
-            if (deptID != null) {
-                department = Department.getDepartmentNameById(departments, deptID);
+            if (selectedDepartment == null || selectedDepartment.equals("All Departments")) {
+                selectedDepartment = "All Departments";
             }
 
-            // Check if "All Departments" is selected or the department matches
-            if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
-                int id = emp.getEmployeeId();
-                String fullName = emp.getFirstName() + " " + emp.getSurname();
-                char gender = emp.getGender();
-                int payLevel = emp.getPayLevel();
+            DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+            model.setRowCount(0); // Clear the table
 
-                Object[] row = {id, fullName, department, gender, payLevel};
-                model.addRow(row);
+            for (Employee emp : allEmployees) {
+                Integer deptID = emp.getDeptID();
+                String department = "No Department"; // Default for employees with no department
+
+                // If deptID is not null, fetch the department name
+                if (deptID != null) {
+                    department = Department.getDepartmentNameById(departments, deptID);
+                }
+
+                // Check if "All Departments" is selected or the department matches
+                if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
+                    int id = emp.getEmployeeId();
+                    String fullName = emp.getFirstName() + " " + emp.getSurname();
+                    char gender = emp.getGender();
+                    int payLevel = emp.getPayLevel();
+
+                    String annualPay = getAnnualPayByLevel(payLevel);
+                    Object[] row = {id, fullName, department, gender, annualPay};
+                    model.addRow(row);
+                }
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An error occurred while updating the employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace(); // Optional for debugging
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "An error occurred while updating the employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace(); // Optional for debugging
-    }
 
     }//GEN-LAST:event_departmentsListSelectActionPerformed
-
+    /**
+     * Name: payLevelDetailPageActionPerformed Purpose/description: Placeholder
+     * method for future implementation of pay level detail page actions. Input:
+     * evt - the action event triggered by user interaction. Output: none
+     * Effect: Currently does nothing.
+     *
+     * @param evt - the action event triggered by pay level detail page
+     * interaction.
+     * @return void - this method does not return any value.
+     */
     private void payLevelDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_payLevelDetailPageActionPerformed
 
-public void loadDefaultData() {
-    try (BufferedReader reader = new BufferedReader(new FileReader("startup.txt"))) {
-        String line;
-        Department currentDepartment = null;
+    /**
+     * Name: jButton2ActionPerformed Purpose/description: Handles the action
+     * when the button is clicked to load default data. Clears existing employee
+     * and department data, loads default data from file, and notifies the user
+     * upon successful loading. Input: evt - the action event triggered by the
+     * button click. Output: none Effect: Clears current employees and
+     * departments lists, loads new data from "startup.txt", sets the flag
+     * isDefaultDataLoaded to true, and displays a success message.
+     *
+     * @param evt - the action event triggered by the button click.
+     * @return void - this method does not return any value.
+     */
 
-        while ((line = reader.readLine()) != null) {
-            if (line.trim().isEmpty()) continue;
-
-            // Split line by commas to get data
-            String[] parts = line.split(",");
-
-            // Process department
-            if (parts[0].equalsIgnoreCase("department")) {
-                int deptID = Integer.parseInt(parts[1]);
-                String deptName = parts[2];
-                String location = parts[3];
-
-                // Create a new department
-                currentDepartment = new Department(deptID, deptName, location);
-                departments.add(currentDepartment);
-
-            } 
-            // Process employee
-            else if (parts[0].equalsIgnoreCase("employee")) {
-                int empID = Integer.parseInt(parts[1]);
-                String firstName = parts[2];
-                String surname = parts[3];
-                char gender = parts[4].charAt(0);
-                String address = parts[5];
-                int payLevel = Integer.parseInt(parts[6]);
-                int deptID = Integer.parseInt(parts[7]);
-
-                // Create new employee
-                Employee emp = new Employee(empID, firstName, surname, gender, address, payLevel, deptID);
-
-                // Check if department exists and assign employee to the department
-                if (currentDepartment != null && currentDepartment.getDeptID() == deptID) {
-                    // Set the first employee in the department as the department head
-                    if (currentDepartment.getDepartmentHead() == null) {
-                        currentDepartment.setDepartmentHead(emp); // Make this employee the department head
-                        emp.setIsHead(true); // Mark this employee as the head
-                    }
-
-                    // Add employee to the allEmployees list
-                    System.out.println("load");
-                    allEmployees.add(emp);
-                }
-            }
-        }
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(MainWindow.this, "Error loading default data: " + e.getMessage(),
-                                      "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
-}
-
-
-    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         // Clear the current data before loading default data
@@ -2054,172 +2566,18 @@ public void loadDefaultData() {
         isDefaultDataLoaded = true;
 
         // Optionally, show a message dialog to inform the user
-        JOptionPane.showMessageDialog(MainWindow.this, "Default data loaded successfully!", 
-                                      "Success", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(MainWindow.this, "Default data loaded successfully!",
+                "Success", JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_jButton2ActionPerformed
-   
-    
- 
-public void refreshEmployeeTable() {
-    // Get the selected department from the combo box
-    String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
 
-    // Default to "All Departments" if selectedDepartment is null
-    if (selectedDepartment == null) {
-        selectedDepartment = "All Departments";
-    }
-
-    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-    model.setRowCount(0);  // Clear existing rows
-
-    // Loop through all employees
-    for (Employee emp : allEmployees) {
-        int id = emp.getEmployeeId();
-        String fullName = emp.getFirstName() + " " + emp.getSurname();
-        Integer deptId = emp.getDeptID();
-        String department = "No Department";  // Default value if no department is assigned
-
-        if (deptId != null) {
-            department = Department.getDepartmentNameById(departments, deptId);
-        }
-
-        // Filter employees based on the selected department
-        if (selectedDepartment.equals("All Departments") || department.equals(selectedDepartment)) {
-            char gender = emp.getGender();
-            int payLevel = emp.getPayLevel();
-
-            // Get the annual pay based on the pay level
-            String annualPay = getAnnualPayByLevel(payLevel);
-
-            // Add the row to the model
-            Object[] row = {id, fullName, department, gender, annualPay};
-            model.addRow(row);
-        }
-    }
-}
-
-        public void refreshDepartmentTable() {
-            // Assuming you have a JTable named departmentTable
-            DefaultTableModel model = (DefaultTableModel) departmentsTable.getModel();
-
-            // Clear existing rows
-            model.setRowCount(0);
-
-            // Populate table
-            for (Department dept : departments) {  
-                // Add department data as rows
-                model.addRow(new Object[]{
-                    dept.getDeptID(), 
-                    dept.getName(), 
-                    dept.getLocation(),
-                    dept.getDepartmentHead() != null ? dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname() : "No Head"
-                });
-            }
-        }
-
-        public void refreshDepartmentsComboBox() {
-        departmentsListSelect.removeAllItems();  // Clear all existing items
-
-        // Add "All Departments" option at the top
-        departmentsListSelect.addItem("All Departments");
-        
-
-        // Now re-populate the combo box with the updated list of departments
-        for (Department dept : departments) {
-            departmentsListSelect.addItem(dept.getName());  // Add department names
-        }
-        
-        refreshEmployeeTable();
-}
-        public void updateEmployeeDetails(Employee updatedEmployee) {
-        try {
-            if (selectedEmployee != null && selectedEmployee.getEmployeeId() == updatedEmployee.getEmployeeId()) {
-                // Update the displayed information
-                firstNameDetailPage.setText(updatedEmployee.getFirstName());
-                surnameDetailPage.setText(updatedEmployee.getSurname());
-                addressDetailPage.setText(updatedEmployee.getAddress());
-                genderDetailPage.setText(updatedEmployee.getGender() == 'M' ? "Male" : "Female");
-
-                // Find and display the department name
-                String departmentName = "No Department";
-                if (departments != null) {
-                    if(updatedEmployee.getDeptID() != null) {
-                        departmentName = Department.getDepartmentNameById(departments, updatedEmployee.getDeptID());
-                        }
-                }
-
-                departmentDetailPage.setText(departmentName);
-
-                // Update pay level
-                payLevelDetailPage.setText(Integer.toString(updatedEmployee.getPayLevel()));
-            }
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "There was a problem updating the employee details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();  // Optional for debugging
-        }
-    }
-
-    // Helper method to calculate biweekly pay based on pay level
-    private double calculateBiweeklyPay(int payLevel) {
-        // Pay levels and their corresponding annual salaries
-        double[] payLevelSalaries = {
-            0.0,     // Level 0 (placeholder)
-            45000.0, // Level 1
-            54000.0, // Level 2
-            63000.0, // Level 3
-            72000.0, // Level 4
-            81000.0, // Level 5
-            71258.22, // Level 6
-            80946.95, // Level 7
-            96336.34  // Level 8
-        };
-
-        // Validate pay level
-        if (payLevel < 1 || payLevel >= payLevelSalaries.length) {
-            return 0.0; // Default to 0 if pay level is invalid
-        }
-
-        // Calculate biweekly pay (1/26th of annual salary)
-        return payLevelSalaries[payLevel] / 26.0;
-    }
-
-
-public void updateDepartmentDetails(Department updatedDepartment) {
-    try {
-        if (selectedDepartment != null && selectedDepartment.getDeptID() == updatedDepartment.getDeptID()) {
-        // Update the department name
-        departmentNameDetailPage.setText(updatedDepartment.getName());
-
-        // Update the department ID
-        idDepartmentDetailPage.setText(Integer.toString(updatedDepartment.getDeptID()));
-
-        // Update the department location
-        locationDetailPage.setText(updatedDepartment.getLocation());
-
-        // Update the department head
-        Employee head = updatedDepartment.getDepartmentHead();
-        if (head != null) {
-            deptHeadDetail.setText(head.getFirstName() + " " + head.getSurname());
-        } else {
-            deptHeadDetail.setText(null);
-        }
-    }  
-
-    } catch (NullPointerException e) {
-        JOptionPane.showMessageDialog(this, "There was a problem updating the department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();  // Optional for debugging
-    }
-}
-
-    
-    
     /**
-     * @param args the command line arguments
+     * Name: main
+     *
+     * @author Zainab Purpose/description: The main entry point to launch the
+     * GUI application. Input: args - command line arguments. Output: none
+     * Effect: Initializes and shows the main GUI form.
+     * @param args - command line arguments.
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
