@@ -29,26 +29,38 @@ import javax.swing.event.DocumentListener;
 
 
 /**
- *
- * @author zainab
+ * MainWindow is the primary JFrame for managing employees, departments, and payroll.
+ * It handles GUI initialization, data loading, and user interactions.
+ * 
+ * @author Zainab
+ * @version 1.0
  */
 public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
     
-    public static ArrayList<Employee> allEmployees;
-    public static ArrayList<Department> departments;
-    public static ArrayList<String> payLevels;
+    public static ArrayList<Employee> allEmployees;//A list holding all Employee objects in the system.
+    public static ArrayList<Department> departments;//A list holding all Department objects in the system.
+    public static ArrayList<String> payLevels;//A list holding all pay level descriptions.
         
 
     
-    private Employee selectedEmployee;
-    private Department selectedDepartment;
-    private DefaultTableModel deptModel;
+    private Employee selectedEmployee;//The currently selected Employee in the UI.
+    private Department selectedDepartment;//The currently selected Department in the UI.
+    private DefaultTableModel deptModel;//Table model used for displaying departments in the department JTable.
 
 
-            
+     /**
+     * Name: MainWindow
+     * 
+     * 
+     * Purpose: Constructs the main window frame, initializes all GUI components, 
+     *          loads initial data, and sets up listeners.
+     * Input: None
+     * Output: None
+     * Effect: Initializes the frame and prepares the GUI for user interaction.
+     */   
     public MainWindow() {
         initComponents();
         initSearchListener();
@@ -141,7 +153,15 @@ public class MainWindow extends javax.swing.JFrame {
 
 
     }
-    
+    /**
+     * Name: getAnnualPayByLevel
+     * 
+     * 
+     * Purpose: Returns the salary string for a given pay level.
+     * 
+     * @param payLevel The integer pay level from 1 to 8.
+     * @return The corresponding salary string or "Not Available" if invalid.
+     */
     private String getAnnualPayByLevel(int payLevel) {
     switch (payLevel) {
         case 1:
@@ -164,7 +184,15 @@ public class MainWindow extends javax.swing.JFrame {
             return "Not Available"; // If pay level is out of range
     }
     }
-
+    /**
+     * Name: initialiseEmployeesTable
+     * 
+     * Purpose: Populates the employees table with current employee data.
+     * 
+     * Input: None
+     * Output: None
+     * Effect: Updates the employees table model with rows of employee info.
+     */
     private void initialiseEmployeesTable() {
     String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Pay"};
 
@@ -208,8 +236,15 @@ public class MainWindow extends javax.swing.JFrame {
 
     
 
-
-    // show employee detail 
+/**
+ * Name: showEmployeeDetails
+ * Purpose: To populate and display the employee detail view with data from the given employee object.
+ * Input: Employee employee - the employee whose details are to be displayed.
+ * Output: None.
+ * Effect: Updates the UI to show the selected employee's information.
+ *
+ * @param employee The employee object containing the details to display.
+ */
     private void showEmployeeDetails(Employee employee) {
         selectedEmployee = null; // Reset before assigning
         
@@ -247,7 +282,15 @@ public class MainWindow extends javax.swing.JFrame {
 
     
     
-    // show department detail 
+ /**
+ * Name: showDepartmentDetails
+ * Purpose: To populate and display the department detail view with data from the given department object.
+ * Input: Department dept - the department whose details are to be displayed.
+ * Output: None.
+ * Effect: Updates the UI to show the selected department's information including its head and employees.
+ *
+ * @param dept The department object containing the details to display.
+ */
     private void showDepartmentDetails(Department dept) {
         selectedDepartment = dept;
 
@@ -323,8 +366,18 @@ public class MainWindow extends javax.swing.JFrame {
 
 
     
-    
-    // pagination function
+ /**
+ * Name: updatePagination
+ * Purpose: To dynamically generate and update pagination buttons based on total pages and the current page.
+ * Input: 
+ *  - int totalPages: the total number of pages available.
+ *  - int currentPage: the current page number selected.
+ * Output: None.
+ * Effect: Modifies the pagination panel to reflect navigation options.
+ *
+ * @param totalPages The total number of pages.
+ * @param currentPage The current active page number.
+ */
     public void updatePagination(int totalPages, int currentPage) {
     paginationPanel.removeAll();
 
@@ -355,7 +408,18 @@ public class MainWindow extends javax.swing.JFrame {
     paginationPanel.repaint();
 }
 
-    
+ /**
+ * Name: showSuccessToast
+ * Purpose: To notify the user with a temporary success message displayed as a toast.
+ * Input: 
+ *  - JFrame parent: the parent frame to position the toast relative to.
+ *  - String message: the success message to display.
+ * Output: None.
+ * Effect: Displays a green toast message for 3 seconds at the bottom-right of the parent frame.
+ *
+ * @param parent The JFrame that owns this toast popup.
+ * @param message The message to display in the toast.
+ */
     public void showSuccessToast(JFrame parent, String message) {
         JWindow toast = new JWindow(parent); 
         toast.setLayout(new BorderLayout());
@@ -378,6 +442,19 @@ public class MainWindow extends javax.swing.JFrame {
         // Auto-close after 3 seconds
         new Timer(3000, e -> toast.dispose()).start();
     }
+    
+ /**
+ * Name: showErrorToast
+ * Purpose: To notify the user with a temporary error message displayed as a toast.
+ * Input:
+ *  - JFrame parent: the parent frame to position the toast relative to.
+ *  - String message: the error message to display.
+ * Output: None.
+ * Effect: Displays a red toast message for 3 seconds at the bottom-right of the parent frame.
+ *
+ * @param parent The JFrame that owns this toast popup.
+ * @param message The error message to display in the toast.
+ */
     public void showErrorToast(JFrame parent, String message) {
         JWindow toast = new JWindow(parent); 
         toast.setLayout(new BorderLayout());
@@ -400,7 +477,14 @@ public class MainWindow extends javax.swing.JFrame {
         // Auto-close after 3 seconds
         new Timer(3000, e -> toast.dispose()).start();
     }
+/**
+ * * Name: populateDepartmentsComboBox
+ * Purpose: To update the department dropdown list with current department names.
+ * Input: None.
+ * Output: None.
+ * Effect: Clears and repopulates the combo box with department names plus a default "All Departments" option.
 
+ */
     public void populateDepartmentsComboBox() {
         departmentsListSelect.removeAllItems();
         departmentsListSelect.addItem("All Departments");
@@ -1406,19 +1490,41 @@ public class MainWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+ * Name: txtUserNameActionPerformed
+ * Purpose: This method handles the event when the user presses Enter while focused on the username text field.
+ *          It shifts the focus to the password field.
+ * @param evt The ActionEvent triggered by pressing Enter in the username field.
+ */
     private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUserNameActionPerformed
-
+/**
+ * Name: txtPasswordActionPerformed
+ * Purpose: This method is called when the Enter key is pressed in the password field. 
+ *          It attempts to perform the login operation.
+ * @param evt The ActionEvent triggered by pressing Enter in the password field.
+ */
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordActionPerformed
-
+/**
+ * Name: jCheckBox1ActionPerformed
+ * Purpose: Handles the event of toggling the password visibility checkbox.
+ * @param evt The ActionEvent triggered when the checkbox is selected or deselected.
+ */
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
+    
+ /**
+ * Name: loginButtonActionPerformed
+ * Purpose: This method handles the login button click event. It verifies user input,
+ *          loads employee and department data from the serialized file (if available),
+ *          and displays the dashboard if login is successful.
+ * @param evt The ActionEvent triggered by clicking the login button.
+ */
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         // TODO add your handling code here:
         
@@ -1457,14 +1563,24 @@ public class MainWindow extends javax.swing.JFrame {
         
 
     }//GEN-LAST:event_loginButtonActionPerformed
-
+/**
+ * Name: employeesButtonActionPerformed
+ * Purpose: This method switches the main content panel to the "employees" view 
+ *          when the Employees button is clicked.
+ * @param evt The ActionEvent triggered by clicking the Employees button.
+ */
     private void employeesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cl = (CardLayout)(contentPanel.getLayout());
         cl.show(contentPanel, "employees");
 
     }//GEN-LAST:event_employeesButtonActionPerformed
-
+/**
+ * Name: addEmployeeButtonActionPerformed
+ * Purpose: Opens the AddEmployeeForm when the "Add Employee" button is clicked
+ *          and hides the main window while the new form is open.
+ * @param evt The ActionEvent triggered by clicking the Add Employee button.
+ */
     private void addEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeButtonActionPerformed
         // TODO add your handling code here:
     // Create and show the AddEmployeeForm
@@ -1476,7 +1592,14 @@ public class MainWindow extends javax.swing.JFrame {
            
     }//GEN-LAST:event_addEmployeeButtonActionPerformed
 
-    // Search field (so it can search as you are typing
+/**
+ * Name: initSearchListener
+ * Purpose: Initializes a document listener on the employee search text field to enable real-time search
+ *          functionality as the user types characters.
+ * Input: None
+ * Output: None
+ * Effect: Attaches listeners to the text field that trigger employee search logic
+ */
     private void initSearchListener() {
     // Add a document listener to the search field to track typing events
 //    searchEmployeesTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -1496,6 +1619,16 @@ public class MainWindow extends javax.swing.JFrame {
 //        }
 //    });
 }
+    
+    
+    
+ /**
+ * Name: searchEmployee
+ * Purpose: Filters the employee list based on user input in the search field and updates the display table.
+ * Input: None
+ * Output: None
+ * Effect: Shows matching employees in the table based on first name or surname prefix.
+ */
    private void searchEmployee() {
     String query = searchEmployeesTextField.getText().trim().toLowerCase();
     
@@ -1543,39 +1676,67 @@ public class MainWindow extends javax.swing.JFrame {
     }
 }
 
-    
+ /**
+ * Name: searchEmployeesTextFieldActionPerformed
+ * Purpose: Handles actions when the user presses enter on the employee search field.
+ * @param evt The ActionEvent triggered by pressing enter in the search field.
+ */
     private void searchEmployeesTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchEmployeesTextFieldActionPerformed
         // TODO add your handling code here:
 
     }//GEN-LAST:event_searchEmployeesTextFieldActionPerformed
-
+/**
+ * Name: searchEmployeesTextFieldFocusGained
+ * Purpose: Clears default text when the search field gains focus.
+ * @param evt The FocusEvent triggered when the search field is focused.
+ */
     private void searchEmployeesTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchEmployeesTextFieldFocusGained
         // TODO add your handling code here:
         searchEmployeesTextField.setText("");
     }//GEN-LAST:event_searchEmployeesTextFieldFocusGained
-
+/**
+ * Name: departmentsButtonActionPerformed
+ * Purpose: Displays the departments panel.
+ * @param evt The ActionEvent triggered by clicking the Departments button.
+ */
     private void departmentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cl = (CardLayout)(contentPanel.getLayout());
         cl.show(contentPanel, "departments");
     }//GEN-LAST:event_departmentsButtonActionPerformed
-
+/**
+ * Name: addDepartmentButtonActionPerformed
+ * Purpose: Opens AddDepartmentForm and hides main window.
+ * @param evt The ActionEvent triggered by clicking the Add Department button.
+ */
     private void addDepartmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDepartmentButtonActionPerformed
         // TODO add your handling code here:
         setVisible(false);
         AddDepartmentForm addDeptartmentForm = new AddDepartmentForm(this);
         addDeptartmentForm.setVisible(true);
     }//GEN-LAST:event_addDepartmentButtonActionPerformed
-
+/**
+ * Name: searchDepartmentsFieldActionPerformed
+ * Purpose: Placeholder for actions on department search field.
+ * @param evt The ActionEvent triggered when user presses enter in department search field.
+ */
     private void searchDepartmentsFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDepartmentsFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchDepartmentsFieldActionPerformed
-
+/**
+ * Name: searchDepartmentsFieldFocusGained
+ * Purpose: Clears default text when the department search field gains focus.
+ * @param evt The FocusEvent triggered when field gains focus.
+ */
     private void searchDepartmentsFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchDepartmentsFieldFocusGained
         // TODO add your handling code here:
         searchDepartmentsField.setText("");
     }//GEN-LAST:event_searchDepartmentsFieldFocusGained
-
+/**
+ * Name: exitButtonActionPerformed
+ * Purpose: Serializes employee and department lists and exits the application.
+ * @param evt The ActionEvent triggered by clicking the Exit button.
+ */
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
 
     //Serializing the emplyees & departments array lists and the static ID count for employees & departments
@@ -1591,17 +1752,29 @@ public class MainWindow extends javax.swing.JFrame {
     // Exit the System
         System.exit(0);
     }//GEN-LAST:event_exitButtonActionPerformed
-
+/**
+ * Name: generatePayReportButtonActionPerformed
+ * Purpose: Stub for future implementation of pay report generation.
+ * @param evt The ActionEvent triggered by clicking the Generate Pay Report button.
+ */
     private void generatePayReportButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // Check if there are any employees
         
 
     }
-
+/**
+ * Name: cancelButton3ActionPerformed
+ * Purpose: Placeholder for cancel button actions.
+ * @param evt The ActionEvent triggered by cancel button.
+ */
     private void cancelButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cancelButton3ActionPerformed
-
+/**
+ * Name: employeesTableMouseClicked
+ * Purpose: Handles row click in employee table, opens detailed view.
+ * @param evt The MouseEvent triggered by clicking a row in the table.
+ */
     private void employeesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeesTableMouseClicked
         // TODO add your handling code here:
 
@@ -1633,7 +1806,11 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
     }//GEN-LAST:event_employeesTableMouseClicked
-
+/**
+ * Name: editEmployeeButtonActionPerformed
+ * Purpose: Opens EditEmployeeForm for selected employee.
+ * @param evt The ActionEvent triggered by Edit button.
+ */
     private void editEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEmployeeButtonActionPerformed
         // TODO add your handling code here:
         
@@ -1643,11 +1820,19 @@ public class MainWindow extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_editEmployeeButtonActionPerformed
-
+/**
+ * Name: idDetailPageActionPerformed
+ * Purpose: Placeholder for ID detail page button action.
+ * @param evt The ActionEvent triggered by ID detail page button.
+ */
     private void idDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_idDetailPageActionPerformed
-
+/**
+ * Name: departmentsTableMouseClicked
+ * Purpose: Handles click on department table row to open department details.
+ * @param evt The MouseEvent triggered by clicking a row in departments table.
+ */
     private void departmentsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_departmentsTableMouseClicked
         // TODO add your handling code here:
         // fake data to test detail page
@@ -1680,38 +1865,71 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_departmentsTableMouseClicked
 
+    
+     /** Name: genderDetailPageActionPerformed
+     * Purpose/description: Placeholder method for future implementation of gender detail page behavior.
+     * @param evt - the action event triggered by the user interaction.
+     * @return void - this method does not return any value.
+     * 
+     */
     private void genderDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genderDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_genderDetailPageActionPerformed
-
+    /** Name: backToEmployeesButtonActionPerformed
+     * Purpose/description: Returns to the employees panel from another view.
+     * @param evt - the action event triggered by the button click.
+     * @return void - this method does not return any value.
+     */
     private void backToEmployeesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToEmployeesButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "employees");
 
     }//GEN-LAST:event_backToEmployeesButtonActionPerformed
-
+/** Name: backToDepartmentsButtonActionPerformed
+     * Purpose/description: Returns to the departments panel from another view.
+     * @param evt - the action event triggered by the button click.
+     * @return void - this method does not return any value.
+     */
     private void backToDepartmentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToDepartmentsButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "departments");
     }//GEN-LAST:event_backToDepartmentsButtonActionPerformed
+    /** Name: editDepartmentButtonActionPerformed
+     * Purpose/description: Opens the edit form for the selected department.
+     * @param evt - the action event triggered by the button click.
+    * @return void - this method does not return any value.
 
+     */
     private void editDepartmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDepartmentButtonActionPerformed
         // TODO add your handling code here:
         EditDepartmentForm editForm = new EditDepartmentForm(this, selectedDepartment);
         editForm.setVisible(true);
 
     }//GEN-LAST:event_editDepartmentButtonActionPerformed
-
+    /** Name: idDepartmentDetailPageActionPerformed
+     * Purpose/description: Placeholder method for ID field interaction in department detail page.
+     * @param evt - the action event triggered by the user interaction.
+     * * @return void - this method does not return any value.
+     */
     private void idDepartmentDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idDepartmentDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_idDepartmentDetailPageActionPerformed
-
+    /** Name: locationDetailPageActionPerformed
+     * Purpose/description: Placeholder method for location field interaction in department detail page.
+     * @param evt - the action event triggered by the user interaction.
+     * @return void - this method does not return any value.
+     */
     private void locationDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_locationDetailPageActionPerformed
+    /** Name: generateReportButtonActionPerformed
+     * Purpose/description: Generates a payroll report for all employees, saves it to a file, and displays it.
+     * @param evt - the action event triggered by the button click.
+    * @return void - this method does not return any value.
 
+*/ 
     private void generateReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportButtonActionPerformed
         // Check if there are any employees
         if (allEmployees == null || allEmployees.isEmpty()) {
@@ -1855,13 +2073,22 @@ public class MainWindow extends javax.swing.JFrame {
                 JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_generateReportButtonActionPerformed
-
+    /** Name: payrollReportButtonActionPerformed
+     * Purpose/description: Switches the view to the payroll report panel.
+     * @param evt - the action event triggered by the button click.
+     * * @return void - this method does not return any value.
+     */
     private void payrollReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payrollReportButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cl = (CardLayout)(contentPanel.getLayout());
         cl.show(contentPanel, "payroll");
     }//GEN-LAST:event_payrollReportButtonActionPerformed
-
+    /** Name: deleteButtonActionPerformed
+     * @author Raghad
+     * Purpose/description: Deletes the selected employee after user confirmation.
+     * @param evt - the action event triggered by the button click.
+     * @return void - this method does not return any value.
+     */
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this employee?", 
@@ -1882,12 +2109,23 @@ public class MainWindow extends javax.swing.JFrame {
        }
         
     }//GEN-LAST:event_deleteButtonActionPerformed
+     /** Name: deleteButton1ActionPerformed
+     * @author Raghad
+     * Purpose/description: Deletes the selected department if no employees are assigned to it.
+     * @param evt - the action event triggered by the button click.
+     * @return void - this method does not return any value.
+     */
     private void deleteEmployee(Employee employee){
     allEmployees.remove(employee);
     refreshEmployeeTable();
     }
     
-    
+     /** Name: deleteDepartment
+     * @author Raghad
+     * Purpose/description: Deletes the given department from the list and refreshes related UI components.
+     * @param department - the department object to be removed.
+     * @return void - this method does not return any value.
+     */
     private void deleteButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButton1ActionPerformed
         // TODO add your handling code here:
          int confirm = JOptionPane.showConfirmDialog(this, "Are you sure that you want to delete this department?",
@@ -1935,16 +2173,27 @@ public class MainWindow extends javax.swing.JFrame {
             
   
     }//GEN-LAST:event_deleteButton1ActionPerformed
- private void deleteDepartment(Department department){
+  /**
+     * Name: deleteDepartment
+     * @author Raghad
+     * Purpose/description: Deletes the given department from the list and refreshes related UI components.
+     * @param department - the department object to be removed.
+     * @return void - this method does not return any value.
+     */
+    private void deleteDepartment(Department department){
         departments.remove(department);
         refreshDepartmentsComboBox();
     }
     
-    
-    
-    
-    
-    
+  /**
+ * Name: departmentsListSelectActionPerformed
+ * Purpose/description: Updates the employees table based on the selected department from the combo box.
+ * Input: evt - the action event triggered by selecting a department.
+ * Output: none
+ * Effect: Updates the employees table to show only employees belonging to the selected department or all employees if "All Departments" is selected.
+ * @param evt - the action event triggered by the department selection.
+ * @return void- this method does not return any value.
+ */
     private void departmentsListSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsListSelectActionPerformed
 // TODO add your handling code here:
     try {
@@ -1983,13 +2232,28 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     }//GEN-LAST:event_departmentsListSelectActionPerformed
-
+/**
+ * Name: payLevelDetailPageActionPerformed
+ * Purpose/description: Placeholder method for future implementation of pay level detail page actions.
+ * Input: evt - the action event triggered by user interaction.
+ * Output: none
+ * Effect: Currently does nothing.
+ * @param evt - the action event triggered by pay level detail page interaction.
+ * @return void - this method does not return any value.
+ */
     private void payLevelDetailPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payLevelDetailPageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_payLevelDetailPageActionPerformed
    
     
- 
+ /**
+ * Name: refreshEmployeeTable
+ * Purpose/description: Refreshes the employee table based on the selected department in the combo box.
+ * Input: none
+ * Output: none
+ * Effect: Clears the employee table and repopulates it with employees filtered by selected department, displaying their annual pay.
+ * @return void - this method does not return any value.
+ */
 public void refreshEmployeeTable() {
     // Get the selected department from the combo box
     String selectedDepartment = (String) departmentsListSelect.getSelectedItem();
@@ -2027,7 +2291,15 @@ public void refreshEmployeeTable() {
         }
     }
 }
-
+    
+ /**
+ * Name: refreshDepartmentTable
+ * Purpose/description: Refreshes the departments table with the current list of departments.
+ * Input: none
+ * Output: none
+ * Effect: Clears the departments table and repopulates it with the latest department data including head info.
+ * @return void - this method does not return any value.
+ */
         public void refreshDepartmentTable() {
             // Assuming you have a JTable named departmentTable
             DefaultTableModel model = (DefaultTableModel) departmentsTable.getModel();
@@ -2047,6 +2319,14 @@ public void refreshEmployeeTable() {
             }
         }
 
+ /**
+ * Name: refreshDepartmentsComboBox
+ * Purpose/description: Refreshes the departments combo box with updated department names.
+ * Input: none
+ * Output: none
+ * Effect: Clears and repopulates the combo box, adding "All Departments" option and refreshing the employee table afterwards.
+ * @return void - this method does not return any value.
+ */
         public void refreshDepartmentsComboBox() {
         departmentsListSelect.removeAllItems();  // Clear all existing items
 
@@ -2061,6 +2341,15 @@ public void refreshEmployeeTable() {
         
         refreshEmployeeTable();
 }
+/**
+ * Name: updateEmployeeDetails
+ * Purpose/description: Updates the detail page fields with the provided employee's information.
+ * Input: updatedEmployee - the employee whose details are to be displayed.
+ * Output: none
+ * Effect: Updates UI components with employee's name, address, gender, department, and pay level.
+ * @param updatedEmployee - Employee object containing updated information.
+ * @return void - this method does not return any value.
+ */
         public void updateEmployeeDetails(Employee updatedEmployee) {
         try {
             if (selectedEmployee != null && selectedEmployee.getEmployeeId() == updatedEmployee.getEmployeeId()) {
@@ -2091,6 +2380,17 @@ public void refreshEmployeeTable() {
         }
     }
 
+        
+        
+  /**
+ * Name: calculateBiweeklyPay
+ * Purpose/description: Calculates the biweekly pay amount based on the pay level.
+ * Input: payLevel - the pay level of the employee.
+ * Output: biweekly pay amount as double.
+ * Effect: Returns the biweekly salary calculated from predefined annual salaries.
+ * @param payLevel - integer representing employee's pay level.
+ * @return double - calculated biweekly pay amount.
+ */
     // Helper method to calculate biweekly pay based on pay level
     private double calculateBiweeklyPay(int payLevel) {
         // Pay levels and their corresponding annual salaries
@@ -2115,7 +2415,15 @@ public void refreshEmployeeTable() {
         return payLevelSalaries[payLevel] / 26.0;
     }
 
-
+/**
+ * Name: updateDepartmentDetails
+ * Purpose/description: Updates the department detail fields with the provided department's information.
+ * Input: updatedDepartment - the department whose details are to be displayed.
+ * Output: none
+ * Effect: Updates UI components with department name, ID, location, and department head.
+ * @param updatedDepartment - Department object containing updated information.
+ * @return void - this method does not return any value.
+ */
 public void updateDepartmentDetails(Department updatedDepartment) {
     try {
         if (selectedDepartment != null && selectedDepartment.getDeptID() == updatedDepartment.getDeptID()) {
@@ -2148,9 +2456,15 @@ public void updateDepartmentDetails(Department updatedDepartment) {
 
     
     
-    /**
-     * @param args the command line arguments
-     */
+   /**
+ * Name: main
+ * @author Zainab
+ * Purpose/description: The main entry point to launch the GUI application.
+ * Input: args - command line arguments.
+ * Output: none
+ * Effect: Initializes and shows the main GUI form.
+ * @param args - command line arguments.
+ */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
