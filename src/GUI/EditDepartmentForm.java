@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 public class EditDepartmentForm extends javax.swing.JFrame {
     private Department selectedDepartment;//The department currently being edited.
     private MainWindow main;// Reference to the main application window to update data and UI after editing.
-    ArrayList<Employee> allEmployees = main.allEmployees;//List of all employees available in the system, obtained from the main window.
+    ArrayList<Employee> allEmployees;//List of all employees available in the system, obtained from the main window.
      /**
      * Default constructor - initializes the form.
      * 
@@ -64,6 +64,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         this.setLocation(x, y);
         this.main = main;
         this.selectedDepartment = dept;
+        this.allEmployees = main.allEmployees;
         // initialise departments details for edit
         departmentNameField.setText(dept.getName());
         locationField.setText(dept.getLocation());
