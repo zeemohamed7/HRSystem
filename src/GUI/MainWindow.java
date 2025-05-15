@@ -815,12 +815,37 @@ public class MainWindow extends javax.swing.JFrame {
                     }
                 }
             }
+            updateStaticEmployeeID();
+            updateStaticDeptID();
+         
         } catch (IOException e) {
             JOptionPane.showMessageDialog(MainWindow.this, "Error loading default data: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
+    
+    private void updateStaticEmployeeID() {
+    int maxID = 0;
+    for (Employee emp : allEmployees) {
+        if (emp.getEmployeeId() > maxID) {
+            maxID = emp.getEmployeeId();
+        }
+    }
+        System.out.println(maxID);
+    staticEmployeeID = maxID;
+}
+    
+    private void updateStaticDeptID() {
+    int maxID = 0;
+    for (Department dept : departments) {
+        if (dept.getDeptID() > maxID) {
+            maxID = dept.getDeptID();
+        }
+    }
+    staticDeptID = maxID;
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1874,23 +1899,8 @@ public class MainWindow extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(MainWindow.this, "Username and Password should not be empty!",
                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
         } else {
-            //Check if the serialization file exists
-            File file = new File("HRSystem.dat");
-
-            if (file.exists() && file.length() > 0) {
-                // Deserialize the information from the HRSystem.dat file
-                try {
-                    FileInputStream fileIn = new FileInputStream("HRSystem.dat");
-                    ObjectInputStream in = new ObjectInputStream(fileIn);
-                    allEmployees = (ArrayList<Employee>) in.readObject();
-                    departments = (ArrayList<Department>) in.readObject();
-                } catch (IOException | ClassNotFoundException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            System.out.println("isDefaultDataLoaded is " + isDefaultDataLoaded);
-            if (!isDefaultDataLoaded) {
-                // Load default data if it hasn't been deserialized yet
+            // If default data isn't loaded, use data from HRSystem.dat
+            if (!isDefaultDataLoaded) {// default not loaded
                 deserializeData();
             }
             initialiseEmployeesTable();
@@ -2013,32 +2023,31 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
 
-        // Prompt the user to ask if they want to save changes before exiting
-        int option = JOptionPane.showConfirmDialog(this, "Do you want to save changes before exiting?",
-                "Save Changes", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    // Prompt the user to ask if they want to save changes before exiting
+    int option = JOptionPane.showConfirmDialog(this, "Do you want to save changes before exiting?",
+            "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-        // If the user chooses 'Yes' (option 0)
-        if (option == JOptionPane.YES_OPTION) {
-            //Serializing the emplyees & departments array lists and the static ID count for employees & departments
-            try {
-                FileOutputStream fileOut = new FileOutputStream("HRSystem.dat");
-                ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                out.writeObject(allEmployees);
-                out.writeObject(departments);
-                out.writeObject(staticEmployeeID);
-                out.writeObject(staticDeptID);
+    if (option == JOptionPane.YES_OPTION) {
+        // Serializing the employees & departments array lists and the static ID count for employees & departments
+        try (FileOutputStream fileOut = new FileOutputStream("HRSystem.dat");
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
 
-                JOptionPane.showMessageDialog(this, "Information saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            out.writeObject(allEmployees);
+            out.writeObject(departments);
+            out.writeObject(staticEmployeeID);
+            out.writeObject(staticDeptID);
 
-                System.exit(0);
+            JOptionPane.showMessageDialog(this, "Information saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-            } catch (IOException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } // Exit without saving
-        else if (option == JOptionPane.NO_OPTION) {
-            System.exit(0);
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.exit(0);  // exit after saving
+    } 
+    else if (option == JOptionPane.NO_OPTION) {
+        System.exit(0);  // exit without saving
+    }
+    // if CANCEL_OPTION or CLOSED_OPTION: do nothing, return to app
     }//GEN-LAST:event_exitButtonActionPerformed
 
     /**
@@ -2561,7 +2570,17 @@ public class MainWindow extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         // Clear the current data before loading default data
-        allEmployees.clear();
+    System.out.println("Before clearing:");
+    System.out.println("All Employees: " + allEmployees.size());
+    System.out.println("Departments: " + departments.size());
+
+    allEmployees.clear();
+    departments.clear();
+
+    System.out.println("After clearing:");
+    System.out.println("All Employees: " + allEmployees.size());
+    System.out.println("Departments: " + departments.size());
+
         departments.clear();
 
         // Load data from startup.txt
@@ -2577,7 +2596,8 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Name: main
      *
-     * @author Zainab Purpose/description: The main entry point to launch the
+     * @author Zainab 
+     * Purpose/description: The main entry point to launch the
      * GUI application. Input: args - command line arguments. Output: none
      * Effect: Initializes and shows the main GUI form.
      * @param args - command line arguments.
