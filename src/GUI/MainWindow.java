@@ -1426,7 +1426,7 @@ public class MainWindow extends javax.swing.JFrame {
                 fullName, // Full Name (First + Surname)
                 departmentName,
                 emp.getGender(), // Gender
-                emp.getPayLevel() // Pay Level (Annual Salary)
+                getAnnualPayByLevel(emp.getPayLevel()) // Pay Level (Annual Salary)
             });
         }
     }
@@ -1841,7 +1841,9 @@ public class MainWindow extends javax.swing.JFrame {
                     char gender = emp.getGender();
                     int payLevel = emp.getPayLevel();
 
-                    Object[] row = {id, fullName, department, gender, payLevel};
+                    String annualPay = getAnnualPayByLevel(payLevel);
+                    Object[] row = {id, fullName, department, gender, annualPay};
+
                     model.addRow(row);
                 }
             }
