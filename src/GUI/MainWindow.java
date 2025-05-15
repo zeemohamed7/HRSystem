@@ -63,7 +63,11 @@ public class MainWindow extends javax.swing.JFrame {
      * interaction.
      */
     public MainWindow() {
-
+        
+        allEmployees = new ArrayList<>();
+        departments = new ArrayList<>();
+        payLevels = new ArrayList<>();
+        
         initComponents();
         initSearchListener();
 
