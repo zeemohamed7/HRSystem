@@ -187,15 +187,9 @@ public class EditEmployeeForm extends javax.swing.JFrame {
     private void populatePayLevelComboBox() {
         payLevelEditCombo.removeAllItems();  // Clear all existing items
 
-        payLevelEditCombo.addItem("Select Annual Salary");
-        payLevelEditCombo.addItem("Level 1 - BHD 44,245.75");
-        payLevelEditCombo.addItem("Level 2 - BHD 48,670.32");
-        payLevelEditCombo.addItem("Level 3 - BHD 53,537.35");
-        payLevelEditCombo.addItem("Level 4 - BHD 58,891.09");
-        payLevelEditCombo.addItem("Level 5 - BHD 64,780.20");
-        payLevelEditCombo.addItem("Level 6 - BHD 71,258.22");
-        payLevelEditCombo.addItem("Level 7 - BHD 80,946.95");
-        payLevelEditCombo.addItem("Level 8 - BHD 96,336.34");
+        for (String payLevel : MainWindow.payLevels) {
+            payLevelEditCombo.addItem(payLevel);
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.

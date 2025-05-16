@@ -25,9 +25,9 @@ import javax.swing.JOptionPane;
  */
 
 public class EditDepartmentForm extends javax.swing.JFrame {
-    private Department selectedDepartment;//Purpose: The department currently being edited.
-    private MainWindow main;//Purpose: Reference to the main application window to update data and UI after editing.
-    ArrayList<Employee> allEmployees;//Purpose: List of all employees available in the system, obtained from the main window.
+
+    private Department selectedDepartment;//The department currently being edited.
+    private MainWindow main;// Reference to the main application window to update data and UI after editing.
      /**
      * Default constructor - initializes the form.
      * 
@@ -64,7 +64,6 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         this.setLocation(x, y);
         this.main = main;
         this.selectedDepartment = dept;
-        this.allEmployees = main.allEmployees;
         // initialise departments details for edit
         departmentNameField.setText(dept.getName());
         locationField.setText(dept.getLocation());
@@ -82,7 +81,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
         }
 
         // Add the rest of the employees, excluding the current head (to avoid duplicate entry)
-        for (Employee emp : allEmployees) {
+        for (Employee emp : main.allEmployees) {
             String empName = emp.getFirstName() + " " + emp.getSurname();
 
             // Prevent adding the same employee twice if they are already set as the head
@@ -319,7 +318,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
 
         // Determine the new head
         if (headName != null && !headName.equals("No Head")) {
-            for (Employee emp : allEmployees) {
+            for (Employee emp : main.allEmployees) {
                 if (headName.equals(emp.getFirstName() + " " + emp.getSurname())) {
 
                     // Check if the employee is already a head of another department

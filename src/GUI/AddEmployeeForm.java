@@ -26,10 +26,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AddEmployeeForm extends javax.swing.JFrame {
 
-    MainWindow main; //Purpose: Reference to the main window
-    ArrayList<Department> departments; //Purpose: Declare without initializing here
-    ArrayList<Employee> allEmployees; //Purpose: Declare without initializing here
-
+    MainWindow main; // Reference to the main window
     /**
      * Name: AddEmployeeForm (Default Constructor) Purpose: Default constructor
      * to initialize the form Input: None Output: Initialized form window
@@ -52,8 +49,6 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.main = main;
-        this.departments = main.departments;
-        this.allEmployees = main.allEmployees;
 
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
@@ -73,7 +68,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         model.addElement(null); // Default option
 
-        for (Department dept : departments) {
+        for (Department dept : main.departments) {
             model.addElement(dept.getName());
         }
 
@@ -367,7 +362,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
 
             if (selectedDepartmentName != null && !selectedDepartmentName.equals("No Department")) {
                 try {
-                    departmentId = Department.getIdByDepartmentName(departments, selectedDepartmentName);
+                    departmentId = Department.getIdByDepartmentName(main.departments, selectedDepartmentName);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(this, "Error retrieving department information: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }

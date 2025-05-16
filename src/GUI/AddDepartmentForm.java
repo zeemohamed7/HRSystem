@@ -26,9 +26,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AddDepartmentForm extends javax.swing.JFrame {
 
-    MainWindow main;//Purpose: Reference to the main application window to access shared data and methods.
-    ArrayList<Department> departments;//Purpose: List of departments fetched from the main window.
-    ArrayList<Employee> allEmployees;//Purpose: List of employees fetched from the main window.
+    MainWindow main;//Reference to the main application window to access shared data and methods.
 
     /**
      * Name: AddDepartmentForm
@@ -60,8 +58,6 @@ public class AddDepartmentForm extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.main = main;
-        this.departments = main.departments;
-        this.allEmployees = main.allEmployees;
 
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
@@ -248,7 +244,7 @@ public class AddDepartmentForm extends javax.swing.JFrame {
             Department newDepartment = new Department(main.staticDeptID, departmentName, location);
 
             // Add to departments list
-            departments.add(newDepartment);
+            main.departments.add(newDepartment);
 
             // Update departments table
             main.refreshDepartmentTable();
