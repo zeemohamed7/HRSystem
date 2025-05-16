@@ -42,9 +42,9 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     // change these to private later
-    public ArrayList<Employee> allEmployees;
-    public ArrayList<Department> departments;
-    public ArrayList<String> payLevels;
+    public static ArrayList<Employee> allEmployees;
+    public static ArrayList<Department> departments;
+    public static ArrayList<String> payLevels;
 
     public static int staticEmployeeID = 0;
     public static int staticDeptID = 0;
@@ -63,14 +63,18 @@ public class MainWindow extends javax.swing.JFrame {
      * interaction.
      */
     public MainWindow() {
-        
+        initComponents();
+        initSearchListener();
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+        this.setLocation(x, y);
+
         allEmployees = new ArrayList<>();
         departments = new ArrayList<>();
         payLevels = new ArrayList<>();
-        
-        initComponents();
-        initSearchListener();
 
+        // Predefined pay levels
         payLevels.add("Select Annual Salary");
         payLevels.add("Level 1 - BHD 44,245.75");
         payLevels.add("Level 2 - BHD 48,670.32");
@@ -80,11 +84,6 @@ public class MainWindow extends javax.swing.JFrame {
         payLevels.add("Level 6 - BHD 71,258.22");
         payLevels.add("Level 7 - BHD 80,946.95");
         payLevels.add("Level 8 - BHD 96,336.34");
-
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
-        int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
-        this.setLocation(x, y);
 
         // Add login and dashboard panel to main panel
         // Add generate pay report button
@@ -159,10 +158,16 @@ public class MainWindow extends javax.swing.JFrame {
             System.out.println("Data successfully loaded from HRSystem.dat");
 
         } catch (FileNotFoundException e) {
-            System.out.println("No previous data found. Starting fresh.");
-            // Optionally, you can call your clean start method here
+            JOptionPane.showMessageDialog(this,
+                    "No saved data found. Starting with a fresh, empty system.",
+                    "Information",
+                    JOptionPane.INFORMATION_MESSAGE);
             // initializeWithStartupData();
         } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this,
+                    "An error occurred while loading saved data. Please try again or contact support.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -339,7 +344,6 @@ public class MainWindow extends javax.swing.JFrame {
      *
      * @param employee The Employee object to be removed from the list.
      */
-
     private void deleteEmployee(Employee employee) {
         allEmployees.remove(employee);
         refreshEmployeeTable();
@@ -353,7 +357,6 @@ public class MainWindow extends javax.swing.JFrame {
      * @param department - the department object to be removed.
      * @return void - this method does not return any value.
      */
-
     private void deleteDepartment(Department department) {
         departments.remove(department);
         refreshDepartmentsComboBox();
@@ -686,57 +689,68 @@ public class MainWindow extends javax.swing.JFrame {
 
     // maryam
     /**
-     * Name: searchEmployee Purpose: Filters the employee list based on user
+     * Name: searchEmployee 
+     * Purpose: Filters the employee list based on user
      * input in the search field and updates the display table. Input: None
      * Output: None Effect: Shows matching employees in the table based on first
      * name or surname prefix.
+     * 
+     * @author:
      */
-    private void searchEmployee() {
-        String query = searchEmployeesTextField.getText().trim().toLowerCase();
+private void searchEmployee() {
+    String query = searchEmployeesTextField.getText().trim().toLowerCase();
+    ArrayList<Employee> searchResults = new ArrayList<>();
 
-        // If the query is empty, just return and don't filter the employees
-        if (query.isEmpty()) {
-            return;
-        }
+    if (query.isEmpty()) {
+        // Show all employees if the search field is empty
+        searchResults.addAll(allEmployees);
+    } else {
+        // Split the query by space to handle first name + surname search
+        String[] queryParts = query.split("\\s+");
+        boolean isFullNameQuery = queryParts.length == 2;
 
-        // Create a list to store the filtered results
-        ArrayList<Employee> searchResults = new ArrayList<>();
-
-        // Loop through all employees and filter by the search query
         for (Employee employee : allEmployees) {
-            // Check if the first name or surname contains the query (case-insensitive)
-            if (employee.getFirstName().toLowerCase().startsWith(query)
-                    || // starts with because we need exact matching from the start, not contains
-                    employee.getSurname().toLowerCase().startsWith(query)) {
-                searchResults.add(employee);
+            String firstName = employee.getFirstName().toLowerCase();
+            String surname = employee.getSurname().toLowerCase();
+            String fullName = firstName + " " + surname;
+
+            if (isFullNameQuery) {
+                // Full name search
+                if (fullName.startsWith(query)) {
+                    searchResults.add(employee);
+                }
+            } else {
+                // Single word search (either first name or surname)
+                if (firstName.startsWith(query) || surname.startsWith(query)) {
+                    searchResults.add(employee);
+                }
             }
         }
-
-        // Clear the current rows
-        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-        model.setRowCount(0);  // This clears all rows from the table
-
-        // Populate the table with the filtered search results
-        for (Employee emp : searchResults) {
-            // Combine first name and surname to create Full Name
-            String fullName = emp.getFirstName().toLowerCase().trim() + " " + emp.getSurname().toLowerCase().trim();
-            // Handle case where deptID might be null
-            String departmentName = "No Department"; // Default value if no department
-            if (emp.getDeptID() != null) {
-                departmentName = Department.getDepartmentNameById(departments, emp.getDeptID());
-            }
-
-            // Add the employee details to the table
-            model.addRow(new Object[]{
-                emp.getEmployeeId(), // Assuming you have employee ID
-                fullName, // Full Name (First + Surname)
-                departmentName,
-                emp.getGender(), // Gender
-                getAnnualPayByLevel(emp.getPayLevel()) // Pay Level (Annual Salary)
-            });
-        }
-
     }
+
+    // Clear the current rows
+    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+    model.setRowCount(0);  // Clears the table
+
+    // Populate the table with the filtered search results
+    for (Employee emp : searchResults) {
+        // Combine first name and surname to create Full Name
+        String fullName = emp.getFirstName().trim() + " " + emp.getSurname().trim();
+        // Handle case where deptID might be null
+        String departmentName = (emp.getDeptID() != null) ? 
+            Department.getDepartmentNameById(departments, emp.getDeptID()) : "No Department";
+
+        // Add the employee details to the table
+        model.addRow(new Object[]{
+            emp.getEmployeeId(), // Assuming you have employee ID
+            fullName,            // Full Name (First + Surname)
+            departmentName,      // Department
+            emp.getGender(),     // Gender
+            getAnnualPayByLevel(emp.getPayLevel()) // Pay Level (Annual Salary)
+        });
+    }
+}
+
 
     /**
      * Name: generatePayReportButtonActionPerformed Purpose: Stub for future
@@ -811,35 +825,34 @@ public class MainWindow extends javax.swing.JFrame {
             }
             updateStaticEmployeeID();
             updateStaticDeptID();
-         
+
         } catch (IOException e) {
             JOptionPane.showMessageDialog(MainWindow.this, "Error loading default data: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
-    
-    private void updateStaticEmployeeID() {
-    int maxID = 0;
-    for (Employee emp : allEmployees) {
-        if (emp.getEmployeeId() > maxID) {
-            maxID = emp.getEmployeeId();
-        }
-    }
-        System.out.println(maxID);
-    staticEmployeeID = maxID;
-}
-    
-    private void updateStaticDeptID() {
-    int maxID = 0;
-    for (Department dept : departments) {
-        if (dept.getDeptID() > maxID) {
-            maxID = dept.getDeptID();
-        }
-    }
-    staticDeptID = maxID;
-}
 
+    private void updateStaticEmployeeID() {
+        int maxID = 0;
+        for (Employee emp : allEmployees) {
+            if (emp.getEmployeeId() > maxID) {
+                maxID = emp.getEmployeeId();
+            }
+        }
+        System.out.println(maxID);
+        staticEmployeeID = maxID;
+    }
+
+    private void updateStaticDeptID() {
+        int maxID = 0;
+        for (Department dept : departments) {
+            if (dept.getDeptID() > maxID) {
+                maxID = dept.getDeptID();
+            }
+        }
+        staticDeptID = maxID;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -2017,31 +2030,29 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
 
-    // Prompt the user to ask if they want to save changes before exiting
-    int option = JOptionPane.showConfirmDialog(this, "Do you want to save changes before exiting?",
-            "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        // Prompt the user to ask if they want to save changes before exiting
+        int option = JOptionPane.showConfirmDialog(this, "Do you want to save changes before exiting?",
+                "Save Changes", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-    if (option == JOptionPane.YES_OPTION) {
-        // Serializing the employees & departments array lists and the static ID count for employees & departments
-        try (FileOutputStream fileOut = new FileOutputStream("HRSystem.dat");
-             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+        if (option == JOptionPane.YES_OPTION) {
+            // Serializing the employees & departments array lists and the static ID count for employees & departments
+            try (FileOutputStream fileOut = new FileOutputStream("HRSystem.dat"); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
 
-            out.writeObject(allEmployees);
-            out.writeObject(departments);
-            out.writeObject(staticEmployeeID);
-            out.writeObject(staticDeptID);
+                out.writeObject(allEmployees);
+                out.writeObject(departments);
+                out.writeObject(staticEmployeeID);
+                out.writeObject(staticDeptID);
 
-            JOptionPane.showMessageDialog(this, "Information saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Information saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-        } catch (IOException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.exit(0);  // exit after saving
+        } else if (option == JOptionPane.NO_OPTION) {
+            System.exit(0);  // exit without saving
         }
-        System.exit(0);  // exit after saving
-    } 
-    else if (option == JOptionPane.NO_OPTION) {
-        System.exit(0);  // exit without saving
-    }
-    // if CANCEL_OPTION or CLOSED_OPTION: do nothing, return to app
+        // if CANCEL_OPTION or CLOSED_OPTION: do nothing, return to app
     }//GEN-LAST:event_exitButtonActionPerformed
 
     /**
@@ -2564,17 +2575,8 @@ public class MainWindow extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         // Clear the current data before loading default data
-    System.out.println("Before clearing:");
-    System.out.println("All Employees: " + allEmployees.size());
-    System.out.println("Departments: " + departments.size());
 
-    allEmployees.clear();
-    departments.clear();
-
-    System.out.println("After clearing:");
-    System.out.println("All Employees: " + allEmployees.size());
-    System.out.println("Departments: " + departments.size());
-
+        allEmployees.clear();
         departments.clear();
 
         // Load data from startup.txt
@@ -2590,8 +2592,7 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Name: main
      *
-     * @author Zainab 
-     * Purpose/description: The main entry point to launch the
+     * @author Zainab Purpose/description: The main entry point to launch the
      * GUI application. Input: args - command line arguments. Output: none
      * Effect: Initializes and shows the main GUI form.
      * @param args - command line arguments.
