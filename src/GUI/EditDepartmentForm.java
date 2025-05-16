@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
  */
 
 public class EditDepartmentForm extends javax.swing.JFrame {
+
     private Department selectedDepartment;//The department currently being edited.
     private MainWindow main;// Reference to the main application window to update data and UI after editing.
      /**
@@ -297,6 +298,20 @@ public class EditDepartmentForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.");
             return;
         }
+        
+        //Validate input is only strings
+            if (!departmentName.matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                departmentNameField.requestFocus();
+                return;
+            }
+            
+        //Validate input is only strings
+            if (!location.matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                locationField.requestFocus();
+                return;
+            }
 
         Employee departmentHead = null;
         Employee previousHead = selectedDepartment.getDepartmentHead(); 

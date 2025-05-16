@@ -10,21 +10,22 @@ import java.io.Serializable;
  *
  * Name: Employee
  *
- * @version 1.0 Purpose: Represents an employee with personal details,
+ * @version 1.0 
+ * Purpose: Represents an employee with personal details,
  * employment information, and association to a department. It includes logic
  * for assigning unique employee IDs and tracking department head status.
  *
  */
 public class Employee implements Serializable {
 
-    private int employeeId; // Unique identifier for the employee
-    private String firstName; // Employee's first name
-    private String surname; // Employee's surname
-    private char gender; // Employee's gender (M/F)
-    private String address; // Employee's residential address
-    private int payLevel;  // Pay level used to calculate salary
-    private boolean isHead; // Whether this employee is the head of a department
-    private Integer deptID; // ID of the department this employee belongs to. Converted to Integer as it can be null
+    private int employeeId; //Purpose: Unique identifier for the employee
+    private String firstName; //Purpose: Employee's first name
+    private String surname; //Purpose: Employee's surname
+    private char gender; //Purpose: Employee's gender (M/F)
+    private String address; //Purpose: Employee's residential address
+    private int payLevel;  //Purpose: Pay level used to calculate salary
+    private boolean isHead; //Purpose: Whether this employee is the head of a department
+    private Integer deptID; //Purpose: ID of the department this employee belongs to. Converted to Integer as it can be null
 
     /**
      * Name: Employee Purpose: Default constructor Effect: Creates an empty
