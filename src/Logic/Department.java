@@ -11,15 +11,16 @@ import java.util.ArrayList;
  *
  * Name: Department
  * @author Zainab
- * @version 1.0 Purpose: Represents a department within the organization,
+ * @version 1.0 
+ * Purpose: Represents a department within the organization,
  * including its ID, name, location, and optionally its head employee.
  */
 public class Department implements Serializable {
 
-    private int deptID; // Unique ID of the department
-    private String name; // Name of the department
-    private String location; // Location of the department
-    private Employee departmentHead; // Head of the department
+    private int deptID; //Purpose: Unique ID of the department
+    private String name; //Purpose: Name of the department
+    private String location; //Purpose: Location of the department
+    private Employee departmentHead; //Purpose: Head of the department
 
     /**
      * Name: Department Purpose: Default constructor Effect: Creates an empty

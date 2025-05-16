@@ -38,9 +38,9 @@ import javax.swing.Timer;
 
 public class EditEmployeeForm extends javax.swing.JFrame {
     
-    private Employee selectedEmployee; // The employee currently selected for editing
-    private MainWindow main; // Reference to the main application window, used for accessing shared data and methods
-    private ArrayList<Department> departments; // List of departments available in the organization, used to populate department combo box
+    private Employee selectedEmployee; //Purpose: The employee currently selected for editing
+    private MainWindow main; //Purpose: Reference to the main application window, used for accessing shared data and methods
+    private ArrayList<Department> departments; //Purpose: List of departments available in the organization, used to populate department combo box
 
      /**
      * Constructor: EditEmployeeForm
@@ -446,13 +446,26 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         // Get selected department
         String selectedDepartment = (String) departmentEditCombo.getSelectedItem();
         Integer deptID = null;  // Default to no department
-
+        
+        //Check if employee is head of a department
+        if(selectedDepartment.equals("No Department") && selectedEmployee.isIsHead() == true) {
+            JOptionPane.showMessageDialog(this, "Cannot delete employee from the department.\nEmployee is a head of a department", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         if (selectedDepartment != null && !selectedDepartment.equals("No Department")) {
             for (Department dept : departments) {
-                if (dept.getName().equals(selectedDepartment)) {
-                    deptID = dept.getDeptID();
-                    break;
-                }
+                
+                if(selectedEmployee.isIsHead() && selectedEmployee.getDeptID() != dept.getDeptID() && !dept.getName().equals(selectedDepartment)) {
+                        JOptionPane.showMessageDialog(this, "Cannot change employee's department.\nEmployee is a head of a department", "Input Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                
+                else if (dept.getName().equals(selectedDepartment)) {
+                        deptID = dept.getDeptID();
+                        break;
+                    }
+
             }
         }
 
@@ -477,7 +490,22 @@ public class EditEmployeeForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please fill in all required fields and select valid options.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+        
+        //Validate input is only strings
+            if (!firstName.matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                firstNameEditField.requestFocus();
+                return;
+            }  
+            
+        //Validate input is only strings
+            if (!surname.matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                lastNameEditField.requestFocus();
+                return;
+            } 
+        
+        
         // Update the selected employee object
         if (selectedEmployee != null) {
             selectedEmployee.setFirstName(firstName);

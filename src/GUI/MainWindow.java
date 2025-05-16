@@ -30,7 +30,8 @@ import javax.swing.event.DocumentListener;
 
 /**
  *
- * MainWindow is the primary JFrame for managing employees, departments, and
+ * Name: MainWindow
+ * Purpose: It is the primary JFrame for managing employees, departments, and
  * payroll. It handles GUI initialization, data loading, and user interactions.
  *
  * @author Zainab
@@ -42,16 +43,16 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     // change these to private later
-    public ArrayList<Employee> allEmployees;
-    public ArrayList<Department> departments;
-    public ArrayList<String> payLevels;
+    public ArrayList<Employee> allEmployees;//Purpose: store all emplyees in the system
+    public ArrayList<Department> departments;//Purpose: store all departments in the system
+    public ArrayList<String> payLevels;//Purpose: store pay levels in the system
 
-    public static int staticEmployeeID = 0;
-    public static int staticDeptID = 0;
-    private boolean isDefaultDataLoaded = false;
+    public static int staticEmployeeID = 0;//Purpose: static variable to create the emploeye ID
+    public static int staticDeptID = 0;//Purpose: static variable to create the department ID
+    private boolean isDefaultDataLoaded = false;//Purpose: check if default data are loaded
 
-    private Employee selectedEmployee;//The currently selected Employee in the UI.
-    private Department selectedDepartment;//The currently selected Department in the UI.
+    private Employee selectedEmployee;//Purpose: Store the currently selected Employee in the UI.
+    private Department selectedDepartment;//Purpose: Store the currently selected Department in the UI.
 
     /**
      * Name: MainWindow
@@ -128,6 +129,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         // all function init for data
         populateDepartmentsComboBox();
+        refreshDepartmentsComboBox();
 
     }
 
@@ -418,9 +420,33 @@ public class MainWindow extends javax.swing.JFrame {
             for (Employee employee : allEmployees) {
                 if (employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
                     hasEmployees = true;
+                    int payLevel = employee.getPayLevel();
+                    String annualPay = null;
+                    
+                    //Check Annual Salary
+                    switch (payLevel) {
+                    case 1:
+                        annualPay = "BHD 44,245.75"; break;
+                    case 2:
+                        annualPay =  "BHD 48,670.32"; break;
+                    case 3: 
+                        annualPay = "BHD 53,537.35"; break;
+                    case 4:
+                        annualPay = "BHD 58,891.09"; break;
+                    case 5:
+                        annualPay = "BHD 64,780.20"; break;
+                    case 6:
+                        annualPay = "BHD 71,258.22"; break;
+                    case 7:
+                        annualPay = "BHD 80,946.95"; break;
+                    case 8:
+                        annualPay = "BHD 96,336.34"; break;
+                }
+                    
                     employeeDetails.append("ID: ").append(employee.getEmployeeId())
                             .append(", Name: ").append(employee.getFirstName())
                             .append(" ").append(employee.getSurname())
+                            .append(", Annual Pay: ").append(annualPay)
                             .append("\n");
                 }
             }
@@ -1905,7 +1931,7 @@ public class MainWindow extends javax.swing.JFrame {
             lblUserName.setText(txtUserName.getText());
         }
 
-
+        populateDepartmentsComboBox();
     }//GEN-LAST:event_loginButtonActionPerformed
     /**
      * Name: employeesButtonActionPerformed Purpose: This method switches the

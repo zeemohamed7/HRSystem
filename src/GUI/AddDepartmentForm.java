@@ -16,7 +16,8 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * This is a Java Swing GUI class that provides a form for adding new
+ * Name: AddDepartmentForm
+ * Purpose: This is a Java Swing GUI class that provides a form for adding new
  * departments to the system. It interacts with the main application window to
  * update department data and GUI components.
  *
@@ -25,9 +26,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AddDepartmentForm extends javax.swing.JFrame {
 
-    MainWindow main;//Reference to the main application window to access shared data and methods.
-    ArrayList<Department> departments;//List of departments fetched from the main window.
-    ArrayList<Employee> allEmployees;//List of employees fetched from the main window.
+    MainWindow main;//Purpose: Reference to the main application window to access shared data and methods.
+    ArrayList<Department> departments;//Purpose: List of departments fetched from the main window.
+    ArrayList<Employee> allEmployees;//Purpose: List of employees fetched from the main window.
 
     /**
      * Name: AddDepartmentForm
@@ -221,12 +222,26 @@ public class AddDepartmentForm extends javax.swing.JFrame {
                 departmentNameField.requestFocus();
                 return;
             }
+            
+            //Validate input is only strings
+            if (!departmentName.matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                departmentNameField.requestFocus();
+                return;
+            } 
 
             if (location.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Location cannot be empty.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 locationField.requestFocus();
                 return;
             }
+            
+            //Validate input is only strings
+            if (!location.matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                locationField.requestFocus();
+                return;
+            } 
 
             // Create new department without assigning a head
             main.staticDeptID++;

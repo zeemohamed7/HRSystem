@@ -25,9 +25,9 @@ import javax.swing.JOptionPane;
  */
 
 public class EditDepartmentForm extends javax.swing.JFrame {
-    private Department selectedDepartment;//The department currently being edited.
-    private MainWindow main;// Reference to the main application window to update data and UI after editing.
-    ArrayList<Employee> allEmployees;//List of all employees available in the system, obtained from the main window.
+    private Department selectedDepartment;//Purpose: The department currently being edited.
+    private MainWindow main;//Purpose: Reference to the main application window to update data and UI after editing.
+    ArrayList<Employee> allEmployees;//Purpose: List of all employees available in the system, obtained from the main window.
      /**
      * Default constructor - initializes the form.
      * 
@@ -299,6 +299,20 @@ public class EditDepartmentForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.");
             return;
         }
+        
+        //Validate input is only strings
+            if (!departmentName.matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                departmentNameField.requestFocus();
+                return;
+            }
+            
+        //Validate input is only strings
+            if (!location.matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                locationField.requestFocus();
+                return;
+            }
 
         Employee departmentHead = null;
         Employee previousHead = selectedDepartment.getDepartmentHead(); 

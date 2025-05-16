@@ -18,16 +18,17 @@ import javax.swing.table.DefaultTableModel;
  * Name: AddEmployeeForm
  *
  * @author Zainab
- * @version 1.0 Purpose: This class represents a GUI form for adding a new
+ * @version 1.0 
+ * Purpose: This class represents a GUI form for adding a new
  * employee to the system. It allows the user to enter first name, last name,
  * gender, address, department, and pay level. The new employee is added to the
  * main employee list and the employee table is updated.
  */
 public class AddEmployeeForm extends javax.swing.JFrame {
 
-    MainWindow main; // Reference to the main window
-    ArrayList<Department> departments; // Declare without initializing here
-    ArrayList<Employee> allEmployees; // Declare without initializing here
+    MainWindow main; //Purpose: Reference to the main window
+    ArrayList<Department> departments; //Purpose: Declare without initializing here
+    ArrayList<Employee> allEmployees; //Purpose: Declare without initializing here
 
     /**
      * Name: AddEmployeeForm (Default Constructor) Purpose: Default constructor
@@ -314,18 +315,33 @@ public class AddEmployeeForm extends javax.swing.JFrame {
             String lastName = lastNameField1.getText().trim();
             String address = addressField1.getText().trim();
 
-            // Validate required fields
+            // Validate first name is not empty
             if (firstName.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "First name is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 firstNameField1.requestFocus();
                 return;
             }
-
+            
+            //Validate input is only strings
+            if (!firstName.matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                firstNameField1.requestFocus();
+                return;
+            }           
+            
+            //validate last name is not empty
             if (lastName.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Last name is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 lastNameField1.requestFocus();
                 return;
             }
+            
+            //Validate input is only strings
+            if (!lastName.matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                lastNameField1.requestFocus();
+                return;
+            } 
 
             // Validate gender selection
             char gender;
@@ -338,6 +354,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
                 return;
             }
 
+            //Validate address is not empty
             if (address.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Address is required.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 addressField1.requestFocus();
