@@ -48,6 +48,7 @@ public class MainWindow extends javax.swing.JFrame {
     public static ArrayList<Department> departments;
     public static ArrayList<String> payLevels;
 
+
     public static int staticEmployeeID = 0;//Purpose: static variable to create the emploeye ID
     public static int staticDeptID = 0;//Purpose: static variable to create the department ID
     private boolean isDefaultDataLoaded = false;//Purpose: check if default data are loaded
@@ -67,6 +68,7 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
         initComponents();
         initSearchListener();
+        initDepartmentSearchListener();
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
@@ -777,6 +779,82 @@ private void searchEmployee() {
         });
     }
 }
+
+    /**
+     * Name: initDepartmentSearchListener Purpose: Initializes a document
+     * listener on the department search text field to enable real-time search
+     * functionality as the user types characters. Input: None Output: None
+     * Effect: Attaches listeners to the text field that trigger department
+     * search logic
+     */
+    private void initDepartmentSearchListener() {
+        //     Add a document listener to the search field to track typing events
+        searchDepartmentsField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchDepartment();// Called when text is inserted
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchDepartment(); // Called when text is removed
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchDepartment();// Called for other changes (e.g., formatting)
+            }
+        });
+    }
+
+    /**
+     * Name: searchDepartments Purpose: Filters the department list based on
+     * user input in the search field and updates the display table. Input: None
+     * Output: None Effect: Displays departments whose ID, name, location, or
+     * department head's name matches the user's query (case-insensitive).
+     *
+     * @author:
+     */
+    private void searchDepartment() {
+        // Get the user input from the search field, trim spaces, and convert to lowercase for case-insensitive matching
+        String query = searchDepartmentsField.getText().trim().toLowerCase();
+
+        // Create a list to hold the departments that match the search query
+        ArrayList<Department> searchResults = new ArrayList<>();
+
+        if (query.isEmpty()) {
+            // If the search query is empty, add all departments to the search results (show all)
+            searchResults.addAll(departments);
+        } else {
+            // Otherwise, filter departments whose names start with the query text (case-insensitive)
+            for (Department dept : departments) {
+                String deptName = dept.getName().toLowerCase();
+                if (deptName.startsWith(query)) {
+                    searchResults.add(dept);
+                }
+            }
+        }
+
+        // Get the table model of the departments table to modify its data
+        DefaultTableModel model = (DefaultTableModel) departmentsTable.getModel();
+
+        // Clear all current rows from the table before adding new filtered results
+        model.setRowCount(0);
+
+        // Add each department in the filtered results list to the table
+        for (Department dept : searchResults) {
+            Employee head = dept.getDepartmentHead(); // Get the department head, if any
+            String headName = (head != null) ? head.getFirstName() + " " + head.getSurname() : "No Head";
+            
+            // Add the employee details to the table
+            model.addRow(new Object[]{
+                dept.getDeptID(), //Assuming you have department ID
+                dept.getName(), // Departmnet name
+                dept.getLocation(), // Departmnet Location
+                headName //Departmnet head
+            });
+        }
+    }
 
 
     /**
