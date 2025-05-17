@@ -136,7 +136,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     /**
      * Name: loadFromStartupFile
-     *
+     * @author Zainab
      * Purpose: Loads department and employee data from the "startup.txt" file.
      * Reads the number of departments, each department’s details, the number of
      * employees per department, and each employee’s details. Populates the
@@ -203,7 +203,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     /**
      * Name: loadSerializedData
-     *
+     * @author Zahraa
      * Purpose: Loads the serialized department and employee data from a file
      * (e.g., "data.ser") and populates the in-memory lists of departments and
      * employees. Handles file not found, IO, and class not found exceptions.
@@ -240,7 +240,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     /**
      * Name: getAnnualPayByLevel
-     *
+     * @author Zainab
      *
      * Purpose: Returns the salary string for a given pay level.
      *
@@ -273,6 +273,8 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Name: initialiseEmployeesTable
      *
+     * @author Zainab
+     * 
      * Purpose: Populates the employees table with current employee data by 
      * iterating through the list of employees and adding rows to the table model. 
      * Handles potential exceptions related to null data, invalid pay levels, 
@@ -349,7 +351,7 @@ private void initialiseEmployeesTable() {
 
 /**
  * Name: initialiseDepartmentsTable
- *
+ * @author Zainab
  * Purpose: Populates the departments table with current department data, 
  * including department head information. Iterates through the list of 
  * departments and updates the table model with department details.
@@ -403,6 +405,8 @@ private void initialiseDepartmentsTable() {
 
     /**
  * Name: showEmployeeDetails 
+ * 
+ * @author Maryam
  * 
  * Purpose: Populates and displays the employee detail view with data from the given employee object.
  * Updates the UI to show the selected employee's information.
@@ -503,8 +507,12 @@ private void showEmployeeDetails(Employee employee) {
 
     /**
      * Name: showDepartmentDetails Purpose: To populate and display the
-     * department detail view with data from the given department object. Input:
-     * Department dept - the department whose details are to be displayed.
+     * department detail view with data from the given department object. 
+     * 
+     * @author Maryam
+     * 
+     * Input: Department dept - the department whose details are to be displayed.
+     * 
      * Output: None. Effect: Updates the UI to show the selected department's
      * information including its head and employees.
      *
@@ -574,8 +582,9 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * * Name: populateDepartmentsComboBox Purpose: To update the department
-     * dropdown list with current department names. Input: None. Output: None.
+     * Name: populateDepartmentsComboBox 
+     * @author Maryam
+     * Purpose: To update the department dropdown list with current department names. Input: None. Output: None.
      * Effect: Clears and repopulates the combo box with department names plus a
      * default "All Departments" option.
      */
@@ -588,7 +597,9 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: refreshEmployeeTable Purpose/description: Refreshes the employee
+     * Name: refreshEmployeeTable 
+     * @author Hajar
+     * Purpose/description: Refreshes the employee
      * table based on the selected department in the combo box. Input: none
      * Output: none Effect: Clears the employee table and repopulates it with
      * employees filtered by selected department, displaying their annual pay.
@@ -612,7 +623,7 @@ private void showEmployeeDetails(Employee employee) {
             int id = emp.getEmployeeId();
             String fullName = emp.getFirstName() + " " + emp.getSurname();
             Integer deptId = emp.getDeptID();
-            String department = "No Department";  // Default value if no department is assigned
+            String department = "No Department";  
 
             if (deptId != null) {
                 department = Department.getDepartmentNameById(departments, deptId);
@@ -634,7 +645,9 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: refreshDepartmentTable Purpose/description: Refreshes the
+     * Name: refreshDepartmentTable 
+     * @author Hajar
+     * Purpose/description: Refreshes the
      * departments table with the current list of departments. Input: none
      * Output: none Effect: Clears the departments table and repopulates it with
      * the latest department data including head info.
@@ -683,7 +696,9 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: updateEmployeeDetails Purpose/description: Updates the detail page
+     * Name: updateEmployeeDetails 
+     * @author Zahraa
+     * Purpose/description: Updates the detail page
      * fields with the provided employee's information. Input: updatedEmployee -
      * the employee whose details are to be displayed. Output: none Effect:
      * Updates UI components with employee's name, address, gender, department,
@@ -723,7 +738,9 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: calculateBiweeklyPay Purpose/description: Calculates the biweekly
+     * Name: calculateBiweeklyPay 
+     * @author Hajar
+     * Purpose/description: Calculates the biweekly
      * pay amount based on the pay level. Input: payLevel - the pay level of the
      * employee. Output: biweekly pay amount as double. Effect: Returns the
      * biweekly salary calculated from predefined annual salaries.
@@ -755,7 +772,9 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: updateDepartmentDetails Purpose/description: Updates the department
+     * Name: updateDepartmentDetails 
+     * @author Zahraa
+     * Purpose/description: Updates the department
      * detail fields with the provided department's information. Input:
      * updatedDepartment - the department whose details are to be displayed.
      * Output: none Effect: Updates UI components with department name, ID,
@@ -795,7 +814,9 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: initSearchListener Purpose: Initializes a document listener on the
+     * Name: initSearchListener 
+     * @author Maryam
+     * Purpose: Initializes a document listener on the
      * employee search text field to enable real-time search functionality as
      * the user types characters. Input: None Output: None Effect: Attaches
      * listeners to the text field that trigger employee search logic
@@ -820,9 +841,10 @@ private void showEmployeeDetails(Employee employee) {
         });
     }
 
-    // maryam
     /**
-     * Name: searchEmployee Purpose: Filters the employee list based on user
+     * Name: searchEmployee 
+     * @author Maryam
+     * Purpose: Filters the employee list based on user
      * input in the search field and updates the display table. Input: None
      * Output: None Effect: Shows matching employees in the table based on first
      * name or surname prefix.
@@ -884,7 +906,9 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: initDepartmentSearchListener Purpose: Initializes a document
+     * Name: initDepartmentSearchListener 
+     * @author Maryam
+     * Purpose: Initializes a document
      * listener on the department search text field to enable real-time search
      * functionality as the user types characters. Input: None Output: None
      * Effect: Attaches listeners to the text field that trigger department
@@ -911,7 +935,9 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: searchDepartments Purpose: Filters the department list based on
+     * Name: searchDepartments 
+     * @author Maryam
+     * Purpose: Filters the department list based on
      * user input in the search field and updates the display table. Input: None
      * Output: None Effect: Displays departments whose ID, name, location, or
      * department head's name matches the user's query (case-insensitive).
@@ -971,25 +997,45 @@ private void showEmployeeDetails(Employee employee) {
 
     }
 
-    private void updateStaticEmployeeID() {
-        int maxID = 0;
-        for (Employee emp : allEmployees) {
-            if (emp.getEmployeeId() > maxID) {
-                maxID = emp.getEmployeeId();
-            }
+/**
+ * Name: updateStaticEmployeeID
+      * @author Zainab
+ 
+ * Purpose: Updates the staticEmployeeID to the highest employee ID present in the allEmployees list.
+ * Input: None
+ * Output: None
+ * Effect: Ensures that new Employee objects will receive unique IDs greater than any existing employee.
+ */
+private void updateStaticEmployeeID() {
+    int maxID = 0;
+    for (Employee emp : allEmployees) {
+        if (emp.getEmployeeId() > maxID) {
+            maxID = emp.getEmployeeId();
         }
-        staticEmployeeID = maxID;
     }
+    staticEmployeeID = maxID;
+}
 
-    private void updateStaticDeptID() {
-        int maxID = 0;
-        for (Department dept : departments) {
-            if (dept.getDeptID() > maxID) {
-                maxID = dept.getDeptID();
-            }
+/**
+ * Name: updateStaticDeptID
+ * 
+     * @author Zainab
+
+ * Purpose: Updates the staticDeptID to the highest department ID present in the departments list.
+ * Input: None
+ * Output: None
+ * Effect: Ensures that new Department objects will receive unique IDs greater than any existing department.
+ */
+private void updateStaticDeptID() {
+    int maxID = 0;
+    for (Department dept : departments) {
+        if (dept.getDeptID() > maxID) {
+            maxID = dept.getDeptID();
         }
-        staticDeptID = maxID;
     }
+    staticDeptID = maxID;
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -2020,7 +2066,7 @@ private void showEmployeeDetails(Employee employee) {
     }//GEN-LAST:event_jCheckBox1ActionPerformed
     /**
      * Name: loginButtonActionPerformed
-     *
+     * @author Zahraa
      * Purpose: Handles the login action, verifying the username and password
      * inputs. If valid, it checks for the serialized data file
      * ("HRSystem.dat"). If the file exists, it deserializes the data into the
@@ -2077,6 +2123,7 @@ try {
     }//GEN-LAST:event_employeesButtonActionPerformed
     /**
      * Name: addEmployeeButtonActionPerformed Purpose: Opens the AddEmployeeForm
+     * @author Zainab
      * when the "Add Employee" button is clicked and hides the main window while
      * the new form is open.
      *
@@ -2107,7 +2154,7 @@ try {
     /**
      * Name: searchEmployeesTextFieldFocusGained Purpose: Clears default text
      * when the search field gains focus.
-     *
+     * @author Zainab
      * @param evt The FocusEvent triggered when the search field is focused.
      */
     private void searchEmployeesTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchEmployeesTextFieldFocusGained
@@ -2117,7 +2164,7 @@ try {
     /**
      * Name: departmentsButtonActionPerformed Purpose: Displays the departments
      * panel.
-     *
+     * @author Zainab
      * @param evt The ActionEvent triggered by clicking the Departments button.
      */
     private void departmentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentsButtonActionPerformed
@@ -2128,7 +2175,7 @@ try {
     /**
      * Name: addDepartmentButtonActionPerformed Purpose: Opens AddDepartmentForm
      * and hides main window.
-     *
+     * @author Zainab
      * @param evt The ActionEvent triggered by clicking the Add Department
      * button.
      */
@@ -2151,7 +2198,7 @@ try {
     /**
      * Name: searchDepartmentsFieldFocusGained Purpose: Clears default text when
      * the department search field gains focus.
-     *
+     * @author Zainab
      * @param evt The FocusEvent triggered when field gains focus.
      */
     private void searchDepartmentsFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchDepartmentsFieldFocusGained
@@ -2160,7 +2207,7 @@ try {
     }//GEN-LAST:event_searchDepartmentsFieldFocusGained
     /**
      * Name: exitButtonActionPerformed
-     *
+     * @author Zahraa
      * Purpose: Handles the action of clicking the exit button. Prompts the user
      * to confirm whether they want to save changes before exiting. If the user
      * chooses to save, the current state of employees, departments, and static
@@ -2208,7 +2255,7 @@ try {
     }//GEN-LAST:event_cancelButton3ActionPerformed
     /**
      * Name: employeesTableMouseClicked
-     *
+     * @author Zainab
      * Purpose: Handles the action when a row in the employees table is clicked.
      * Retrieves the employee ID from the selected row, searches for the
      * corresponding Employee object in the employee list, and displays the
@@ -2252,7 +2299,7 @@ try {
     /**
      * Name: editEmployeeButtonActionPerformed Purpose: Opens EditEmployeeForm
      * for selected employee.
-     *
+     * @author Zainab
      * @param evt The ActionEvent triggered by Edit button.
      */
     private void editEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEmployeeButtonActionPerformed
@@ -2274,7 +2321,7 @@ try {
     }//GEN-LAST:event_idDetailPageActionPerformed
     /**
      * Name: departmentsTableMouseClicked
-     *
+     * @author Zainab
      * Purpose: Handles the action when a row in the departments table is
      * clicked. Retrieves the department ID from the selected row, searches for
      * the corresponding Department object in the department list, and displays
@@ -2329,7 +2376,7 @@ try {
     /**
      * Name: backToEmployeesButtonActionPerformed Purpose/description: Returns
      * to the employees panel from another view.
-     *
+     * @author Zainab
      * @param evt - the action event triggered by the button click.
      * @return void - this method does not return any value.
      */
@@ -2342,7 +2389,7 @@ try {
     /**
      * Name: backToDepartmentsButtonActionPerformed Purpose/description: Returns
      * to the departments panel from another view.
-     *
+     * @author Zainab
      * @param evt - the action event triggered by the button click.
      * @return void - this method does not return any value.
      */
@@ -2354,7 +2401,7 @@ try {
     /**
      * Name: editDepartmentButtonActionPerformed Purpose/description: Opens the
      * edit form for the selected department.
-     *
+     * @author Zainab
      * @param evt - the action event triggered by the button click.
      * @return void - this method does not return any value.
      */
@@ -2367,7 +2414,7 @@ try {
     /**
      * Name: idDepartmentDetailPageActionPerformed Purpose/description:
      * Placeholder method for ID field interaction in department detail page.
-     *
+     * @author Zainab
      * @param evt - the action event triggered by the user interaction.
      * * @return void - this method does not return any value.
      */
@@ -2385,7 +2432,8 @@ try {
         // TODO add your handling code here:
     }//GEN-LAST:event_locationDetailPageActionPerformed
     /**
-     * Name: generateReportButtonActionPerformed author: Hajar Purpose:
+     * Name: generateReportButtonActionPerformed 
+     * @author: Hajar Purpose:
      * Generates a payroll report for all employees, grouped by department. -
      * Checks if employees exist to generate the report. - Creates a directory
      * and payroll report file in the user's home folder. - Writes employee
@@ -2545,7 +2593,7 @@ try {
     /**
      * Name: payrollReportButtonActionPerformed Purpose/description: Switches
      * the view to the payroll report panel.
-     *
+     * @author Hajar
      * @param evt - the action event triggered by the button click.
      * * @return void - this method does not return any value.
      */
@@ -2557,7 +2605,8 @@ try {
     /**
      * Name: deleteButtonActionPerformed
      *
-     * @author Raghad Purpose/description: Deletes the selected employee after
+     * @author Raghad 
+     * Purpose/description: Deletes the selected employee after
      * user confirmation.
      * @param evt - the action event triggered by the button click.
      * @return void - this method does not return any value.
@@ -2586,7 +2635,8 @@ try {
     /**
      * Name: deleteButton1ActionPerformed
      *
-     * @author Raghad Purpose/description: Deletes the selected department if no
+     * @author Raghad 
+     * Purpose/description: Deletes the selected department if no
      * employees are assigned to it.
      * @param evt - the action event triggered by the button click.
      * @return void - this method does not return any value.
@@ -2640,6 +2690,7 @@ try {
     /**
      * Name: departmentsListSelectActionPerformed Purpose/description: Updates
      * the employees table based on the selected department from the combo box.
+     * @author Zainab
      * Input: evt - the action event triggered by selecting a department.
      * Output: none Effect: Updates the employees table to show only employees
      * belonging to the selected department or all employees if "All
@@ -2688,7 +2739,9 @@ try {
 
     }//GEN-LAST:event_departmentsListSelectActionPerformed
     /**
-     * Name: payLevelDetailPageActionPerformed Purpose/description: Placeholder
+     * Name: payLevelDetailPageActionPerformed 
+     * @author Zainab
+     * Purpose/description: Placeholder
      * method for future implementation of pay level detail page actions. Input:
      * evt - the action event triggered by user interaction. Output: none
      * Effect: Currently does nothing.
@@ -2703,7 +2756,7 @@ try {
 
     /**
     * Name: deleteAllDataActionPerformed
-    *
+     * @author Zainab
     * Purpose: Handles the action when the delete button is clicked to remove all saved data.
     *          It attempts to delete the serialized data file "HRSystem.dat". If deletion is
     *          successful, it also clears the current employee and department lists.
@@ -2734,7 +2787,6 @@ try {
     /**
      * Name: main
      *
-     * @author Zainab 
      * Purpose/description: The main entry point to launch the
      * GUI application. Input: args - command line arguments. Output: none
      * Effect: Initializes and shows the main GUI form.
