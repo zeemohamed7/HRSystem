@@ -39,7 +39,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
     /**
      * Name: AddEmployeeForm Purpose: Initializes the form and populates
      * dropdowns using data from main window
-     *
+     * @author Zainab
      * @param main The reference to the main window object Input: main -
      * instance of MainWindow to access data lists Output: Initialized form with
      * department and pay level dropdowns populated Effect: Prepares the add

@@ -136,12 +136,13 @@ public class MainWindow extends javax.swing.JFrame {
 
     /**
      * Name: loadFromStartupFile
-     * @author Zainab
-     * Purpose: Loads department and employee data from the "startup.txt" file.
-     * Reads the number of departments, each department’s details, the number of
-     * employees per department, and each employee’s details. Populates the
-     * in-memory lists of departments and employees accordingly. Shows a success
-     * message dialog if loading completes without errors.
+     *
+     * @author Zainab Purpose: Loads department and employee data from the
+     * "startup.txt" file. Reads the number of departments, each department’s
+     * details, the number of employees per department, and each employee’s
+     * details. Populates the in-memory lists of departments and employees
+     * accordingly. Shows a success message dialog if loading completes without
+     * errors.
      *
      * @throws FileNotFoundException if "startup.txt" file is missing.
      * @throws NumberFormatException if numeric data in the file is invalid.
@@ -163,7 +164,7 @@ public class MainWindow extends javax.swing.JFrame {
 //         
         File startupFile = new File("startup.txt");
 
-        try (Scanner scanner = new Scanner(startupFile)) { 
+        try (Scanner scanner = new Scanner(startupFile)) {
 
             // Read number of departments
             int numDepartments = Integer.parseInt(scanner.nextLine());
@@ -195,18 +196,19 @@ public class MainWindow extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Data loaded successfully from startup.txt");
 
         } catch (FileNotFoundException e) {
-              JOptionPane.showMessageDialog(this, "startup.txt file not found.", "File Not Found", JOptionPane.WARNING_MESSAGE);
-          } catch (NumberFormatException e) {
-              JOptionPane.showMessageDialog(this, "Invalid number format in startup.txt.", "Data Error", JOptionPane.ERROR_MESSAGE);
-          }
+            JOptionPane.showMessageDialog(this, "startup.txt file not found.", "File Not Found", JOptionPane.WARNING_MESSAGE);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid number format in startup.txt.", "Data Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
      * Name: loadSerializedData
-     * @author Zahraa
-     * Purpose: Loads the serialized department and employee data from a file
-     * (e.g., "data.ser") and populates the in-memory lists of departments and
-     * employees. Handles file not found, IO, and class not found exceptions.
+     *
+     * @author Zahraa Purpose: Loads the serialized department and employee data
+     * from a file (e.g., "data.ser") and populates the in-memory lists of
+     * departments and employees. Handles file not found, IO, and class not
+     * found exceptions.
      *
      * @throws IOException if an I/O error occurs while reading the file.
      * @throws ClassNotFoundException if the serialized class definitions cannot
@@ -240,6 +242,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     /**
      * Name: getAnnualPayByLevel
+     *
      * @author Zainab
      *
      * Purpose: Returns the salary string for a given pay level.
@@ -274,214 +277,219 @@ public class MainWindow extends javax.swing.JFrame {
      * Name: initialiseEmployeesTable
      *
      * @author Zainab
-     * 
-     * Purpose: Populates the employees table with current employee data by 
-     * iterating through the list of employees and adding rows to the table model. 
-     * Handles potential exceptions related to null data, invalid pay levels, 
-     * and invalid gender values.
      *
-     * @throws NullPointerException if any employee data or department information 
-     * is unexpectedly null.
-     * @throws ClassCastException if the gender value is not of the expected type.
-     * @throws NumberFormatException if the pay level value cannot be parsed as an integer.
+     * Purpose: Populates the employees table with current employee data by
+     * iterating through the list of employees and adding rows to the table
+     * model. Handles potential exceptions related to null data, invalid pay
+     * levels, and invalid gender values.
+     *
+     * @throws NullPointerException if any employee data or department
+     * information is unexpectedly null.
+     * @throws ClassCastException if the gender value is not of the expected
+     * type.
+     * @throws NumberFormatException if the pay level value cannot be parsed as
+     * an integer.
      */
+    private void initialiseEmployeesTable() {
+        String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Pay"};
 
-private void initialiseEmployeesTable() {
-    String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Pay"};
+        // Create table with model
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) { // Make cell uneditable
+                return false;
+            }
+        };
 
-    // Create table with model
-    DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) { // Make cell uneditable
-            return false;
-        }
-    };
+        try {
+            // Populate the table with employee data
+            for (Employee emp : allEmployees) {
+                try {
+                    int id = emp.getEmployeeId();
+                    String fullName = emp.getFirstName() + " " + emp.getSurname();
 
-    try {
-        // Populate the table with employee data
-        for (Employee emp : allEmployees) {
-            try {
-                int id = emp.getEmployeeId();
-                String fullName = emp.getFirstName() + " " + emp.getSurname();
+                    String department = "No Department";
+                    Integer deptID = emp.getDeptID();
+                    if (deptID != null) {
+                        try {
+                            department = Department.getDepartmentNameById(departments, deptID);
+                        } catch (NullPointerException e) {
+                            JOptionPane.showMessageDialog(this, "Departments list is null. Cannot resolve department for employee ID: " + id, "Department Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
 
-                String department = "No Department";
-                Integer deptID = emp.getDeptID();
-                if (deptID != null) {
+                    char gender = 'U';  // Default to 'U' for undefined
                     try {
-                        department = Department.getDepartmentNameById(departments, deptID);
-                    } catch (NullPointerException e) {
-                        JOptionPane.showMessageDialog(this, "Departments list is null. Cannot resolve department for employee ID: " + id, "Department Error", JOptionPane.ERROR_MESSAGE);
+                        gender = emp.getGender();
+                    } catch (ClassCastException e) {
+                        JOptionPane.showMessageDialog(this, "Invalid gender value for employee ID: " + id + ". Defaulting to 'U'.", "Gender Error", JOptionPane.WARNING_MESSAGE);
                     }
-                }
 
-                char gender = 'U';  // Default to 'U' for undefined
-                try {
-                    gender = emp.getGender();
-                } catch (ClassCastException e) {
-                    JOptionPane.showMessageDialog(this, "Invalid gender value for employee ID: " + id + ". Defaulting to 'U'.", "Gender Error", JOptionPane.WARNING_MESSAGE);
-                }
-
-                int payLevel = 0;
-                try {
-                    payLevel = emp.getPayLevel();
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Invalid pay level for employee ID: " + id + ". Defaulting to 0.", "Pay Level Error", JOptionPane.WARNING_MESSAGE);
-                }
-
-                // Get annual pay from pay level
-                String annualPay = getAnnualPayByLevel(payLevel);
-
-                // Add the row to the model
-                Object[] row = {id, fullName, department, gender, annualPay};
-                model.addRow(row);
-
-            } catch (NullPointerException e) {
-                JOptionPane.showMessageDialog(this, "Null data encountered for an employee. Skipping entry.", "Data Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Initialization Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    // Set model to employees table
-    employeesTable.setModel(model);
-    refreshEmployeeTable();
-}
-
-
-/**
- * Name: initialiseDepartmentsTable
- * @author Zainab
- * Purpose: Populates the departments table with current department data, 
- * including department head information. Iterates through the list of 
- * departments and updates the table model with department details.
- *
- * @throws NullPointerException if the departments list or department head data is null.
- * @throws ClassCastException if the department head is not of the expected type.
- * @throws Exception if an error occurs while accessing the department data.
- */
-private void initialiseDepartmentsTable() {
-    String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
-
-    // Create the table model for departments
-    DefaultTableModel deptModel = new DefaultTableModel(departmentColumnNames, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
-
-    try {
-        for (Department dept : departments) {
-            try {
-                Integer deptID = dept.getDeptID();
-                String name = dept.getName();
-                String location = dept.getLocation();
-
-                String departmentHead = "No Head";
-                try {
-                    if (dept.getDepartmentHead() != null) {
-                        departmentHead = dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname();
+                    int payLevel = 0;
+                    try {
+                        payLevel = emp.getPayLevel();
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(this, "Invalid pay level for employee ID: " + id + ". Defaulting to 0.", "Pay Level Error", JOptionPane.WARNING_MESSAGE);
                     }
+
+                    // Get annual pay from pay level
+                    String annualPay = getAnnualPayByLevel(payLevel);
+
+                    // Add the row to the model
+                    Object[] row = {id, fullName, department, gender, annualPay};
+                    model.addRow(row);
+
                 } catch (NullPointerException e) {
-                    JOptionPane.showMessageDialog(this, "Null department head data for department ID: " + deptID, "Data Error", JOptionPane.ERROR_MESSAGE);
-                } catch (ClassCastException e) {
-                    JOptionPane.showMessageDialog(this, "Invalid data type for department head in department ID: " + deptID, "Data Type Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Null data encountered for an employee. Skipping entry.", "Data Error", JOptionPane.ERROR_MESSAGE);
                 }
-
-                deptModel.addRow(new Object[]{deptID, name, location, departmentHead});
-
-            } catch (NullPointerException e) {
-                JOptionPane.showMessageDialog(this, "Null data encountered for a department. Skipping entry.", "Data Error", JOptionPane.ERROR_MESSAGE);
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Initialization Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error initializing department table: " + e.getMessage(), "Initialization Error", JOptionPane.ERROR_MESSAGE);
-    }
 
-    departmentsTable.setModel(deptModel);
-    refreshDepartmentTable();
-}
+        // Set model to employees table
+        employeesTable.setModel(model);
+        refreshEmployeeTable();
+    }
 
     /**
- * Name: showEmployeeDetails 
- * 
- * @author Maryam
- * 
- * Purpose: Populates and displays the employee detail view with data from the given employee object.
- * Updates the UI to show the selected employee's information.
- * 
- * @param employee The employee object containing the details to display.
- * @throws NullPointerException if the employee object or any of its attributes are null.
- * @throws ClassCastException if the gender value is not of the expected type.
- * @throws NumberFormatException if the pay level value cannot be converted to a string.
- */
-private void showEmployeeDetails(Employee employee) {
+     * Name: initialiseDepartmentsTable
+     *
+     * @author Zainab Purpose: Populates the departments table with current
+     * department data, including department head information. Iterates through
+     * the list of departments and updates the table model with department
+     * details.
+     *
+     * @throws NullPointerException if the departments list or department head
+     * data is null.
+     * @throws ClassCastException if the department head is not of the expected
+     * type.
+     * @throws Exception if an error occurs while accessing the department data.
+     */
+    private void initialiseDepartmentsTable() {
+        String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
 
-    if (employee == null) {
-        JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-
-    selectedEmployee = employee;
-
-    // Show employee detail page
-    CardLayout cl = (CardLayout) contentPanel.getLayout();
-    cl.show(contentPanel, "employeeDetail");
-
-    try {
-        // Display data
-        idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
-
-        try {
-            firstNameDetailPage.setText(employee.getFirstName());
-            surnameDetailPage.setText(employee.getSurname());
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "Employee name information is missing.", "Data Error", JOptionPane.WARNING_MESSAGE);
-        }
-
-        try {
-            char gender = employee.getGender();
-            genderDetailPage.setText(gender == 'M' ? "Male" : "Female");
-        } catch (ClassCastException e) {
-            JOptionPane.showMessageDialog(this, "Invalid gender value for employee ID: " + employee.getEmployeeId(), "Data Type Error", JOptionPane.WARNING_MESSAGE);
-        }
-
-        try {
-            int payLevel = employee.getPayLevel();
-            String payLevelText = "Level " + payLevel + " " + getAnnualPayByLevel(payLevel);
-            payLevelDetailPage.setText(payLevelText);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Invalid pay level value for employee ID: " + employee.getEmployeeId(), "Data Error", JOptionPane.WARNING_MESSAGE);
-        }
-
-        try {
-            addressDetailPage.setText(employee.getAddress());
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "Employee address is missing for employee ID: " + employee.getEmployeeId(), "Data Error", JOptionPane.WARNING_MESSAGE);
-        }
-
-        try {
-            String department = "No Department";
-            if (employee.getDeptID() != null) {
-                department = Department.getDepartmentNameById(departments, employee.getDeptID());
+        // Create the table model for departments
+        DefaultTableModel deptModel = new DefaultTableModel(departmentColumnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
-            departmentDetailPage.setText(department);
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "Error retrieving department information for employee ID: " + employee.getEmployeeId(), "Data Error", JOptionPane.WARNING_MESSAGE);
+        };
+
+        try {
+            for (Department dept : departments) {
+                try {
+                    Integer deptID = dept.getDeptID();
+                    String name = dept.getName();
+                    String location = dept.getLocation();
+
+                    String departmentHead = "No Head";
+                    try {
+                        if (dept.getDepartmentHead() != null) {
+                            departmentHead = dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname();
+                        }
+                    } catch (NullPointerException e) {
+                        JOptionPane.showMessageDialog(this, "Null department head data for department ID: " + deptID, "Data Error", JOptionPane.ERROR_MESSAGE);
+                    } catch (ClassCastException e) {
+                        JOptionPane.showMessageDialog(this, "Invalid data type for department head in department ID: " + deptID, "Data Type Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    deptModel.addRow(new Object[]{deptID, name, location, departmentHead});
+
+                } catch (NullPointerException e) {
+                    JOptionPane.showMessageDialog(this, "Null data encountered for a department. Skipping entry.", "Data Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error initializing department table: " + e.getMessage(), "Initialization Error", JOptionPane.ERROR_MESSAGE);
         }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error displaying employee details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        departmentsTable.setModel(deptModel);
+        refreshDepartmentTable();
     }
-}
 
+    /**
+     * Name: showEmployeeDetails
+     *
+     * @author Maryam
+     *
+     * Purpose: Populates and displays the employee detail view with data from
+     * the given employee object. Updates the UI to show the selected employee's
+     * information.
+     *
+     * @param employee The employee object containing the details to display.
+     * @throws NullPointerException if the employee object or any of its
+     * attributes are null.
+     * @throws ClassCastException if the gender value is not of the expected
+     * type.
+     * @throws NumberFormatException if the pay level value cannot be converted
+     * to a string.
+     */
+    private void showEmployeeDetails(Employee employee) {
+
+        if (employee == null) {
+            JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        selectedEmployee = employee;
+
+        // Show employee detail page
+        CardLayout cl = (CardLayout) contentPanel.getLayout();
+        cl.show(contentPanel, "employeeDetail");
+
+        try {
+            // Display data
+            idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
+
+            try {
+                firstNameDetailPage.setText(employee.getFirstName());
+                surnameDetailPage.setText(employee.getSurname());
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(this, "Employee name information is missing.", "Data Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+            try {
+                char gender = employee.getGender();
+                genderDetailPage.setText(gender == 'M' ? "Male" : "Female");
+            } catch (ClassCastException e) {
+                JOptionPane.showMessageDialog(this, "Invalid gender value for employee ID: " + employee.getEmployeeId(), "Data Type Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+            try {
+                int payLevel = employee.getPayLevel();
+                String payLevelText = "Level " + payLevel + " " + getAnnualPayByLevel(payLevel);
+                payLevelDetailPage.setText(payLevelText);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Invalid pay level value for employee ID: " + employee.getEmployeeId(), "Data Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+            try {
+                addressDetailPage.setText(employee.getAddress());
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(this, "Employee address is missing for employee ID: " + employee.getEmployeeId(), "Data Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+            try {
+                String department = "No Department";
+                if (employee.getDeptID() != null) {
+                    department = Department.getDepartmentNameById(departments, employee.getDeptID());
+                }
+                departmentDetailPage.setText(department);
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(this, "Error retrieving department information for employee ID: " + employee.getEmployeeId(), "Data Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error displaying employee details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * Name: deleteEmployee
      *
-     * @author Raghad 
-     * Purpose: Removes a specified employee from the
+     * @author Raghad Purpose: Removes a specified employee from the
      * allEmployees list and updates the employee table display.
      *
      * @param employee The Employee object to be removed from the list.
@@ -494,8 +502,7 @@ private void showEmployeeDetails(Employee employee) {
     /**
      * /** Name: deleteDepartment
      *
-     * @author Raghad 
-     * Purpose/description: Deletes the given department from the
+     * @author Raghad Purpose/description: Deletes the given department from the
      * list and refreshes related UI components.
      * @param department - the department object to be removed.
      * @return void - this method does not return any value.
@@ -507,12 +514,13 @@ private void showEmployeeDetails(Employee employee) {
 
     /**
      * Name: showDepartmentDetails Purpose: To populate and display the
-     * department detail view with data from the given department object. 
-     * 
+     * department detail view with data from the given department object.
+     *
      * @author Maryam
-     * 
-     * Input: Department dept - the department whose details are to be displayed.
-     * 
+     *
+     * Input: Department dept - the department whose details are to be
+     * displayed.
+     *
      * Output: None. Effect: Updates the UI to show the selected department's
      * information including its head and employees.
      *
@@ -559,7 +567,7 @@ private void showEmployeeDetails(Employee employee) {
                 if (employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
                     hasEmployees = true;
                     int payLevel = employee.getPayLevel();
-                   String annualPay = getAnnualPayByLevel(payLevel);
+                    String annualPay = getAnnualPayByLevel(payLevel);
 
                     employeeDetails.append("ID: ").append(employee.getEmployeeId())
                             .append(", Name: ").append(employee.getFirstName())
@@ -582,11 +590,12 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: populateDepartmentsComboBox 
-     * @author Maryam
-     * Purpose: To update the department dropdown list with current department names. Input: None. Output: None.
-     * Effect: Clears and repopulates the combo box with department names plus a
-     * default "All Departments" option.
+     * Name: populateDepartmentsComboBox
+     *
+     * @author Maryam Purpose: To update the department dropdown list with
+     * current department names. Input: None. Output: None. Effect: Clears and
+     * repopulates the combo box with department names plus a default "All
+     * Departments" option.
      */
     public void populateDepartmentsComboBox() {
         departmentsListSelect.removeAllItems();
@@ -597,12 +606,12 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: refreshEmployeeTable 
-     * @author Hajar
-     * Purpose/description: Refreshes the employee
-     * table based on the selected department in the combo box. Input: none
-     * Output: none Effect: Clears the employee table and repopulates it with
-     * employees filtered by selected department, displaying their annual pay.
+     * Name: refreshEmployeeTable
+     *
+     * @author Hajar Purpose/description: Refreshes the employee table based on
+     * the selected department in the combo box. Input: none Output: none
+     * Effect: Clears the employee table and repopulates it with employees
+     * filtered by selected department, displaying their annual pay.
      *
      * @return void - this method does not return any value.
      */
@@ -623,7 +632,7 @@ private void showEmployeeDetails(Employee employee) {
             int id = emp.getEmployeeId();
             String fullName = emp.getFirstName() + " " + emp.getSurname();
             Integer deptId = emp.getDeptID();
-            String department = "No Department";  
+            String department = "No Department";
 
             if (deptId != null) {
                 department = Department.getDepartmentNameById(departments, deptId);
@@ -645,12 +654,12 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: refreshDepartmentTable 
-     * @author Hajar
-     * Purpose/description: Refreshes the
-     * departments table with the current list of departments. Input: none
-     * Output: none Effect: Clears the departments table and repopulates it with
-     * the latest department data including head info.
+     * Name: refreshDepartmentTable
+     *
+     * @author Hajar Purpose/description: Refreshes the departments table with
+     * the current list of departments. Input: none Output: none Effect: Clears
+     * the departments table and repopulates it with the latest department data
+     * including head info.
      *
      * @return void - this method does not return any value.
      */
@@ -696,13 +705,13 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: updateEmployeeDetails 
-     * @author Zahraa
-     * Purpose/description: Updates the detail page
-     * fields with the provided employee's information. Input: updatedEmployee -
-     * the employee whose details are to be displayed. Output: none Effect:
-     * Updates UI components with employee's name, address, gender, department,
-     * and pay level.
+     * Name: updateEmployeeDetails
+     *
+     * @author Zahraa Purpose/description: Updates the detail page fields with
+     * the provided employee's information. Input: updatedEmployee - the
+     * employee whose details are to be displayed. Output: none Effect: Updates
+     * UI components with employee's name, address, gender, department, and pay
+     * level.
      *
      * @param updatedEmployee - Employee object containing updated information.
      * @return void - this method does not return any value.
@@ -727,7 +736,7 @@ private void showEmployeeDetails(Employee employee) {
                 departmentDetailPage.setText(departmentName);
 
                 // Update pay level
-                payLevelDetailPage.setText(Integer.toString(updatedEmployee.getPayLevel()));
+                payLevelDetailPage.setText("Level " + Integer.toString(updatedEmployee.getPayLevel()) + " " + getAnnualPayByLevel(updatedEmployee.getPayLevel()));
             }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "There was a problem updating the employee details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -738,12 +747,12 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: calculateBiweeklyPay 
-     * @author Hajar
-     * Purpose/description: Calculates the biweekly
-     * pay amount based on the pay level. Input: payLevel - the pay level of the
-     * employee. Output: biweekly pay amount as double. Effect: Returns the
-     * biweekly salary calculated from predefined annual salaries.
+     * Name: calculateBiweeklyPay
+     *
+     * @author Hajar Purpose/description: Calculates the biweekly pay amount
+     * based on the pay level. Input: payLevel - the pay level of the employee.
+     * Output: biweekly pay amount as double. Effect: Returns the biweekly
+     * salary calculated from predefined annual salaries.
      *
      * @param payLevel - integer representing employee's pay level.
      * @return double - calculated biweekly pay amount.
@@ -772,13 +781,13 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: updateDepartmentDetails 
-     * @author Zahraa
-     * Purpose/description: Updates the department
-     * detail fields with the provided department's information. Input:
-     * updatedDepartment - the department whose details are to be displayed.
-     * Output: none Effect: Updates UI components with department name, ID,
-     * location, and department head.
+     * Name: updateDepartmentDetails
+     *
+     * @author Zahraa Purpose/description: Updates the department detail fields
+     * with the provided department's information. Input: updatedDepartment -
+     * the department whose details are to be displayed. Output: none Effect:
+     * Updates UI components with department name, ID, location, and department
+     * head.
      *
      * @param updatedDepartment - Department object containing updated
      * information.
@@ -814,12 +823,12 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: initSearchListener 
-     * @author Maryam
-     * Purpose: Initializes a document listener on the
-     * employee search text field to enable real-time search functionality as
-     * the user types characters. Input: None Output: None Effect: Attaches
-     * listeners to the text field that trigger employee search logic
+     * Name: initSearchListener
+     *
+     * @author Maryam Purpose: Initializes a document listener on the employee
+     * search text field to enable real-time search functionality as the user
+     * types characters. Input: None Output: None Effect: Attaches listeners to
+     * the text field that trigger employee search logic
      */
     private void initSearchListener() {
 //     Add a document listener to the search field to track typing events
@@ -842,12 +851,12 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: searchEmployee 
-     * @author Maryam
-     * Purpose: Filters the employee list based on user
-     * input in the search field and updates the display table. Input: None
-     * Output: None Effect: Shows matching employees in the table based on first
-     * name or surname prefix.
+     * Name: searchEmployee
+     *
+     * @author Maryam Purpose: Filters the employee list based on user input in
+     * the search field and updates the display table. Input: None Output: None
+     * Effect: Shows matching employees in the table based on first name or
+     * surname prefix.
      *
      * @author:
      */
@@ -906,13 +915,12 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: initDepartmentSearchListener 
-     * @author Maryam
-     * Purpose: Initializes a document
-     * listener on the department search text field to enable real-time search
-     * functionality as the user types characters. Input: None Output: None
-     * Effect: Attaches listeners to the text field that trigger department
-     * search logic
+     * Name: initDepartmentSearchListener
+     *
+     * @author Maryam Purpose: Initializes a document listener on the department
+     * search text field to enable real-time search functionality as the user
+     * types characters. Input: None Output: None Effect: Attaches listeners to
+     * the text field that trigger department search logic
      */
     private void initDepartmentSearchListener() {
         //     Add a document listener to the search field to track typing events
@@ -935,12 +943,12 @@ private void showEmployeeDetails(Employee employee) {
     }
 
     /**
-     * Name: searchDepartments 
-     * @author Maryam
-     * Purpose: Filters the department list based on
-     * user input in the search field and updates the display table. Input: None
-     * Output: None Effect: Displays departments whose ID, name, location, or
-     * department head's name matches the user's query (case-insensitive).
+     * Name: searchDepartments
+     *
+     * @author Maryam Purpose: Filters the department list based on user input
+     * in the search field and updates the display table. Input: None Output:
+     * None Effect: Displays departments whose ID, name, location, or department
+     * head's name matches the user's query (case-insensitive).
      *
      * @author:
      */
@@ -997,45 +1005,45 @@ private void showEmployeeDetails(Employee employee) {
 
     }
 
-/**
- * Name: updateStaticEmployeeID
-      * @author Zainab
- 
- * Purpose: Updates the staticEmployeeID to the highest employee ID present in the allEmployees list.
- * Input: None
- * Output: None
- * Effect: Ensures that new Employee objects will receive unique IDs greater than any existing employee.
- */
-private void updateStaticEmployeeID() {
-    int maxID = 0;
-    for (Employee emp : allEmployees) {
-        if (emp.getEmployeeId() > maxID) {
-            maxID = emp.getEmployeeId();
-        }
-    }
-    staticEmployeeID = maxID;
-}
-
-/**
- * Name: updateStaticDeptID
- * 
+    /**
+     * Name: updateStaticEmployeeID
+     *
      * @author Zainab
-
- * Purpose: Updates the staticDeptID to the highest department ID present in the departments list.
- * Input: None
- * Output: None
- * Effect: Ensures that new Department objects will receive unique IDs greater than any existing department.
- */
-private void updateStaticDeptID() {
-    int maxID = 0;
-    for (Department dept : departments) {
-        if (dept.getDeptID() > maxID) {
-            maxID = dept.getDeptID();
+     *
+     * Purpose: Updates the staticEmployeeID to the highest employee ID present
+     * in the allEmployees list. Input: None Output: None Effect: Ensures that
+     * new Employee objects will receive unique IDs greater than any existing
+     * employee.
+     */
+    private void updateStaticEmployeeID() {
+        int maxID = 0;
+        for (Employee emp : allEmployees) {
+            if (emp.getEmployeeId() > maxID) {
+                maxID = emp.getEmployeeId();
+            }
         }
+        staticEmployeeID = maxID;
     }
-    staticDeptID = maxID;
-}
 
+    /**
+     * Name: updateStaticDeptID
+     *
+     * @author Zainab
+     *
+     * Purpose: Updates the staticDeptID to the highest department ID present in
+     * the departments list. Input: None Output: None Effect: Ensures that new
+     * Department objects will receive unique IDs greater than any existing
+     * department.
+     */
+    private void updateStaticDeptID() {
+        int maxID = 0;
+        for (Department dept : departments) {
+            if (dept.getDeptID() > maxID) {
+                maxID = dept.getDeptID();
+            }
+        }
+        staticDeptID = maxID;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -2066,9 +2074,9 @@ private void updateStaticDeptID() {
     }//GEN-LAST:event_jCheckBox1ActionPerformed
     /**
      * Name: loginButtonActionPerformed
-     * @author Zahraa
-     * Purpose: Handles the login action, verifying the username and password
-     * inputs. If valid, it checks for the serialized data file
+     *
+     * @author Zahraa Purpose: Handles the login action, verifying the username
+     * and password inputs. If valid, it checks for the serialized data file
      * ("HRSystem.dat"). If the file exists, it deserializes the data into the
      * employee and department lists. If default data has not been loaded, it
      * calls the `deserializeData()` method to initialize data. Updates the
@@ -2084,27 +2092,27 @@ private void updateStaticDeptID() {
             JOptionPane.showMessageDialog(MainWindow.this, "Username and Password should not be empty!",
                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
         } else {
-try {
-        File file = new File("HRSystem.dat");
-        if (file.exists()) {
-            loadSerializedData();
-        } else {
-            loadFromStartupFile();
-        }
+            try {
+                File file = new File("HRSystem.dat");
+                if (file.exists()) {
+                    loadSerializedData();
+                } else {
+                    loadFromStartupFile();
+                }
 
-        initialiseEmployeesTable();
-        initialiseDepartmentsTable();
-        populateDepartmentsComboBox();
+                initialiseEmployeesTable();
+                initialiseDepartmentsTable();
+                populateDepartmentsComboBox();
 
-        CardLayout cl = (CardLayout) MainFrame.getLayout();
-        cl.show(MainFrame, "dashboard");
-        lblUserName.setText(txtUserName.getText());
+                CardLayout cl = (CardLayout) MainFrame.getLayout();
+                cl.show(MainFrame, "dashboard");
+                lblUserName.setText(txtUserName.getText());
 
-    } catch (Exception e) { // loading methods handle specific exceptions
-        JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage(),
-                "Load Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
+            } catch (Exception e) { // loading methods handle specific exceptions
+                JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage(),
+                        "Load Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
         }
 
     }//GEN-LAST:event_loginButtonActionPerformed
@@ -2123,9 +2131,9 @@ try {
     }//GEN-LAST:event_employeesButtonActionPerformed
     /**
      * Name: addEmployeeButtonActionPerformed Purpose: Opens the AddEmployeeForm
-     * @author Zainab
-     * when the "Add Employee" button is clicked and hides the main window while
-     * the new form is open.
+     *
+     * @author Zainab when the "Add Employee" button is clicked and hides the
+     * main window while the new form is open.
      *
      * @param evt The ActionEvent triggered by clicking the Add Employee button.
      */
@@ -2154,6 +2162,7 @@ try {
     /**
      * Name: searchEmployeesTextFieldFocusGained Purpose: Clears default text
      * when the search field gains focus.
+     *
      * @author Zainab
      * @param evt The FocusEvent triggered when the search field is focused.
      */
@@ -2164,6 +2173,7 @@ try {
     /**
      * Name: departmentsButtonActionPerformed Purpose: Displays the departments
      * panel.
+     *
      * @author Zainab
      * @param evt The ActionEvent triggered by clicking the Departments button.
      */
@@ -2175,6 +2185,7 @@ try {
     /**
      * Name: addDepartmentButtonActionPerformed Purpose: Opens AddDepartmentForm
      * and hides main window.
+     *
      * @author Zainab
      * @param evt The ActionEvent triggered by clicking the Add Department
      * button.
@@ -2198,6 +2209,7 @@ try {
     /**
      * Name: searchDepartmentsFieldFocusGained Purpose: Clears default text when
      * the department search field gains focus.
+     *
      * @author Zainab
      * @param evt The FocusEvent triggered when field gains focus.
      */
@@ -2207,12 +2219,12 @@ try {
     }//GEN-LAST:event_searchDepartmentsFieldFocusGained
     /**
      * Name: exitButtonActionPerformed
-     * @author Zahraa
-     * Purpose: Handles the action of clicking the exit button. Prompts the user
-     * to confirm whether they want to save changes before exiting. If the user
-     * chooses to save, the current state of employees, departments, and static
-     * ID counters are serialized to "HRSystem.dat". Exits the application after
-     * performing the selected action.
+     *
+     * @author Zahraa Purpose: Handles the action of clicking the exit button.
+     * Prompts the user to confirm whether they want to save changes before
+     * exiting. If the user chooses to save, the current state of employees,
+     * departments, and static ID counters are serialized to "HRSystem.dat".
+     * Exits the application after performing the selected action.
      *
      * @param evt The ActionEvent triggered by the exit button.
      */
@@ -2255,12 +2267,12 @@ try {
     }//GEN-LAST:event_cancelButton3ActionPerformed
     /**
      * Name: employeesTableMouseClicked
-     * @author Zainab
-     * Purpose: Handles the action when a row in the employees table is clicked.
-     * Retrieves the employee ID from the selected row, searches for the
-     * corresponding Employee object in the employee list, and displays the
-     * employee details. Displays error messages if the employee ID is invalid
-     * or the employee is not found.
+     *
+     * @author Zainab Purpose: Handles the action when a row in the employees
+     * table is clicked. Retrieves the employee ID from the selected row,
+     * searches for the corresponding Employee object in the employee list, and
+     * displays the employee details. Displays error messages if the employee ID
+     * is invalid or the employee is not found.
      *
      * @param evt The MouseEvent triggered by clicking on a table row.
      */
@@ -2299,6 +2311,7 @@ try {
     /**
      * Name: editEmployeeButtonActionPerformed Purpose: Opens EditEmployeeForm
      * for selected employee.
+     *
      * @author Zainab
      * @param evt The ActionEvent triggered by Edit button.
      */
@@ -2321,12 +2334,12 @@ try {
     }//GEN-LAST:event_idDetailPageActionPerformed
     /**
      * Name: departmentsTableMouseClicked
-     * @author Zainab
-     * Purpose: Handles the action when a row in the departments table is
-     * clicked. Retrieves the department ID from the selected row, searches for
-     * the corresponding Department object in the department list, and displays
-     * the department details. Displays error messages if the department ID is
-     * invalid or the department is not found.
+     *
+     * @author Zainab Purpose: Handles the action when a row in the departments
+     * table is clicked. Retrieves the department ID from the selected row,
+     * searches for the corresponding Department object in the department list,
+     * and displays the department details. Displays error messages if the
+     * department ID is invalid or the department is not found.
      *
      * @param evt The MouseEvent triggered by clicking on a table row.
      */
@@ -2376,6 +2389,7 @@ try {
     /**
      * Name: backToEmployeesButtonActionPerformed Purpose/description: Returns
      * to the employees panel from another view.
+     *
      * @author Zainab
      * @param evt - the action event triggered by the button click.
      * @return void - this method does not return any value.
@@ -2389,6 +2403,7 @@ try {
     /**
      * Name: backToDepartmentsButtonActionPerformed Purpose/description: Returns
      * to the departments panel from another view.
+     *
      * @author Zainab
      * @param evt - the action event triggered by the button click.
      * @return void - this method does not return any value.
@@ -2401,6 +2416,7 @@ try {
     /**
      * Name: editDepartmentButtonActionPerformed Purpose/description: Opens the
      * edit form for the selected department.
+     *
      * @author Zainab
      * @param evt - the action event triggered by the button click.
      * @return void - this method does not return any value.
@@ -2414,6 +2430,7 @@ try {
     /**
      * Name: idDepartmentDetailPageActionPerformed Purpose/description:
      * Placeholder method for ID field interaction in department detail page.
+     *
      * @author Zainab
      * @param evt - the action event triggered by the user interaction.
      * * @return void - this method does not return any value.
@@ -2432,15 +2449,16 @@ try {
         // TODO add your handling code here:
     }//GEN-LAST:event_locationDetailPageActionPerformed
     /**
-     * Name: generateReportButtonActionPerformed 
-     * @author: Hajar Purpose:
-     * Generates a payroll report for all employees, grouped by department. -
-     * Checks if employees exist to generate the report. - Creates a directory
-     * and payroll report file in the user's home folder. - Writes employee
-     * payroll details and department totals to the file. - Calculates biweekly
-     * pay based on employee pay level. - Displays the generated report content
-     * in a text pane. - Copies the report file to the project directory. -
-     * Handles errors with informative dialogs and logs.
+     * Name: generateReportButtonActionPerformed
+     *
+     * @author: Hajar Purpose: Generates a payroll report for all employees,
+     * grouped by department. - Checks if employees exist to generate the
+     * report. - Creates a directory and payroll report file in the user's home
+     * folder. - Writes employee payroll details and department totals to the
+     * file. - Calculates biweekly pay based on employee pay level. - Displays
+     * the generated report content in a text pane. - Copies the report file to
+     * the project directory. - Handles errors with informative dialogs and
+     * logs.
      *
      * @param evt The ActionEvent triggered by clicking the Generate Report
      * button.
@@ -2593,6 +2611,7 @@ try {
     /**
      * Name: payrollReportButtonActionPerformed Purpose/description: Switches
      * the view to the payroll report panel.
+     *
      * @author Hajar
      * @param evt - the action event triggered by the button click.
      * * @return void - this method does not return any value.
@@ -2605,8 +2624,7 @@ try {
     /**
      * Name: deleteButtonActionPerformed
      *
-     * @author Raghad 
-     * Purpose/description: Deletes the selected employee after
+     * @author Raghad Purpose/description: Deletes the selected employee after
      * user confirmation.
      * @param evt - the action event triggered by the button click.
      * @return void - this method does not return any value.
@@ -2635,8 +2653,7 @@ try {
     /**
      * Name: deleteButton1ActionPerformed
      *
-     * @author Raghad 
-     * Purpose/description: Deletes the selected department if no
+     * @author Raghad Purpose/description: Deletes the selected department if no
      * employees are assigned to it.
      * @param evt - the action event triggered by the button click.
      * @return void - this method does not return any value.
@@ -2690,10 +2707,10 @@ try {
     /**
      * Name: departmentsListSelectActionPerformed Purpose/description: Updates
      * the employees table based on the selected department from the combo box.
-     * @author Zainab
-     * Input: evt - the action event triggered by selecting a department.
-     * Output: none Effect: Updates the employees table to show only employees
-     * belonging to the selected department or all employees if "All
+     *
+     * @author Zainab Input: evt - the action event triggered by selecting a
+     * department. Output: none Effect: Updates the employees table to show only
+     * employees belonging to the selected department or all employees if "All
      * Departments" is selected.
      *
      * @param evt - the action event triggered by the department selection.
@@ -2739,12 +2756,12 @@ try {
 
     }//GEN-LAST:event_departmentsListSelectActionPerformed
     /**
-     * Name: payLevelDetailPageActionPerformed 
-     * @author Zainab
-     * Purpose/description: Placeholder
-     * method for future implementation of pay level detail page actions. Input:
-     * evt - the action event triggered by user interaction. Output: none
-     * Effect: Currently does nothing.
+     * Name: payLevelDetailPageActionPerformed
+     *
+     * @author Zainab Purpose/description: Placeholder method for future
+     * implementation of pay level detail page actions. Input: evt - the action
+     * event triggered by user interaction. Output: none Effect: Currently does
+     * nothing.
      *
      * @param evt - the action event triggered by pay level detail page
      * interaction.
@@ -2755,41 +2772,43 @@ try {
     }//GEN-LAST:event_payLevelDetailPageActionPerformed
 
     /**
-    * Name: deleteAllDataActionPerformed
-     * @author Zainab
-    * Purpose: Handles the action when the delete button is clicked to remove all saved data.
-    *          It attempts to delete the serialized data file "HRSystem.dat". If deletion is
-    *          successful, it also clears the current employee and department lists.
-    *          The user is notified of the result through message dialogs.
-    *
-    * @param evt The ActionEvent triggered by the button click.
-    * @return void This method does not return any value.
-    */
+     * Name: deleteAllDataActionPerformed
+     *
+     * @author Zainab Purpose: Handles the action when the delete button is
+     * clicked to remove all saved data. It attempts to delete the serialized
+     * data file "HRSystem.dat". If deletion is successful, it also clears the
+     * current employee and department lists. The user is notified of the result
+     * through message dialogs.
+     *
+     * @param evt The ActionEvent triggered by the button click.
+     * @return void This method does not return any value.
+     */
 
     private void deleteAllDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAllDataActionPerformed
         // TODO add your handling code here:
         // Clear and delete the serialised file 
         File file = new File("HRSystem.dat");
-            if (file.exists()) {
-                if (file.delete()) {
-                    JOptionPane.showMessageDialog(null, "Data file deleted successfully.");
-                    allEmployees.clear();
-                    departments.clear();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Failed to delete data file.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        if (file.exists()) {
+            if (file.delete()) {
+                JOptionPane.showMessageDialog(null, "Data file deleted successfully.");
+                allEmployees.clear();
+                departments.clear();
             } else {
-                JOptionPane.showMessageDialog(null, "Data file does not exist.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Failed to delete data file.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-   
+        } else {
+            JOptionPane.showMessageDialog(null, "Data file does not exist.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        }
+
     }//GEN-LAST:event_deleteAllDataActionPerformed
 
     /**
      * Name: main
      *
-     * Purpose/description: The main entry point to launch the
-     * GUI application. Input: args - command line arguments. Output: none
-     * Effect: Initializes and shows the main GUI form.
+     * Purpose/description: The main entry point to launch the GUI application.
+     * Input: args - command line arguments. Output: none Effect: Initializes
+     * and shows the main GUI form.
+     *
      * @param args - command line arguments.
      */
     public static void main(String args[]) {
