@@ -374,7 +374,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
 
 
             // Update UI
-            main.updateDepartmentDetails(selectedDepartment);
+            main.showDepartmentDetails(selectedDepartment);
             main.refreshDepartmentTable();
             main.refreshEmployeeTable();
         }

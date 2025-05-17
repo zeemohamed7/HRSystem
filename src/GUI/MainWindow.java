@@ -412,7 +412,7 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Name: showEmployeeDetails
      *
-     * @author Maryam
+     * @author Zahraa
      *
      * Purpose: Populates and displays the employee detail view with data from
      * the given employee object. Updates the UI to show the selected employee's
@@ -426,7 +426,7 @@ public class MainWindow extends javax.swing.JFrame {
      * @throws NumberFormatException if the pay level value cannot be converted
      * to a string.
      */
-    private void showEmployeeDetails(Employee employee) {
+    public void showEmployeeDetails(Employee employee) {
 
         if (employee == null) {
             JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.WARNING_MESSAGE);
@@ -516,7 +516,7 @@ public class MainWindow extends javax.swing.JFrame {
      * Name: showDepartmentDetails Purpose: To populate and display the
      * department detail view with data from the given department object.
      *
-     * @author Maryam
+     * @author Zahraa
      *
      * Input: Department dept - the department whose details are to be
      * displayed.
@@ -526,7 +526,7 @@ public class MainWindow extends javax.swing.JFrame {
      *
      * @param dept The department object containing the details to display.
      */
-    private void showDepartmentDetails(Department dept) {
+    public void showDepartmentDetails(Department dept) {
         selectedDepartment = dept;
 
         if (dept == null) {
@@ -569,11 +569,18 @@ public class MainWindow extends javax.swing.JFrame {
                     int payLevel = employee.getPayLevel();
                     String annualPay = getAnnualPayByLevel(payLevel);
 
-                    employeeDetails.append("ID: ").append(employee.getEmployeeId())
-                            .append(", Name: ").append(employee.getFirstName())
-                            .append(" ").append(employee.getSurname())
-                            .append(", Annual Pay: ").append(annualPay)
-                            .append("\n");
+                employeeDetails.append("ID: ").append(employee.getEmployeeId())
+                        .append(", Name: ").append(employee.getFirstName())
+                        .append(" ").append(employee.getSurname());
+
+                if (employee.isIsHead()) {
+                    employeeDetails.append(" (Head of Department)");
+                }
+
+                employeeDetails.append(", Annual Pay: ").append(annualPay)
+                        .append("\n");
+
+                            
                 }
             }
 
@@ -704,47 +711,6 @@ public class MainWindow extends javax.swing.JFrame {
         refreshEmployeeTable();
     }
 
-    /**
-     * Name: updateEmployeeDetails
-     *
-     * @author Zahraa Purpose/description: Updates the detail page fields with
-     * the provided employee's information. Input: updatedEmployee - the
-     * employee whose details are to be displayed. Output: none Effect: Updates
-     * UI components with employee's name, address, gender, department, and pay
-     * level.
-     *
-     * @param updatedEmployee - Employee object containing updated information.
-     * @return void - this method does not return any value.
-     */
-    public void updateEmployeeDetails(Employee updatedEmployee) {
-        try {
-            if (selectedEmployee != null && selectedEmployee.getEmployeeId() == updatedEmployee.getEmployeeId()) {
-                // Update the displayed information
-                firstNameDetailPage.setText(updatedEmployee.getFirstName());
-                surnameDetailPage.setText(updatedEmployee.getSurname());
-                addressDetailPage.setText(updatedEmployee.getAddress());
-                genderDetailPage.setText(updatedEmployee.getGender() == 'M' ? "Male" : "Female");
-
-                // Find and display the department name
-                String departmentName = "No Department";
-                if (departments != null) {
-                    if (updatedEmployee.getDeptID() != null) {
-                        departmentName = Department.getDepartmentNameById(departments, updatedEmployee.getDeptID());
-                    }
-                }
-
-                departmentDetailPage.setText(departmentName);
-
-                // Update pay level
-                payLevelDetailPage.setText("Level " + Integer.toString(updatedEmployee.getPayLevel()) + " " + getAnnualPayByLevel(updatedEmployee.getPayLevel()));
-            }
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "There was a problem updating the employee details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();  // Optional for debugging
-        }
-    }
 
     /**
      * Name: calculateBiweeklyPay
@@ -780,47 +746,6 @@ public class MainWindow extends javax.swing.JFrame {
         return payLevelSalaries[payLevel] / 26.0;
     }
 
-    /**
-     * Name: updateDepartmentDetails
-     *
-     * @author Zahraa Purpose/description: Updates the department detail fields
-     * with the provided department's information. Input: updatedDepartment -
-     * the department whose details are to be displayed. Output: none Effect:
-     * Updates UI components with department name, ID, location, and department
-     * head.
-     *
-     * @param updatedDepartment - Department object containing updated
-     * information.
-     * @return void - this method does not return any value.
-     */
-    public void updateDepartmentDetails(Department updatedDepartment) {
-        try {
-            if (selectedDepartment != null && selectedDepartment.getDeptID() == updatedDepartment.getDeptID()) {
-                // Update the department name
-                departmentNameDetailPage.setText(updatedDepartment.getName());
-
-                // Update the department ID
-                idDepartmentDetailPage.setText(Integer.toString(updatedDepartment.getDeptID()));
-
-                // Update the department location
-                locationDetailPage.setText(updatedDepartment.getLocation());
-
-                // Update the department head
-                Employee head = updatedDepartment.getDepartmentHead();
-                if (head != null) {
-                    deptHeadDetail.setText(head.getFirstName() + " " + head.getSurname());
-                } else {
-                    deptHeadDetail.setText(null);
-                }
-            }
-
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "There was a problem updating the department details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();  // Optional for debugging
-        }
-    }
 
     /**
      * Name: initSearchListener

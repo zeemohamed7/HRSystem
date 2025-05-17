@@ -521,7 +521,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
 
             
             // Refresh the employee table and detail page
-            main.updateEmployeeDetails(selectedEmployee);
+            main.showEmployeeDetails(selectedEmployee);
             main.refreshEmployeeTable();
             main.refreshDepartmentTable();
         }
