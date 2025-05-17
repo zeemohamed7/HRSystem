@@ -145,7 +145,6 @@ public class MainWindow extends javax.swing.JFrame {
      *
      * @throws FileNotFoundException if "startup.txt" file is missing.
      * @throws NumberFormatException if numeric data in the file is invalid.
-     * @throws IOException if an I/O error occurs while reading the file.
      */
     private void loadFromStartupFile() {
 
@@ -274,139 +273,211 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Name: initialiseEmployeesTable
      *
-     * Purpose: Populates the employees table with current employee data.
+     * Purpose: Populates the employees table with current employee data by 
+     * iterating through the list of employees and adding rows to the table model. 
+     * Handles potential exceptions related to null data, invalid pay levels, 
+     * and invalid gender values.
      *
-     * Input: None Output: None Effect: Updates the employees table model with
-     * rows of employee info.
+     * @throws NullPointerException if any employee data or department information 
+     * is unexpectedly null.
+     * @throws ClassCastException if the gender value is not of the expected type.
+     * @throws NumberFormatException if the pay level value cannot be parsed as an integer.
      */
-    private void initialiseEmployeesTable() {
-        String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Pay"};
 
-        // Create table with model
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+private void initialiseEmployeesTable() {
+    String[] columnNames = {"ID", "Full Name", "Department", "Gender", "Annual Pay"};
 
-        try {
-            // Populate the table with employee data
-            for (Employee emp : allEmployees) {
+    // Create table with model
+    DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) { // Make cell uneditable
+            return false;
+        }
+    };
+
+    try {
+        // Populate the table with employee data
+        for (Employee emp : allEmployees) {
+            try {
                 int id = emp.getEmployeeId();
                 String fullName = emp.getFirstName() + " " + emp.getSurname();
 
                 String department = "No Department";
-                if (emp.getDeptID() != null) {
-                    department = Department.getDepartmentNameById(departments, emp.getDeptID()); // emp.getDeptID() can be null so might throw exception
+                Integer deptID = emp.getDeptID();
+                if (deptID != null) {
+                    try {
+                        department = Department.getDepartmentNameById(departments, deptID);
+                    } catch (NullPointerException e) {
+                        JOptionPane.showMessageDialog(this, "Departments list is null. Cannot resolve department for employee ID: " + id, "Department Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
 
-                char gender = emp.getGender();
-                int payLevel = emp.getPayLevel(); // Assuming payLevel is an integer
+                char gender = 'U';  // Default to 'U' for undefined
+                try {
+                    gender = emp.getGender();
+                } catch (ClassCastException e) {
+                    JOptionPane.showMessageDialog(this, "Invalid gender value for employee ID: " + id + ". Defaulting to 'U'.", "Gender Error", JOptionPane.WARNING_MESSAGE);
+                }
 
-                // Map pay level to annual pay
+                int payLevel = 0;
+                try {
+                    payLevel = emp.getPayLevel();
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Invalid pay level for employee ID: " + id + ". Defaulting to 0.", "Pay Level Error", JOptionPane.WARNING_MESSAGE);
+                }
+
+                // Get annual pay from pay level
                 String annualPay = getAnnualPayByLevel(payLevel);
 
                 // Add the row to the model
                 Object[] row = {id, fullName, department, gender, annualPay};
                 model.addRow(row);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
 
-        // Set model to employees table
-        employeesTable.setModel(model);
-        refreshEmployeeTable();
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(this, "Null data encountered for an employee. Skipping entry.", "Data Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error initializing employee table: " + e.getMessage(), "Initialization Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    /**
-     * Name: initialiseDepartmentsTable
-     *
-     * Purpose: Initializes the department table by setting up column names and
-     * populating the table with department data, including department head
-     * information.
-     *
-     * @throws Exception If an error occurs while accessing the department data.
-     */
-    private void initialiseDepartmentsTable() {
-        String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
+    // Set model to employees table
+    employeesTable.setModel(model);
+    refreshEmployeeTable();
+}
 
-        // Create the table model for departments
-        DefaultTableModel deptModel = new DefaultTableModel(departmentColumnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Make all cells non-editable
-            }
-        };
 
-        try {
-            // Populate table
-            for (Department dept : departments) {
-                deptModel.addRow(new Object[]{
-                    dept.getDeptID(),
-                    dept.getName(),
-                    dept.getLocation(),
-                    dept.getDepartmentHead() != null ? dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname() : "No Head"
-                });
+/**
+ * Name: initialiseDepartmentsTable
+ *
+ * Purpose: Populates the departments table with current department data, 
+ * including department head information. Iterates through the list of 
+ * departments and updates the table model with department details.
+ *
+ * @throws NullPointerException if the departments list or department head data is null.
+ * @throws ClassCastException if the department head is not of the expected type.
+ * @throws Exception if an error occurs while accessing the department data.
+ */
+private void initialiseDepartmentsTable() {
+    String[] departmentColumnNames = {"ID", "Name", "Location", "Department Head"};
 
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error initializing department table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+    // Create the table model for departments
+    DefaultTableModel deptModel = new DefaultTableModel(departmentColumnNames, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
         }
+    };
 
-        departmentsTable.setModel(deptModel);
-        refreshDepartmentTable();
+    try {
+        for (Department dept : departments) {
+            try {
+                Integer deptID = dept.getDeptID();
+                String name = dept.getName();
+                String location = dept.getLocation();
+
+                String departmentHead = "No Head";
+                try {
+                    if (dept.getDepartmentHead() != null) {
+                        departmentHead = dept.getDepartmentHead().getFirstName() + " " + dept.getDepartmentHead().getSurname();
+                    }
+                } catch (NullPointerException e) {
+                    JOptionPane.showMessageDialog(this, "Null department head data for department ID: " + deptID, "Data Error", JOptionPane.ERROR_MESSAGE);
+                } catch (ClassCastException e) {
+                    JOptionPane.showMessageDialog(this, "Invalid data type for department head in department ID: " + deptID, "Data Type Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+                deptModel.addRow(new Object[]{deptID, name, location, departmentHead});
+
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(this, "Null data encountered for a department. Skipping entry.", "Data Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error initializing department table: " + e.getMessage(), "Initialization Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    departmentsTable.setModel(deptModel);
+    refreshDepartmentTable();
+}
+
     /**
-     * Name: showEmployeeDetails Purpose: To populate and display the employee
-     * detail view with data from the given employee object. Input: Employee
-     * employee - the employee whose details are to be displayed. Output: None.
-     * Effect: Updates the UI to show the selected employee's information.
-     *
-     * @param employee The employee object containing the details to display.
-     */
-    private void showEmployeeDetails(Employee employee) {
+ * Name: showEmployeeDetails 
+ * 
+ * Purpose: Populates and displays the employee detail view with data from the given employee object.
+ * Updates the UI to show the selected employee's information.
+ * 
+ * @param employee The employee object containing the details to display.
+ * @throws NullPointerException if the employee object or any of its attributes are null.
+ * @throws ClassCastException if the gender value is not of the expected type.
+ * @throws NumberFormatException if the pay level value cannot be converted to a string.
+ */
+private void showEmployeeDetails(Employee employee) {
 
-        if (employee == null) {
-            JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+    if (employee == null) {
+        JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
-        selectedEmployee = employee;
+    selectedEmployee = employee;
 
-        // Show employee detail page
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, "employeeDetail");
+    // Show employee detail page
+    CardLayout cl = (CardLayout) contentPanel.getLayout();
+    cl.show(contentPanel, "employeeDetail");
+
+    try {
+        // Display data
+        idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
 
         try {
-            // Display data
-            idDetailPage.setText(Integer.toString(employee.getEmployeeId()));
             firstNameDetailPage.setText(employee.getFirstName());
             surnameDetailPage.setText(employee.getSurname());
-            genderDetailPage.setText(employee.getGender() == 'M' ? "Male" : "Female");
-            payLevelDetailPage.setText("Level " + employee.getPayLevel() + " " + getAnnualPayByLevel(employee.getPayLevel()));
-            addressDetailPage.setText(employee.getAddress());
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "Employee name information is missing.", "Data Error", JOptionPane.WARNING_MESSAGE);
+        }
 
+        try {
+            char gender = employee.getGender();
+            genderDetailPage.setText(gender == 'M' ? "Male" : "Female");
+        } catch (ClassCastException e) {
+            JOptionPane.showMessageDialog(this, "Invalid gender value for employee ID: " + employee.getEmployeeId(), "Data Type Error", JOptionPane.WARNING_MESSAGE);
+        }
+
+        try {
+            int payLevel = employee.getPayLevel();
+            String payLevelText = "Level " + payLevel + " " + getAnnualPayByLevel(payLevel);
+            payLevelDetailPage.setText(payLevelText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid pay level value for employee ID: " + employee.getEmployeeId(), "Data Error", JOptionPane.WARNING_MESSAGE);
+        }
+
+        try {
+            addressDetailPage.setText(employee.getAddress());
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "Employee address is missing for employee ID: " + employee.getEmployeeId(), "Data Error", JOptionPane.WARNING_MESSAGE);
+        }
+
+        try {
             String department = "No Department";
             if (employee.getDeptID() != null) {
                 department = Department.getDepartmentNameById(departments, employee.getDeptID());
             }
             departmentDetailPage.setText(department);
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error displaying employee details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "Error retrieving department information for employee ID: " + employee.getEmployeeId(), "Data Error", JOptionPane.WARNING_MESSAGE);
         }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error displaying employee details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
+
 
     /**
      * Name: deleteEmployee
      *
-     * @author Raghad Purpose: Removes a specified employee from the
+     * @author Raghad 
+     * Purpose: Removes a specified employee from the
      * allEmployees list and updates the employee table display.
      *
      * @param employee The Employee object to be removed from the list.
@@ -419,7 +490,8 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * /** Name: deleteDepartment
      *
-     * @author Raghad Purpose/description: Deletes the given department from the
+     * @author Raghad 
+     * Purpose/description: Deletes the given department from the
      * list and refreshes related UI components.
      * @param department - the department object to be removed.
      * @return void - this method does not return any value.
@@ -471,16 +543,6 @@ public class MainWindow extends javax.swing.JFrame {
             } else {
                 deptHeadDetail.setText(null);
             }
-
-//        String headName = null;
-//        System.out.println(headName);
-//        for (Employee employee : allEmployees) {
-//            if (employee.isIsHead() && employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
-//                headName = employee.getFirstName() + " " + employee.getSurname();
-//                break;
-//            }
-//        }
-//        deptHeadDetail.setText(headName);
             // Display employees in the department
             StringBuilder employeeDetails = new StringBuilder();
             boolean hasEmployees = false;
@@ -489,35 +551,7 @@ public class MainWindow extends javax.swing.JFrame {
                 if (employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
                     hasEmployees = true;
                     int payLevel = employee.getPayLevel();
-                    String annualPay = null;
-
-                    //Check Annual Salary
-                    switch (payLevel) {
-                        case 1:
-                            annualPay = "BHD 44,245.75";
-                            break;
-                        case 2:
-                            annualPay = "BHD 48,670.32";
-                            break;
-                        case 3:
-                            annualPay = "BHD 53,537.35";
-                            break;
-                        case 4:
-                            annualPay = "BHD 58,891.09";
-                            break;
-                        case 5:
-                            annualPay = "BHD 64,780.20";
-                            break;
-                        case 6:
-                            annualPay = "BHD 71,258.22";
-                            break;
-                        case 7:
-                            annualPay = "BHD 80,946.95";
-                            break;
-                        case 8:
-                            annualPay = "BHD 96,336.34";
-                            break;
-                    }
+                   String annualPay = getAnnualPayByLevel(payLevel);
 
                     employeeDetails.append("ID: ").append(employee.getEmployeeId())
                             .append(", Name: ").append(employee.getFirstName())
@@ -2004,23 +2038,27 @@ public class MainWindow extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(MainWindow.this, "Username and Password should not be empty!",
                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
         } else {
+try {
+        File file = new File("HRSystem.dat");
+        if (file.exists()) {
+            loadSerializedData();
+        } else {
+            loadFromStartupFile();
+        }
 
-            File file = new File("HRSystem.dat");
-            // check if serialized file exists
-            if (file.exists()) {
-                loadSerializedData();
-            } else {
-                loadFromStartupFile();
-            }
+        initialiseEmployeesTable();
+        initialiseDepartmentsTable();
+        populateDepartmentsComboBox();
 
-            initialiseEmployeesTable();
-            initialiseDepartmentsTable();
-            populateDepartmentsComboBox();
-            
-            // Switch to the dashboard after login
-            CardLayout cl = (CardLayout) MainFrame.getLayout();
-            cl.show(MainFrame, "dashboard");
-            lblUserName.setText(txtUserName.getText());
+        CardLayout cl = (CardLayout) MainFrame.getLayout();
+        cl.show(MainFrame, "dashboard");
+        lblUserName.setText(txtUserName.getText());
+
+    } catch (Exception e) { // loading methods handle specific exceptions
+        JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage(),
+                "Load Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
         }
 
     }//GEN-LAST:event_loginButtonActionPerformed
@@ -2591,7 +2629,7 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
 
-            // Refresh UI
+            // Refresh tables
             refreshEmployeeTable();
             refreshDepartmentTable();
         }
