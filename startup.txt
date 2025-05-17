@@ -1,7 +1,22 @@
-department,1,Human Resources,Dubai
-employee,1,John,Doe,M,123 Elm Street,3,1
-employee,2,Jane,Smith,F,456 Oak Avenue,4,1
-
-department,2,IT,New York
-employee,3,Mark,Twain,M,789 Pine Road,5,2
-employee,4,Alice,Johnson,F,321 Maple Lane,2,2
+2
+Sales
+New York
+2
+John
+Doe
+Male
+123 Elm Street
+5
+Jane
+Smith
+Female
+456 Oak Avenue
+4
+IT
+San Francisco
+1
+Alice
+Johnson
+Female
+789 Pine Road
+6

@@ -23,6 +23,7 @@ import java.io.ObjectOutputStream;
 import javax.swing.JFileChooser;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
@@ -30,9 +31,9 @@ import javax.swing.event.DocumentListener;
 
 /**
  *
- * Name: MainWindow
- * Purpose: It is the primary JFrame for managing employees, departments, and
- * payroll. It handles GUI initialization, data loading, and user interactions.
+ * Name: MainWindow Purpose: It is the primary JFrame for managing employees,
+ * departments, and payroll. It handles GUI initialization, data loading, and
+ * user interactions.
  *
  * @author Zainab
  * @version 1.0
@@ -43,11 +44,9 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     // change these to private later
-
     public static ArrayList<Employee> allEmployees;
     public static ArrayList<Department> departments;
     public static ArrayList<String> payLevels;
-
 
     public static int staticEmployeeID = 0;//Purpose: static variable to create the emploeye ID
     public static int staticDeptID = 0;//Purpose: static variable to create the department ID
@@ -136,44 +135,107 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     /**
-     * Name: deserializeData
+     * Name: loadFromStartupFile
      *
-     * Purpose: Reads and deserializes the data from the "HRSystem.dat" file to
-     * restore the state of all employees, departments, and static IDs.
+     * Purpose: Loads department and employee data from the "startup.txt" file.
+     * Reads the number of departments, each department’s details, the number of
+     * employees per department, and each employee’s details. Populates the
+     * in-memory lists of departments and employees accordingly. Shows a success
+     * message dialog if loading completes without errors.
      *
-     * @throws FileNotFoundException If the "HRSystem.dat" file does not exist.
-     * @throws IOException If an error occurs while reading the file.
-     * @throws ClassNotFoundException If a class in the serialized file cannot
-     * be found.
+     * @throws FileNotFoundException if "startup.txt" file is missing.
+     * @throws NumberFormatException if numeric data in the file is invalid.
+     * @throws IOException if an I/O error occurs while reading the file.
      */
-    public void deserializeData() {
-        try {
-            FileInputStream fileIn = new FileInputStream("HRSystem.dat");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
+    private void loadFromStartupFile() {
 
-            // Read the objects in the same order they were written
-            allEmployees = (ArrayList<Employee>) in.readObject();
-            departments = (ArrayList<Department>) in.readObject();
-            staticEmployeeID = (Integer) in.readObject();
-            staticDeptID = (Integer) in.readObject();
+// * Structure for reference
+// * 1. Number of departments (integer)
+// * 2. For each department:
+// *    - Department name (string)
+// *    - Department location (string)
+// *    - Number of employees in the department (integer)
+// *    - For each employee:
+// *       * First name (string)
+// *       * Surname (string)
+// *       * Gender (string)
+// *       * Address (string)
+// *       * Pay level (integer)
+//         
+        File startupFile = new File("startup.txt");
 
-            in.close();
-            fileIn.close();
+        try (Scanner scanner = new Scanner(startupFile)) {
 
-            System.out.println("Data successfully loaded from HRSystem.dat");
+            // Read number of departments
+            int numDepartments = Integer.parseInt(scanner.nextLine());
+
+            // Read departments info
+            for (int i = 0; i < numDepartments; i++) {
+                String deptName = scanner.nextLine();
+                String deptLocation = scanner.nextLine();
+                Department department = new Department(++staticDeptID, deptName, deptLocation);
+                departments.add(department);
+
+                // Read number of employees in the department
+                int numEmployees = Integer.parseInt(scanner.nextLine());
+
+                for (int j = 0; j < numEmployees; j++) {
+                    // Read employee info
+                    String firstName = scanner.nextLine();
+                    String surname = scanner.nextLine();
+                    char gender = scanner.nextLine().charAt(0); // Stored as char
+                    String address = scanner.nextLine();
+                    int payLevel = Integer.parseInt(scanner.nextLine());
+
+                    // Create employee
+                    Employee employee = new Employee(++staticEmployeeID, firstName, surname, gender, address, payLevel, department.getDeptID());
+                    allEmployees.add(employee);
+                }
+            }
+
+            JOptionPane.showMessageDialog(this, "Data loaded successfully from startup.txt");
 
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(this,
-                    "No saved data found. Starting with a fresh, empty system.",
-                    "Information",
-                    JOptionPane.INFORMATION_MESSAGE);
-            // initializeWithStartupData();
-        } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(this,
-                    "An error occurred while loading saved data. Please try again or contact support.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+              JOptionPane.showMessageDialog(this, "startup.txt file not found.", "File Not Found", JOptionPane.WARNING_MESSAGE);
+          } catch (NumberFormatException e) {
+              JOptionPane.showMessageDialog(this, "Invalid number format in startup.txt.", "Data Error", JOptionPane.ERROR_MESSAGE);
+          }
+    }
+
+    /**
+     * Name: loadSerializedData
+     *
+     * Purpose: Loads the serialized department and employee data from a file
+     * (e.g., "data.ser") and populates the in-memory lists of departments and
+     * employees. Handles file not found, IO, and class not found exceptions.
+     *
+     * @throws IOException if an I/O error occurs while reading the file.
+     * @throws ClassNotFoundException if the serialized class definitions cannot
+     * be found.
+     */
+    private void loadSerializedData() {
+        File file = new File("HRSystem.dat");
+
+        if (!file.exists()) {
+            JOptionPane.showMessageDialog(this, "Serialized data file not found.", "Load Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) { //  try-with-resources, ensures automatic closing
+            allEmployees = (ArrayList<Employee>) ois.readObject();
+            departments = (ArrayList<Department>) ois.readObject();
+            staticEmployeeID = (Integer) ois.readObject();
+            staticDeptID = (Integer) ois.readObject();
+
+            // Update static IDs to avoid duplicates
+            updateStaticEmployeeID();
+            updateStaticDeptID();
+
+            JOptionPane.showMessageDialog(this, "Data loaded successfully from HRSystem.dat", "Load Successful", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error reading serialized data: " + e.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this, "Class not found during deserialization: " + e.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -428,27 +490,35 @@ public class MainWindow extends javax.swing.JFrame {
                     hasEmployees = true;
                     int payLevel = employee.getPayLevel();
                     String annualPay = null;
-                    
+
                     //Check Annual Salary
                     switch (payLevel) {
-                    case 1:
-                        annualPay = "BHD 44,245.75"; break;
-                    case 2:
-                        annualPay =  "BHD 48,670.32"; break;
-                    case 3: 
-                        annualPay = "BHD 53,537.35"; break;
-                    case 4:
-                        annualPay = "BHD 58,891.09"; break;
-                    case 5:
-                        annualPay = "BHD 64,780.20"; break;
-                    case 6:
-                        annualPay = "BHD 71,258.22"; break;
-                    case 7:
-                        annualPay = "BHD 80,946.95"; break;
-                    case 8:
-                        annualPay = "BHD 96,336.34"; break;
-                }
-                    
+                        case 1:
+                            annualPay = "BHD 44,245.75";
+                            break;
+                        case 2:
+                            annualPay = "BHD 48,670.32";
+                            break;
+                        case 3:
+                            annualPay = "BHD 53,537.35";
+                            break;
+                        case 4:
+                            annualPay = "BHD 58,891.09";
+                            break;
+                        case 5:
+                            annualPay = "BHD 64,780.20";
+                            break;
+                        case 6:
+                            annualPay = "BHD 71,258.22";
+                            break;
+                        case 7:
+                            annualPay = "BHD 80,946.95";
+                            break;
+                        case 8:
+                            annualPay = "BHD 96,336.34";
+                            break;
+                    }
+
                     employeeDetails.append("ID: ").append(employee.getEmployeeId())
                             .append(", Name: ").append(employee.getFirstName())
                             .append(" ").append(employee.getSurname())
@@ -718,67 +788,66 @@ public class MainWindow extends javax.swing.JFrame {
 
     // maryam
     /**
-     * Name: searchEmployee 
-     * Purpose: Filters the employee list based on user
+     * Name: searchEmployee Purpose: Filters the employee list based on user
      * input in the search field and updates the display table. Input: None
      * Output: None Effect: Shows matching employees in the table based on first
      * name or surname prefix.
-     * 
+     *
      * @author:
      */
-private void searchEmployee() {
-    String query = searchEmployeesTextField.getText().trim().toLowerCase();
-    ArrayList<Employee> searchResults = new ArrayList<>();
+    private void searchEmployee() {
+        String query = searchEmployeesTextField.getText().trim().toLowerCase();
+        ArrayList<Employee> searchResults = new ArrayList<>();
 
-    if (query.isEmpty()) {
-        // Show all employees if the search field is empty
-        searchResults.addAll(allEmployees);
-    } else {
-        // Split the query by space to handle first name + surname search
-        String[] queryParts = query.split("\\s+");
-        boolean isFullNameQuery = queryParts.length == 2;
+        if (query.isEmpty()) {
+            // Show all employees if the search field is empty
+            searchResults.addAll(allEmployees);
+        } else {
+            // Split the query by space to handle first name + surname search
+            String[] queryParts = query.split("\\s+");
+            boolean isFullNameQuery = queryParts.length == 2;
 
-        for (Employee employee : allEmployees) {
-            String firstName = employee.getFirstName().toLowerCase();
-            String surname = employee.getSurname().toLowerCase();
-            String fullName = firstName + " " + surname;
+            for (Employee employee : allEmployees) {
+                String firstName = employee.getFirstName().toLowerCase();
+                String surname = employee.getSurname().toLowerCase();
+                String fullName = firstName + " " + surname;
 
-            if (isFullNameQuery) {
-                // Full name search
-                if (fullName.startsWith(query)) {
-                    searchResults.add(employee);
-                }
-            } else {
-                // Single word search (either first name or surname)
-                if (firstName.startsWith(query) || surname.startsWith(query)) {
-                    searchResults.add(employee);
+                if (isFullNameQuery) {
+                    // Full name search
+                    if (fullName.startsWith(query)) {
+                        searchResults.add(employee);
+                    }
+                } else {
+                    // Single word search (either first name or surname)
+                    if (firstName.startsWith(query) || surname.startsWith(query)) {
+                        searchResults.add(employee);
+                    }
                 }
             }
         }
+
+        // Clear the current rows
+        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
+        model.setRowCount(0);  // Clears the table
+
+        // Populate the table with the filtered search results
+        for (Employee emp : searchResults) {
+            // Combine first name and surname to create Full Name
+            String fullName = emp.getFirstName().trim() + " " + emp.getSurname().trim();
+            // Handle case where deptID might be null
+            String departmentName = (emp.getDeptID() != null)
+                    ? Department.getDepartmentNameById(departments, emp.getDeptID()) : "No Department";
+
+            // Add the employee details to the table
+            model.addRow(new Object[]{
+                emp.getEmployeeId(), // Assuming you have employee ID
+                fullName, // Full Name (First + Surname)
+                departmentName, // Department
+                emp.getGender(), // Gender
+                getAnnualPayByLevel(emp.getPayLevel()) // Pay Level (Annual Salary)
+            });
+        }
     }
-
-    // Clear the current rows
-    DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
-    model.setRowCount(0);  // Clears the table
-
-    // Populate the table with the filtered search results
-    for (Employee emp : searchResults) {
-        // Combine first name and surname to create Full Name
-        String fullName = emp.getFirstName().trim() + " " + emp.getSurname().trim();
-        // Handle case where deptID might be null
-        String departmentName = (emp.getDeptID() != null) ? 
-            Department.getDepartmentNameById(departments, emp.getDeptID()) : "No Department";
-
-        // Add the employee details to the table
-        model.addRow(new Object[]{
-            emp.getEmployeeId(), // Assuming you have employee ID
-            fullName,            // Full Name (First + Surname)
-            departmentName,      // Department
-            emp.getGender(),     // Gender
-            getAnnualPayByLevel(emp.getPayLevel()) // Pay Level (Annual Salary)
-        });
-    }
-}
 
     /**
      * Name: initDepartmentSearchListener Purpose: Initializes a document
@@ -845,7 +914,7 @@ private void searchEmployee() {
         for (Department dept : searchResults) {
             Employee head = dept.getDepartmentHead(); // Get the department head, if any
             String headName = (head != null) ? head.getFirstName() + " " + head.getSurname() : "No Head";
-            
+
             // Add the employee details to the table
             model.addRow(new Object[]{
                 dept.getDeptID(), //Assuming you have department ID
@@ -855,7 +924,6 @@ private void searchEmployee() {
             });
         }
     }
-
 
     /**
      * Name: generatePayReportButtonActionPerformed Purpose: Stub for future
@@ -869,75 +937,6 @@ private void searchEmployee() {
 
     }
 
-    /**
-     * Name: loadDefaultData Purpose/description: Loads default departments and
-     * employees from the "startup.txt" file. Input: none Output: none Effect:
-     * Initializes the departments and allEmployees lists by reading from the
-     * file. Sets the first employee in each department as the department head.
-     * Displays an error dialog if file reading fails.
-     *
-     * Expected file format ("startup.txt"): - Each line represents either a
-     * department or an employee. - Department line format:
-     * department,<deptID>,<deptName>,<location>
-     * Example: department,1,Finance,Bahrain Tower - Employee line format:
-     * employee,<empID>,<firstName>,<surname>,<gender>,<address>,<payLevel>,<deptID>
-     * Example: employee,101,John,Doe,M,123 Main St,3,1
-     *
-     * @return void - this method does not return any value.
-     */
-    public void loadDefaultData() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("startup.txt"))) {
-            String line;
-            Department currentDepartment = null;
-
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty()) {
-                    continue;
-                }
-
-                // Split line by commas to get data
-                String[] parts = line.split(",");
-
-                // Process department
-                if (parts[0].equalsIgnoreCase("department")) {
-                    int deptID = Integer.parseInt(parts[1]);
-                    String deptName = parts[2];
-                    String location = parts[3];
-
-                    // Create a new department
-                    currentDepartment = new Department(deptID, deptName, location);
-                    departments.add(currentDepartment);
-
-                } // Process employee
-                else if (parts[0].equalsIgnoreCase("employee")) {
-                    int empID = Integer.parseInt(parts[1]);
-                    String firstName = parts[2];
-                    String surname = parts[3];
-                    char gender = parts[4].charAt(0);
-                    String address = parts[5];
-                    int payLevel = Integer.parseInt(parts[6]);
-                    int deptID = Integer.parseInt(parts[7]);
-
-                    // Create new employee
-                    Employee emp = new Employee(empID, firstName, surname, gender, address, payLevel, deptID);
-
-                    // Check if department exists and assign employee to the department
-                    if (currentDepartment != null && currentDepartment.getDeptID() == deptID) {
-                        // Add employee to the allEmployees list
-                        allEmployees.add(emp);
-                    }
-                }
-            }
-            updateStaticEmployeeID();
-            updateStaticDeptID();
-
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(MainWindow.this, "Error loading default data: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-    }
-
     private void updateStaticEmployeeID() {
         int maxID = 0;
         for (Employee emp : allEmployees) {
@@ -945,7 +944,6 @@ private void searchEmployee() {
                 maxID = emp.getEmployeeId();
             }
         }
-        System.out.println(maxID);
         staticEmployeeID = maxID;
     }
 
@@ -984,8 +982,7 @@ private void searchEmployee() {
         jCheckBox1 = new javax.swing.JCheckBox();
         loginButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        jButton2 = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
+        deleteAllData = new javax.swing.JButton();
         DashboardPanel = new javax.swing.JPanel();
         sidemenuPanel = new javax.swing.JPanel();
         employeesButton = new javax.swing.JButton();
@@ -1162,19 +1159,15 @@ private void searchEmployee() {
         LoginPanel.add(loginButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 370, -1, -1));
         LoginPanel.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 400, 318, 5));
 
-        jButton2.setBackground(new java.awt.Color(136, 156, 176));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Load Default Data");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        deleteAllData.setBackground(new java.awt.Color(136, 156, 176));
+        deleteAllData.setForeground(new java.awt.Color(255, 255, 255));
+        deleteAllData.setText("Delete Previous Data");
+        deleteAllData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                deleteAllDataActionPerformed(evt);
             }
         });
-        LoginPanel.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, -1, -1));
-
-        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 0, 8)); // NOI18N
-        jLabel6.setText("Initialize the system with sample data from startup file");
-        LoginPanel.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 450, -1, 17));
+        LoginPanel.add(deleteAllData, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, -1, -1));
 
         MainFrame.add(LoginPanel, "login");
 
@@ -2011,19 +2004,25 @@ private void searchEmployee() {
             JOptionPane.showMessageDialog(MainWindow.this, "Username and Password should not be empty!",
                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
         } else {
-            // If default data isn't loaded, use data from HRSystem.dat
-            if (!isDefaultDataLoaded) {// default not loaded
-                deserializeData();
+
+            File file = new File("HRSystem.dat");
+            // check if serialized file exists
+            if (file.exists()) {
+                loadSerializedData();
+            } else {
+                loadFromStartupFile();
             }
+
             initialiseEmployeesTable();
             initialiseDepartmentsTable();
-            // Switch to the dashboard screen after successful login
+            populateDepartmentsComboBox();
+            
+            // Switch to the dashboard after login
             CardLayout cl = (CardLayout) MainFrame.getLayout();
             cl.show(MainFrame, "dashboard");
             lblUserName.setText(txtUserName.getText());
         }
 
-        populateDepartmentsComboBox();
     }//GEN-LAST:event_loginButtonActionPerformed
     /**
      * Name: employeesButtonActionPerformed Purpose: This method switches the
@@ -2665,39 +2664,40 @@ private void searchEmployee() {
     }//GEN-LAST:event_payLevelDetailPageActionPerformed
 
     /**
-     * Name: jButton2ActionPerformed Purpose/description: Handles the action
-     * when the button is clicked to load default data. Clears existing employee
-     * and department data, loads default data from file, and notifies the user
-     * upon successful loading. Input: evt - the action event triggered by the
-     * button click. Output: none Effect: Clears current employees and
-     * departments lists, loads new data from "startup.txt", sets the flag
-     * isDefaultDataLoaded to true, and displays a success message.
-     *
-     * @param evt - the action event triggered by the button click.
-     * @return void - this method does not return any value.
-     */
+    * Name: deleteAllDataActionPerformed
+    *
+    * Purpose: Handles the action when the delete button is clicked to remove all saved data.
+    *          It attempts to delete the serialized data file "HRSystem.dat". If deletion is
+    *          successful, it also clears the current employee and department lists.
+    *          The user is notified of the result through message dialogs.
+    *
+    * @param evt The ActionEvent triggered by the button click.
+    * @return void This method does not return any value.
+    */
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void deleteAllDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAllDataActionPerformed
         // TODO add your handling code here:
-        // Clear the current data before loading default data
-
-        allEmployees.clear();
-        departments.clear();
-
-        // Load data from startup.txt
-        loadDefaultData();
-        isDefaultDataLoaded = true;
-
-        // Optionally, show a message dialog to inform the user
-        JOptionPane.showMessageDialog(MainWindow.this, "Default data loaded successfully!",
-                "Success", JOptionPane.INFORMATION_MESSAGE);
-
-    }//GEN-LAST:event_jButton2ActionPerformed
+        // Clear and delete the serialised file 
+        File file = new File("HRSystem.dat");
+            if (file.exists()) {
+                if (file.delete()) {
+                    JOptionPane.showMessageDialog(null, "Data file deleted successfully.");
+                    allEmployees.clear();
+                    departments.clear();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to delete data file.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Data file does not exist.", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+   
+    }//GEN-LAST:event_deleteAllDataActionPerformed
 
     /**
      * Name: main
      *
-     * @author Zainab Purpose/description: The main entry point to launch the
+     * @author Zainab 
+     * Purpose/description: The main entry point to launch the
      * GUI application. Input: args - command line arguments. Output: none
      * Effect: Initializes and shows the main GUI form.
      * @param args - command line arguments.
@@ -2747,6 +2747,7 @@ private void searchEmployee() {
     private javax.swing.JButton cancelButton3;
     private javax.swing.JButton confirmDeleteButton;
     private javax.swing.JPanel contentPanel;
+    private javax.swing.JButton deleteAllData;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton deleteButton1;
     private javax.swing.JTextField departmentDetailPage;
@@ -2772,7 +2773,6 @@ private void searchEmployee() {
     private javax.swing.JTextField idDepartmentDetailPage;
     private javax.swing.JTextField idDetailPage;
     private javax.swing.JPanel imageDepartmentPanel;
-    private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -2797,7 +2797,6 @@ private void searchEmployee() {
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
