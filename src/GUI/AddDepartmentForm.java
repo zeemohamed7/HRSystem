@@ -220,7 +220,7 @@ public class AddDepartmentForm extends javax.swing.JFrame {
             }
             
             //Validate input is only strings
-            if (!departmentName.matches("[a-zA-Z]+")) {
+            if (!departmentName.matches("[a-zA-Z ]+")) {
                 JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 departmentNameField.requestFocus();
                 return;
@@ -233,7 +233,7 @@ public class AddDepartmentForm extends javax.swing.JFrame {
             }
             
             //Validate input is only strings
-            if (!location.matches("[a-zA-Z]+")) {
+            if (!location.matches("[a-zA-Z ]+")) {
                 JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 locationField.requestFocus();
                 return;
