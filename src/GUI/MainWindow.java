@@ -164,7 +164,7 @@ public class MainWindow extends javax.swing.JFrame {
 //         
         File startupFile = new File("startup.txt");
 
-        try (Scanner scanner = new Scanner(startupFile)) {
+        try (Scanner scanner = new Scanner(startupFile)) { 
 
             // Read number of departments
             int numDepartments = Integer.parseInt(scanner.nextLine());
