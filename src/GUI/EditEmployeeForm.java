@@ -486,14 +486,14 @@ public class EditEmployeeForm extends javax.swing.JFrame {
         }
         
         //Validate input is only strings
-            if (!firstName.matches("[a-zA-Z]+")) {
+            if (!firstName.matches("[a-zA-Z ]+")) {
                 JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 firstNameEditField.requestFocus();
                 return;
             }  
             
         //Validate input is only strings
-            if (!surname.matches("[a-zA-Z]+")) {
+            if (!surname.matches("[a-zA-Z ]+")) {
                 JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 lastNameEditField.requestFocus();
                 return;
