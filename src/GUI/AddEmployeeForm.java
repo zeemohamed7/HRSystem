@@ -318,7 +318,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
             }
             
             //Validate input is only strings
-            if (!firstName.matches("[a-zA-Z ]+")) {
+            if (!firstName.matches("[a-zA-Z]+")) {
                 JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 firstNameField1.requestFocus();
                 return;
@@ -332,7 +332,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
             }
             
             //Validate input is only strings
-            if (!lastName.matches("[a-zA-Z ]+")) {
+            if (!lastName.matches("[a-zA-Z]+")) {
                 JOptionPane.showMessageDialog(this, "Please enter only letters.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 lastNameField1.requestFocus();
                 return;
