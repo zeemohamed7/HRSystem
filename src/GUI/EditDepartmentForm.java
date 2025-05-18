@@ -149,6 +149,8 @@ public class EditDepartmentForm extends javax.swing.JFrame {
             }
         });
 
+        cancelButton2.setBackground(new java.awt.Color(102, 102, 102));
+        cancelButton2.setForeground(new java.awt.Color(255, 255, 255));
         cancelButton2.setText("Cancel");
         cancelButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,6 +158,8 @@ public class EditDepartmentForm extends javax.swing.JFrame {
             }
         });
 
+        editDepartmentSaveButton.setBackground(new java.awt.Color(0, 51, 102));
+        editDepartmentSaveButton.setForeground(new java.awt.Color(255, 255, 255));
         editDepartmentSaveButton.setText("Save Changes");
         editDepartmentSaveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

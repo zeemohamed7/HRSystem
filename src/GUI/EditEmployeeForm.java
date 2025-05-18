@@ -228,6 +228,8 @@ public class EditEmployeeForm extends javax.swing.JFrame {
             }
         });
 
+        cancelButton1.setBackground(new java.awt.Color(102, 102, 102));
+        cancelButton1.setForeground(new java.awt.Color(255, 255, 255));
         cancelButton1.setText("Cancel");
         cancelButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -279,6 +281,8 @@ public class EditEmployeeForm extends javax.swing.JFrame {
 
         jLabel21.setText("Address");
 
+        saveEditButton.setBackground(new java.awt.Color(0, 51, 102));
+        saveEditButton.setForeground(new java.awt.Color(255, 255, 255));
         saveEditButton.setText("Save Changes");
         saveEditButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

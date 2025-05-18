@@ -84,6 +84,7 @@ public class AddDepartmentForm extends javax.swing.JFrame {
         addDepartmentConfirmButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 0, 51));
 
         jLabel9.setText("Department Name");
 
@@ -101,6 +102,8 @@ public class AddDepartmentForm extends javax.swing.JFrame {
             }
         });
 
+        cancelButton2.setBackground(new java.awt.Color(102, 102, 102));
+        cancelButton2.setForeground(new java.awt.Color(255, 255, 255));
         cancelButton2.setText("Cancel");
         cancelButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,6 +111,8 @@ public class AddDepartmentForm extends javax.swing.JFrame {
             }
         });
 
+        addDepartmentConfirmButton.setBackground(new java.awt.Color(0, 51, 102));
+        addDepartmentConfirmButton.setForeground(new java.awt.Color(255, 255, 255));
         addDepartmentConfirmButton.setText("Add Department");
         addDepartmentConfirmButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
