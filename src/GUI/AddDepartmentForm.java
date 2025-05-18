@@ -158,8 +158,9 @@ public class AddDepartmentForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
- /**
+    /**
      * Name: departmentNameFieldActionPerformed
+     * @author Raghad
      *
      * Event handler for the departmentNameField action event.
      *
@@ -173,6 +174,7 @@ public class AddDepartmentForm extends javax.swing.JFrame {
     }//GEN-LAST:event_departmentNameFieldActionPerformed
     /**
      * Name: locationFieldActionPerformed
+     * @author Zainab
      *
      * Event handler for the locationField action event.
      *
@@ -186,6 +188,7 @@ public class AddDepartmentForm extends javax.swing.JFrame {
     }//GEN-LAST:event_locationFieldActionPerformed
     /**
      * Name: cancelButton2ActionPerformed
+     * @author Zahraa
      *
      * Event handler for the Cancel button.
      *
@@ -202,6 +205,7 @@ public class AddDepartmentForm extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButton2ActionPerformed
     /**
      * Name: addDepartmentConfirmButtonActionPerformed
+     * @author Zainab
      *
      * Event handler for the Add Department confirmation button.
      *
