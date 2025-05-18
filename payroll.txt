@@ -1,25 +1,57 @@
-Department: Human Resources
+Department: Finance
+-----------------------------------
+Employee ID: 8
+Name: Maryam Sharaf
+2-Week Pay: BHD 2740.70
+
+Employee ID: 9
+Name: Dennis Manning
+2-Week Pay: BHD 3115.38
+
+Department Total: BHD 5856.09
+
+Department: HR
+-----------------------------------
+Employee ID: 4
+Name: Zainab Mohamed
+2-Week Pay: BHD 3115.38
+
+Employee ID: 5
+Name: Zahraa Hubail
+2-Week Pay: BHD 2769.23
+
+Department Total: BHD 5884.62
+
+Department: IT
+-----------------------------------
+Employee ID: 3
+Name: Alice Johnson
+2-Week Pay: BHD 2740.70
+
+Department Total: BHD 2740.70
+
+Department: Marketing
+-----------------------------------
+Employee ID: 6
+Name: Hajar Aljafen
+2-Week Pay: BHD 3115.38
+
+Employee ID: 7
+Name: Raghad Aleskafi
+2-Week Pay: BHD 2769.23
+
+Department Total: BHD 5884.62
+
+Department: Sales
 -----------------------------------
 Employee ID: 1
 Name: John Doe
-2-Week Pay: BHD 2423.08
+2-Week Pay: BHD 3115.38
 
 Employee ID: 2
 Name: Jane Smith
 2-Week Pay: BHD 2769.23
 
-Department Total: BHD 5192.31
+Department Total: BHD 5884.62
 
-Department: IT
------------------------------------
-Employee ID: 3
-Name: Mark Twain
-2-Week Pay: BHD 3115.38
-
-Employee ID: 4
-Name: Alice Johnson
-2-Week Pay: BHD 2076.92
-
-Department Total: BHD 5192.31
-
-COMPANY TOTAL: BHD 10384.62
+COMPANY TOTAL: BHD 26250.63

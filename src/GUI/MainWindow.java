@@ -562,23 +562,25 @@ public class MainWindow extends javax.swing.JFrame {
             // Display employees in the department
             StringBuilder employeeDetails = new StringBuilder();
             boolean hasEmployees = false;
+            int counter = 0;
 
             for (Employee employee : allEmployees) {
                 if (employee.getDeptID() != null && employee.getDeptID() == dept.getDeptID()) {
                     hasEmployees = true;
                     int payLevel = employee.getPayLevel();
                     String annualPay = getAnnualPayByLevel(payLevel);
-
-                employeeDetails.append("ID: ").append(employee.getEmployeeId())
-                        .append(", Name: ").append(employee.getFirstName())
+                    counter++;
+                    
+                employeeDetails.append("Employee " + counter).append("\nID: ").append(employee.getEmployeeId())
+                        .append("\nName: ").append(employee.getFirstName())
                         .append(" ").append(employee.getSurname());
 
                 if (employee.isIsHead()) {
                     employeeDetails.append(" (Head of Department)");
                 }
 
-                employeeDetails.append(", Annual Pay: ").append(annualPay)
-                        .append("\n");
+                employeeDetails.append("\nAnnual Pay: ").append(annualPay)
+                        .append("\n\n");
 
                             
                 }
