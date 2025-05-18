@@ -750,7 +750,8 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Name: initSearchListener
      *
-     * @author Maryam Purpose: Initializes a document listener on the employee
+     * @author Maryam 
+     * Purpose: Initializes a document listener on the employee
      * search text field to enable real-time search functionality as the user
      * types characters. Input: None Output: None Effect: Attaches listeners to
      * the text field that trigger employee search logic
@@ -778,7 +779,7 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Name: searchEmployee
      *
-     * @author Maryam Purpose: Filters the employee list based on user input in
+     * @author Hajar & Maryam Purpose: Filters the employee list based on user input in
      * the search field and updates the display table. Input: None Output: None
      * Effect: Shows matching employees in the table based on first name or
      * surname prefix.
@@ -882,8 +883,12 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Name: searchDepartments
      *
-     * @author Maryam Purpose: Filters the department list based on user input
-     * in the search field and updates the display table. Input: None Output:
+     * @author Hajar & Maryam 
+     * 
+     * Purpose: Filters the department list based on user input
+     * in the search field and updates the display table. 
+     * Input: None 
+     * Output:
      * None Effect: Displays departments whose ID, name, location, or department
      * head's name matches the user's query (case-insensitive).
      *
@@ -1194,13 +1199,13 @@ public class MainWindow extends javax.swing.JFrame {
 
         deleteAllData.setBackground(new java.awt.Color(136, 156, 176));
         deleteAllData.setForeground(new java.awt.Color(255, 255, 255));
-        deleteAllData.setText("Delete Previous Data");
+        deleteAllData.setText("Clean Start");
         deleteAllData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteAllDataActionPerformed(evt);
             }
         });
-        LoginPanel.add(deleteAllData, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, -1, -1));
+        LoginPanel.add(deleteAllData, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, -1, -1));
 
         MainFrame.add(LoginPanel, "login");
 
