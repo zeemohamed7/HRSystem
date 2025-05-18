@@ -251,6 +251,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
     /**
      * Handles action performed when the location field changes.
      * 
+     * @author Mariam
      * Name: locationFieldActionPerformed
      * Purpose: Placeholder for actions when location input is changed.
      * Input: evt - the ActionEvent triggered
@@ -265,6 +266,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
     /**
      * Handles action when the Cancel button is clicked.
      * 
+     * @author Zahraa
      * Name: cancelButton2ActionPerformed
      * Purpose: Closes the edit form without saving changes.
      * Input: evt - the ActionEvent triggered by Cancel button
@@ -282,6 +284,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
      * Handles action when the Save Changes button is clicked.
      * Validates input, updates department details, updates head employee's status, and refreshes the UI.
      * 
+     * @author zainab
      * Name: editDepartmentSaveButtonActionPerformed
      * Purpose: Saves the updated department data and reflects changes in the main window.
      * Input: evt - the ActionEvent triggered by Save Changes button
@@ -406,6 +409,7 @@ public class EditDepartmentForm extends javax.swing.JFrame {
     /**
      * Handles action when the department head selection changes.
      * 
+     * @author zainab
      * Name: departmentHeadSelectActionPerformed
      * Purpose: Placeholder for actions when department head selection changes.
      * Input: evt - the ActionEvent triggered

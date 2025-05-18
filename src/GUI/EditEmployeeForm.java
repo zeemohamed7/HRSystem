@@ -94,6 +94,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
     }
     /**
      * Name: populateDepartmentsComboBox
+     * @author Hajar
      * Purpose:
      * Populates the department combo box with all departments available from the main window.
      * Adds a "No Department" option for employees without a department.
@@ -178,6 +179,7 @@ public class EditEmployeeForm extends javax.swing.JFrame {
 
     /**
      * Name: populatePayLevelComboBox
+     * @author Raghad
      * Purpose:
      * Populates the pay level combo box with predefined salary levels.
      * 
