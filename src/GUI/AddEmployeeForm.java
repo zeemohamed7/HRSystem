@@ -110,11 +110,14 @@ public class AddEmployeeForm extends javax.swing.JFrame {
         addEmployeeConfirmButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 0, 51));
 
         jLabel22.setText("First Name");
 
         departmentForEmployeeCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select department", "Item 2", "Item 3", "Item 4" }));
 
+        cancelEmployeeFormButton.setBackground(new java.awt.Color(102, 102, 102));
+        cancelEmployeeFormButton.setForeground(new java.awt.Color(255, 255, 255));
         cancelEmployeeFormButton.setText("Cancel");
         cancelEmployeeFormButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,6 +169,8 @@ public class AddEmployeeForm extends javax.swing.JFrame {
 
         jLabel21.setText("Address");
 
+        addEmployeeConfirmButton1.setBackground(new java.awt.Color(0, 51, 102));
+        addEmployeeConfirmButton1.setForeground(new java.awt.Color(255, 255, 255));
         addEmployeeConfirmButton1.setText("Add Employee");
         addEmployeeConfirmButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -1135,6 +1135,7 @@ public class MainWindow extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(250, 244, 222));
 
         MainFrame.setPreferredSize(new java.awt.Dimension(1380, 1000));
         MainFrame.setLayout(new java.awt.CardLayout());
@@ -1211,6 +1212,12 @@ public class MainWindow extends javax.swing.JFrame {
 
         MainFrame.add(LoginPanel, "login");
 
+        DashboardPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        sidemenuPanel.setBackground(new java.awt.Color(0, 51, 102));
+
+        employeesButton.setBackground(new java.awt.Color(136, 156, 176));
+        employeesButton.setForeground(new java.awt.Color(255, 255, 255));
         employeesButton.setText("Employees");
         employeesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1218,6 +1225,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        departmentsButton.setBackground(new java.awt.Color(136, 156, 176));
+        departmentsButton.setForeground(new java.awt.Color(255, 255, 255));
         departmentsButton.setText("Departments");
         departmentsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1225,6 +1234,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        payrollReportButton.setBackground(new java.awt.Color(136, 156, 176));
+        payrollReportButton.setForeground(new java.awt.Color(255, 255, 255));
         payrollReportButton.setText("Payroll Report");
         payrollReportButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1232,6 +1243,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        exitButton.setBackground(new java.awt.Color(102, 102, 102));
+        exitButton.setForeground(new java.awt.Color(255, 255, 255));
         exitButton.setText("Exit");
         exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1266,9 +1279,13 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(322, Short.MAX_VALUE))
         );
 
+        headerPanel.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel7.setText("HRConnect");
 
         lblUserName.setText("John Doe");
+
+        logoPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout logoPanelLayout = new javax.swing.GroupLayout(logoPanel);
         logoPanel.setLayout(logoPanelLayout);
@@ -1310,6 +1327,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         contentPanel.setLayout(new java.awt.CardLayout());
 
+        employeesPanel.setBackground(new java.awt.Color(255, 255, 255));
+
         searchEmployeesTextField.setText("Search Employees..");
         searchEmployeesTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -1334,6 +1353,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
 
+        paginationPanel.setBackground(new java.awt.Color(255, 255, 255));
+
         javax.swing.GroupLayout paginationPanelLayout = new javax.swing.GroupLayout(paginationPanel);
         paginationPanel.setLayout(paginationPanelLayout);
         paginationPanelLayout.setHorizontalGroup(
@@ -1348,6 +1369,8 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel17.setText("Employee Detail");
 
+        editEmployeeButton.setBackground(new java.awt.Color(0, 51, 102));
+        editEmployeeButton.setForeground(new java.awt.Color(255, 255, 255));
         editEmployeeButton.setText("Edit");
         editEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1355,6 +1378,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        deleteButton.setBackground(new java.awt.Color(102, 0, 0));
+        deleteButton.setForeground(new java.awt.Color(255, 255, 255));
         deleteButton.setText("Delete");
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1493,6 +1518,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
+        backToEmployeesButton.setBackground(new java.awt.Color(102, 102, 102));
+        backToEmployeesButton.setForeground(new java.awt.Color(255, 255, 255));
         backToEmployeesButton.setText("Back to list");
         backToEmployeesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1540,6 +1567,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        addEmployeeButton.setBackground(new java.awt.Color(0, 51, 102));
+        addEmployeeButton.setForeground(new java.awt.Color(255, 255, 255));
         addEmployeeButton.setText("+ Add Employee");
         addEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1609,6 +1638,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         contentPanel.add(employeesPanel, "card4");
 
+        departmentsPanel.setBackground(new java.awt.Color(255, 255, 255));
+
         searchDepartmentsField.setText("Search Departments..");
         searchDepartmentsField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -1642,6 +1673,8 @@ public class MainWindow extends javax.swing.JFrame {
             departmentsTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
+        addDepartmentButton.setBackground(new java.awt.Color(0, 51, 102));
+        addDepartmentButton.setForeground(new java.awt.Color(255, 255, 255));
         addDepartmentButton.setText("+ Add Department");
         addDepartmentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1654,6 +1687,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
 
+        paginationPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
         javax.swing.GroupLayout paginationPanel1Layout = new javax.swing.GroupLayout(paginationPanel1);
         paginationPanel1.setLayout(paginationPanel1Layout);
         paginationPanel1Layout.setHorizontalGroup(
@@ -1665,6 +1700,8 @@ public class MainWindow extends javax.swing.JFrame {
             .addGap(0, 45, Short.MAX_VALUE)
         );
 
+        backToDepartmentsButton.setBackground(new java.awt.Color(102, 102, 102));
+        backToDepartmentsButton.setForeground(new java.awt.Color(255, 255, 255));
         backToDepartmentsButton.setText("Back to list");
         backToDepartmentsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1672,6 +1709,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        editDepartmentButton.setBackground(new java.awt.Color(0, 51, 102));
+        editDepartmentButton.setForeground(new java.awt.Color(255, 255, 255));
         editDepartmentButton.setText("Edit");
         editDepartmentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1679,6 +1718,8 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        deleteButton1.setBackground(new java.awt.Color(102, 0, 0));
+        deleteButton1.setForeground(new java.awt.Color(255, 255, 255));
         deleteButton1.setText("Delete");
         deleteButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1858,15 +1899,21 @@ public class MainWindow extends javax.swing.JFrame {
 
         contentPanel.add(departmentsPanel, "card4");
 
+        payrollPanel.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel36.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel36.setText("Payroll Report");
 
+        generateReportButton.setBackground(new java.awt.Color(0, 51, 102));
+        generateReportButton.setForeground(new java.awt.Color(255, 255, 255));
         generateReportButton.setText("Generate Report");
         generateReportButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateReportButtonActionPerformed(evt);
             }
         });
+
+        reportPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         jScrollPane4.setViewportView(reportTextPane);
 
