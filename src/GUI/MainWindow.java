@@ -793,24 +793,36 @@ public class MainWindow extends javax.swing.JFrame {
             // Show all employees if the search field is empty
             searchResults.addAll(allEmployees);
         } else {
-            // Split the query by space to handle first name + surname search
-            String[] queryParts = query.split("\\s+");
-            boolean isFullNameQuery = queryParts.length == 2;
-
-            for (Employee employee : allEmployees) {
-                String firstName = employee.getFirstName().toLowerCase();
-                String surname = employee.getSurname().toLowerCase();
-                String fullName = firstName + " " + surname;
-
-                if (isFullNameQuery) {
-                    // Full name search
-                    if (fullName.startsWith(query)) {
-                        searchResults.add(employee);
+            // First try to search by ID
+            try {
+                int employeeId = Integer.parseInt(query);
+                for (Employee emp : allEmployees) {
+                    if (emp.getEmployeeId() == employeeId) {
+                        searchResults.add(emp);
+                        break; // Stop searching once the ID match is found
                     }
-                } else {
-                    // Single word search (either first name or surname)
-                    if (firstName.startsWith(query) || surname.startsWith(query)) {
-                        searchResults.add(employee);
+                }
+            } catch (NumberFormatException e) {
+                // If not a number, search by name
+                // Split the query by space to handle first name + surname search
+                String[] queryParts = query.split("\\s+");
+                boolean isFullNameQuery = queryParts.length == 2;
+
+                for (Employee employee : allEmployees) {
+                    String firstName = employee.getFirstName().toLowerCase();
+                    String surname = employee.getSurname().toLowerCase();
+                    String fullName = firstName + " " + surname;
+
+                    if (isFullNameQuery) {
+                        // Full name search
+                        if (fullName.startsWith(query)) {
+                            searchResults.add(employee);
+                        }
+                    } else {
+                        // Single word search (either first name or surname)
+                        if (firstName.startsWith(query) || surname.startsWith(query)) {
+                            searchResults.add(employee);
+                        }
                     }
                 }
             }
@@ -878,21 +890,29 @@ public class MainWindow extends javax.swing.JFrame {
      * @author:
      */
     private void searchDepartment() {
-        // Get the user input from the search field, trim spaces, and convert to lowercase for case-insensitive matching
         String query = searchDepartmentsField.getText().trim().toLowerCase();
-
-        // Create a list to hold the departments that match the search query
         ArrayList<Department> searchResults = new ArrayList<>();
 
         if (query.isEmpty()) {
-            // If the search query is empty, add all departments to the search results (show all)
+            // If the search query is empty, show all departments
             searchResults.addAll(departments);
         } else {
-            // Otherwise, filter departments whose names start with the query text (case-insensitive)
-            for (Department dept : departments) {
-                String deptName = dept.getName().toLowerCase();
-                if (deptName.startsWith(query)) {
-                    searchResults.add(dept);
+            // First try to search by ID
+            try {
+                int deptId = Integer.parseInt(query);
+                for (Department dept : departments) {
+                    if (dept.getDeptID() == deptId) {
+                        searchResults.add(dept);
+                        break; // Stop searching once the ID match is found
+                    }
+                }
+            } catch (NumberFormatException e) {
+                // If not a number, search by name
+                for (Department dept : departments) {
+                    String deptName = dept.getName().toLowerCase();
+                    if (deptName.startsWith(query)) {
+                        searchResults.add(dept);
+                    }
                 }
             }
         }
