@@ -462,8 +462,6 @@ public class EditEmployeeForm extends javax.swing.JFrame {
                     }
                 
                         deptID = dept.getDeptID();
-
-
             }
         }
 
