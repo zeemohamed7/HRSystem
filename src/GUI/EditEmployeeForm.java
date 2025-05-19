@@ -453,18 +453,16 @@ public class EditEmployeeForm extends javax.swing.JFrame {
             return;
         }
         
-        if (selectedDepartment != null && !selectedDepartment.equals("No Department")) {
+        else if (!selectedDepartment.equals("No Department")) {
             for (Department dept : departments) {
                 
-                if(selectedEmployee.isIsHead() && selectedEmployee.getDeptID() != dept.getDeptID() && !dept.getName().equals(selectedDepartment)) {
+                if(selectedEmployee.isIsHead() && selectedEmployee.getDeptID() != dept.getDeptID() && dept.getName().equals(selectedDepartment)) {
                         JOptionPane.showMessageDialog(this, "Cannot change employee's department.\nEmployee is a head of a department", "Input Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 
-                else if (dept.getName().equals(selectedDepartment)) {
                         deptID = dept.getDeptID();
-                        break;
-                    }
+
 
             }
         }
