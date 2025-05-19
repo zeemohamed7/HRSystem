@@ -36,7 +36,6 @@ import javax.swing.Timer;
  * Effect: Allows users to update employee information through an interactive
  * form interface. user-friendly form.
  */
-
 public class EditEmployeeForm extends javax.swing.JFrame {
 
     private Employee selectedEmployee; //Purpose: The employee currently selected for editing
@@ -560,7 +559,9 @@ public class EditEmployeeForm extends javax.swing.JFrame {
     }//GEN-LAST:event_payLevelEditComboActionPerformed
 
     /**
-     * @param args the command line arguments
+     * The main method that serves as the entry point of the application.
+     *
+     * @param args the command-line arguments passed to the program
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

@@ -10,9 +10,9 @@ import java.util.ArrayList;
 /**
  *
  * Name: Department
+ *
  * @author Zainab
- * @version 1.0 
- * Purpose: Represents a department within the organization,
+ * @version 1.0 Purpose: Represents a department within the organization,
  * including its ID, name, location, and optionally its head employee.
  */
 public class Department implements Serializable {
@@ -33,9 +33,12 @@ public class Department implements Serializable {
      * Name: Department Purpose: Constructor to create a department without
      * assigning a head
      *
+     * @param staticDeptID - auto-generated department ID
      * @param name - the name of the department
-     * @param location - the location of the department Effect: Initializes
-     * department with name and location, assigns auto-generated ID
+     * @param location - the location of the department
+     *
+     * Effect: Initializes department with name and location, assigns
+     * auto-generated ID
      */
     public Department(int staticDeptID, String name, String location) {
         this.deptID = staticDeptID;
@@ -44,6 +47,8 @@ public class Department implements Serializable {
     }
 
     /**
+     * Retrieves the unique ID of this department.
+     *
      * @return the unique department ID
      */
     public int getDeptID() {
@@ -51,6 +56,8 @@ public class Department implements Serializable {
     }
 
     /**
+     * Retrieves the name of this department.
+     *
      * @return the name of the department
      */
     public String getName() {
@@ -58,61 +65,74 @@ public class Department implements Serializable {
     }
 
     /**
-     * @param name - new name to set for the department Effect: Updates the
-     * department name
+     * Sets a new name for the department.
+     *
+     * @param name the new name to set for the department (e.g., "Human
+     * Resources", "Finance")
+     *
+     * Effect: Updates the department's name field.
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * @return the location of the department
+     * Returns the location of the department.
+     *
+     * @return the department's location
      */
     public String getLocation() {
         return location;
     }
 
     /**
-     * @param location - new location to set for the department Effect: Updates
-     * the department location
+     * Sets a new location for the department.
+     *
+     * @param location the new location to assign to the department
+     *
+     * Effect: Updates the department's location field.
      */
     public void setLocation(String location) {
         this.location = location;
     }
 
     /**
-     * @return the current head of the department
+     * Returns the current head of the department.
+     *
+     * @return the department head (an Employee object)
      */
     public Employee getDepartmentHead() {
         return departmentHead;
     }
 
     /**
-     * @param departmentHead - employee to assign as department head Effect:
-     * Updates the department head
+     * Assigns a new employee as the head of the department.
+     *
+     * @param departmentHead the employee to assign as department head
+     *
+     * Effect: Updates the department head field.
      */
-
     public void setDepartmentHead(Employee departmentHead) {
         this.departmentHead = departmentHead;
     }
 
     /**
-     * Name: toString Purpose: Returns the name of the department for display
+     * Returns the name of the department for display purposes.
      *
-     * @return department name if deptID is not 0; otherwise, "Select
-     * Department"
+     * @return the department name if deptID is not 0; otherwise, returns
+     * "Select Department"
      */
     @Override
     public String toString() {
-        return (deptID == 0) ? "Select Department" : name; //  makes jcombo display the department name
+        return (deptID == 0) ? "Select Department" : name;
     }
 
     /**
-     * Name: getDepartmentNameById Purpose: Looks up department name by its ID
+     * Looks up the name of a department by its ID.
      *
-     * @param departments - list of all departments
-     * @param deptId - the department ID to search for
-     * @return the name of the department if found, else "No Department"
+     * @param departments the list of all departments
+     * @param deptId the ID of the department to search for
+     * @return the department name if found, otherwise "No Department"
      */
     public static String getDepartmentNameById(ArrayList<Department> departments, int deptId) {
         for (Department dept : departments) {
@@ -124,12 +144,11 @@ public class Department implements Serializable {
     }
 
     /**
-     * Name: findDepartmentIndexById Purpose: Finds index of a department by ID
-     * in the list
+     * Finds the index of a department by its ID in the list.
      *
-     * @param departments - list of all departments
-     * @param deptId - the department ID to find
-     * @return index of the department if found, else 0
+     * @param departments the list of all departments
+     * @param deptId the ID of the department to find
+     * @return the index of the department if found, otherwise 0
      */
     public static int findDepartmentIndexById(ArrayList<Department> departments, int deptId) {
         for (int i = 0; i < departments.size(); i++) {
@@ -141,12 +160,11 @@ public class Department implements Serializable {
     }
 
     /**
-     * Name: getIdByDepartmentName Purpose: Retrieves the ID of a department
-     * based on its name
+     * Retrieves the ID of a department based on its name.
      *
-     * @param departments - list of all departments
-     * @param name - the name of the department to find
-     * @return department ID if found, else 0
+     * @param departments the list of all departments
+     * @param name the name of the department to search for
+     * @return the department ID if found, otherwise 0
      */
     public static int getIdByDepartmentName(ArrayList<Department> departments, String name) {
         for (Department dept : departments) {
@@ -158,14 +176,12 @@ public class Department implements Serializable {
     }
 
     /**
-     * Name: calculateBiweeklyPay author: Hajar Purpose: Calculates biweekly
-     * salary based on pay level
+     * Calculates biweekly pay based on the provided pay level.
      *
-     * @param payLevel - pay level from 1 to 8
-     * @return biweekly pay corresponding to pay level, or 0.0 if invalid
+     * @param payLevel the pay level ranging from 1 to 8
+     * @return the calculated biweekly pay, or 0.0 if pay level is invalid
      */
     public static double calculateBiweeklyPay(int payLevel) {
-        // Pay levels and their corresponding annual salaries
         double[] payLevelSalaries = {
             0.0, // Level 0 (invalid/placeholder)
             45000.0, // Level 1
@@ -178,12 +194,11 @@ public class Department implements Serializable {
             96336.34 // Level 8
         };
 
-        // Validate pay level
         if (payLevel < 1 || payLevel >= payLevelSalaries.length) {
-            return 0.0; // Default to 0 if pay level is invalid
+            return 0.0;
         }
 
-        // Calculate biweekly pay (1/26th of annual salary)
         return payLevelSalaries[payLevel] / 26.0;
     }
+
 }

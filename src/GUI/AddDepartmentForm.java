@@ -290,7 +290,7 @@ public class AddDepartmentForm extends javax.swing.JFrame {
      * /
      *
      **
-     * @param args the command line arguments Name: main
+     * Name: main
      *
      * Main method to run the AddDepartmentForm standalone for testing.
      *

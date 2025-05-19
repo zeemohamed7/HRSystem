@@ -38,26 +38,45 @@ import javax.swing.event.DocumentListener;
  * @author Zainab
  * @version 1.0
  */
-
 public class MainWindow extends javax.swing.JFrame {
 
-    
     /**
      * Creates new form MainWindow
      */
-    // change these to private later
+    /**
+     * List of all employees in the company.
+     */
     public static ArrayList<Employee> allEmployees;
+
+    /**
+     * List of all departments within the organization.
+     */
     public static ArrayList<Department> departments;
+
+    /**
+     * List of available pay levels/salary grades.
+     */
     public static ArrayList<String> payLevels;
 
-    public static int staticEmployeeID = 0;//Purpose: static variable to create the emploeye ID
-    public static int staticDeptID = 0;//Purpose: static variable to create the department ID
-    private boolean isDefaultDataLoaded = false;//Purpose: check if default data are loaded
+    /**
+     * Static variable to generate unique Employee IDs.
+     */
+    public static int staticEmployeeID = 0;
 
-    private Employee selectedEmployee;//Purpose: Store the currently selected Employee in the UI.
-    private Department selectedDepartment;//Purpose: Store the currently selected Department in the UI.
+    /**
+     * Static variable to generate unique Department IDs.
+     */
+    public static int staticDeptID = 0;
 
+    /**
+     * Stores the currently selected Employee in the UI.
+     */
+    private Employee selectedEmployee;
 
+    /**
+     * Stores the currently selected Department in the UI.
+     */
+    private Department selectedDepartment;
 
     /**
      * Name: MainWindow
@@ -104,7 +123,7 @@ public class MainWindow extends javax.swing.JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setBackground(new Color(255, 255, 255));
         buttonPanel.add(generatePayReportButton);
-MainFrame.setBackground(new Color(163, 193, 214));
+        MainFrame.setBackground(new Color(163, 193, 214));
 
         // Add panels to main frame
         MainFrame.add(LoginPanel, "login");
@@ -575,19 +594,18 @@ MainFrame.setBackground(new Color(163, 193, 214));
                     int payLevel = employee.getPayLevel();
                     String annualPay = getAnnualPayByLevel(payLevel);
                     counter++;
-                    
-                employeeDetails.append("Employee " + counter).append("\nID: ").append(employee.getEmployeeId())
-                        .append("\nName: ").append(employee.getFirstName())
-                        .append(" ").append(employee.getSurname());
 
-                if (employee.isIsHead()) {
-                    employeeDetails.append(" (Head of Department)");
-                }
+                    employeeDetails.append("Employee " + counter).append("\nID: ").append(employee.getEmployeeId())
+                            .append("\nName: ").append(employee.getFirstName())
+                            .append(" ").append(employee.getSurname());
 
-                employeeDetails.append("\nAnnual Pay: ").append(annualPay)
-                        .append("\n\n");
+                    if (employee.isIsHead()) {
+                        employeeDetails.append(" (Head of Department)");
+                    }
 
-                            
+                    employeeDetails.append("\nAnnual Pay: ").append(annualPay)
+                            .append("\n\n");
+
                 }
             }
 
@@ -627,7 +645,6 @@ MainFrame.setBackground(new Color(163, 193, 214));
      * Effect: Clears the employee table and repopulates it with employees
      * filtered by selected department, displaying their annual pay.
      *
-     * @return void - this method does not return any value.
      */
     public void refreshEmployeeTable() {
         // Get the selected department from the combo box
@@ -675,7 +692,6 @@ MainFrame.setBackground(new Color(163, 193, 214));
      * the departments table and repopulates it with the latest department data
      * including head info.
      *
-     * @return void - this method does not return any value.
      */
     public void refreshDepartmentTable() {
         // Assuming you have a JTable named departmentTable
@@ -702,7 +718,6 @@ MainFrame.setBackground(new Color(163, 193, 214));
      * none Effect: Clears and repopulates the combo box, adding "All
      * Departments" option and refreshing the employee table afterwards.
      *
-     * @return void - this method does not return any value.
      */
     public void refreshDepartmentsComboBox() {
         departmentsListSelect.removeAllItems();  // Clear all existing items
@@ -717,7 +732,7 @@ MainFrame.setBackground(new Color(163, 193, 214));
 
         refreshEmployeeTable();
     }
-    
+
     /**
      * Name: calculateBiweeklyPay
      *
@@ -752,12 +767,10 @@ MainFrame.setBackground(new Color(163, 193, 214));
         return payLevelSalaries[payLevel] / 26.0;
     }
 
-
     /**
      * Name: initSearchListener
      *
-     * @author Maryam 
-     * Purpose: Initializes a document listener on the employee
+     * @author Maryam Purpose: Initializes a document listener on the employee
      * search text field to enable real-time search functionality as the user
      * types characters. Input: None Output: None Effect: Attaches listeners to
      * the text field that trigger employee search logic
@@ -785,12 +798,12 @@ MainFrame.setBackground(new Color(163, 193, 214));
     /**
      * Name: searchEmployee
      *
-     * @author Hajar & Maryam Purpose: Filters the employee list based on user input in
-     * the search field and updates the display table. Input: None Output: None
-     * Effect: Shows matching employees in the table based on first name or
-     * surname prefix.
+     * @author Hajar & Maryam Purpose: Filters the employee list based on user
+     * input in the search field and updates the display table. Input: None
+     * Output: None Effect: Shows matching employees in the table based on first
+     * name or surname prefix.
      *
-     * 
+     *
      */
     private void searchEmployee() {
         String query = searchEmployeesTextField.getText().trim().toLowerCase();
@@ -889,14 +902,12 @@ MainFrame.setBackground(new Color(163, 193, 214));
     /**
      * Name: searchDepartments
      *
-     * @author Hajar & Maryam 
-     * 
-     * Purpose: Filters the department list based on user input
-     * in the search field and updates the display table. 
-     * Input: None 
-     * Output:
-     * None Effect: Displays departments whose ID, name, location, or department
-     * head's name matches the user's query (case-insensitive).
+     * @author Hajar & Maryam
+     *
+     * Purpose: Filters the department list based on user input in the search
+     * field and updates the display table. Input: None Output: None Effect:
+     * Displays departments whose ID, name, location, or department head's name
+     * matches the user's query (case-insensitive).
      *
      * @author:
      */
@@ -1945,7 +1956,7 @@ MainFrame.setBackground(new Color(163, 193, 214));
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUserNameActionPerformed
 
-   /**
+    /**
      * Name: jCheckBox1ActionPerformed Purpose: Handles the event of toggling
      * the password visibility checkbox.
      *
@@ -2139,7 +2150,7 @@ MainFrame.setBackground(new Color(163, 193, 214));
         // if CANCEL_OPTION or CLOSED_OPTION: do nothing, return to app
     }//GEN-LAST:event_exitButtonActionPerformed
 
-   /**
+    /**
      * Name: employeesTableMouseClicked
      *
      * @author Zainab Purpose: Handles the action when a row in the employees
