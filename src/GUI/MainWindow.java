@@ -113,7 +113,7 @@ public class MainWindow extends javax.swing.JFrame {
         DashboardPanel.add(sidemenuPanel, BorderLayout.WEST);
 
         // Right side (header + content)
-        headerPanel.setPreferredSize(new Dimension(0, 60));
+        headerPanel.setPreferredSize(new Dimension(0, 80));
         rightPanel.setLayout(new BorderLayout());
         rightPanel.add(headerPanel, BorderLayout.NORTH);
         rightPanel.add(contentPanel, BorderLayout.CENTER);
@@ -1555,8 +1555,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
 
-        departmentDetailPanel.setBackground(new java.awt.Color(127, 157, 181));
-        departmentDetailPanel.setForeground(new java.awt.Color(127, 157, 181));
+        departmentDetailPanel.setBackground(new java.awt.Color(140, 174, 201));
+        departmentDetailPanel.setForeground(new java.awt.Color(140, 174, 201));
 
         backToDepartmentsButton.setBackground(new java.awt.Color(102, 102, 102));
         backToDepartmentsButton.setForeground(new java.awt.Color(255, 255, 255));
@@ -1647,9 +1647,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(departmentNameDetailPage)
-                            .addGroup(departmentDetailPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel34)
-                                .addGap(201, 201, 201))))
+                            .addComponent(jLabel34)))
                     .addGroup(departmentDetailPanelLayout.createSequentialGroup()
                         .addGroup(departmentDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(idDepartmentDetailPage, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1832,7 +1830,6 @@ public class MainWindow extends javax.swing.JFrame {
 
         lblUserName.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         lblUserName.setForeground(new java.awt.Color(255, 255, 255));
-        lblUserName.setText("k");
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/headerImage.png"))); // NOI18N
 
@@ -1843,21 +1840,20 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(headerPanelLayout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 616, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 573, Short.MAX_VALUE)
                 .addComponent(lblUserName)
                 .addGap(145, 145, 145))
         );
         headerPanelLayout.setVerticalGroup(
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(headerPanelLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
                 .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(headerPanelLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
+                        .addGap(8, 8, 8)
                         .addComponent(lblUserName))
-                    .addGroup(headerPanelLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(348, Short.MAX_VALUE))
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(337, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout DashboardPanelLayout = new javax.swing.GroupLayout(DashboardPanel);
