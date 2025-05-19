@@ -38,8 +38,10 @@ import javax.swing.event.DocumentListener;
  * @author Zainab
  * @version 1.0
  */
+
 public class MainWindow extends javax.swing.JFrame {
 
+    
     /**
      * Creates new form MainWindow
      */
@@ -54,6 +56,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     private Employee selectedEmployee;//Purpose: Store the currently selected Employee in the UI.
     private Department selectedDepartment;//Purpose: Store the currently selected Department in the UI.
+
+
 
     /**
      * Name: MainWindow
@@ -100,6 +104,7 @@ public class MainWindow extends javax.swing.JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setBackground(new Color(255, 255, 255));
         buttonPanel.add(generatePayReportButton);
+MainFrame.setBackground(new Color(163, 193, 214));
 
         // Add panels to main frame
         MainFrame.add(LoginPanel, "login");
@@ -1006,10 +1011,6 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ConfirmDelete = new javax.swing.JDialog();
-        jLabel16 = new javax.swing.JLabel();
-        cancelButton3 = new javax.swing.JButton();
-        confirmDeleteButton = new javax.swing.JButton();
         MainFrame = new javax.swing.JPanel();
         DashboardPanel = new javax.swing.JPanel();
         sidemenuPanel = new javax.swing.JPanel();
@@ -1094,46 +1095,9 @@ public class MainWindow extends javax.swing.JFrame {
         txtPassword = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
 
-        jLabel16.setText("Are you sure you want to delete this? This action cannot be undone.");
-
-        cancelButton3.setText("Cancel");
-        cancelButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButton3ActionPerformed(evt);
-            }
-        });
-
-        confirmDeleteButton.setText("Delete");
-
-        javax.swing.GroupLayout ConfirmDeleteLayout = new javax.swing.GroupLayout(ConfirmDelete.getContentPane());
-        ConfirmDelete.getContentPane().setLayout(ConfirmDeleteLayout);
-        ConfirmDeleteLayout.setHorizontalGroup(
-            ConfirmDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ConfirmDeleteLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel16)
-                .addContainerGap(25, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ConfirmDeleteLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cancelButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(confirmDeleteButton)
-                .addGap(25, 25, 25))
-        );
-        ConfirmDeleteLayout.setVerticalGroup(
-            ConfirmDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ConfirmDeleteLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel16)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(ConfirmDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelButton3)
-                    .addComponent(confirmDeleteButton))
-                .addContainerGap(10, Short.MAX_VALUE))
-        );
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(250, 244, 222));
+        setBounds(new java.awt.Rectangle(0, 0, 0, 0));
 
         MainFrame.setBackground(new java.awt.Color(250, 244, 222));
         MainFrame.setPreferredSize(new java.awt.Dimension(1380, 1000));
@@ -1946,7 +1910,7 @@ public class MainWindow extends javax.swing.JFrame {
         LoginPanel.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 450, 320, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logoLogin.png"))); // NOI18N
-        LoginPanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 100, -1, -1));
+        LoginPanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, -1, -1));
 
         MainFrame.add(LoginPanel, "login");
 
@@ -1955,16 +1919,16 @@ public class MainWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(0, 0, 0)
                 .addComponent(MainFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 1168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(MainFrame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -2176,16 +2140,7 @@ public class MainWindow extends javax.swing.JFrame {
         // if CANCEL_OPTION or CLOSED_OPTION: do nothing, return to app
     }//GEN-LAST:event_exitButtonActionPerformed
 
-    /**
-     * Name: cancelButton3ActionPerformed Purpose: Placeholder for cancel button
-     * actions.
-     *
-     * @param evt The ActionEvent triggered by cancel button.
-     */
-    private void cancelButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cancelButton3ActionPerformed
-    /**
+   /**
      * Name: employeesTableMouseClicked
      *
      * @author Zainab Purpose: Handles the action when a row in the employees
@@ -2764,7 +2719,6 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDialog ConfirmDelete;
     private javax.swing.JPanel DashboardPanel;
     private javax.swing.JPanel LoginPanel;
     private javax.swing.JPanel MainFrame;
@@ -2773,8 +2727,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextArea addressDetailPage;
     private javax.swing.JButton backToDepartmentsButton;
     private javax.swing.JButton backToEmployeesButton;
-    private javax.swing.JButton cancelButton3;
-    private javax.swing.JButton confirmDeleteButton;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JButton deleteAllData;
     private javax.swing.JButton deleteButton;
@@ -2807,7 +2759,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
