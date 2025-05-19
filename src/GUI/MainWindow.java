@@ -717,8 +717,7 @@ MainFrame.setBackground(new Color(163, 193, 214));
 
         refreshEmployeeTable();
     }
-
-
+    
     /**
      * Name: calculateBiweeklyPay
      *
@@ -791,7 +790,7 @@ MainFrame.setBackground(new Color(163, 193, 214));
      * Effect: Shows matching employees in the table based on first name or
      * surname prefix.
      *
-     * @author:
+     * 
      */
     private void searchEmployee() {
         String query = searchEmployeesTextField.getText().trim().toLowerCase();

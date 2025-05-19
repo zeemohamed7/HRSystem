@@ -66,7 +66,7 @@ public class AddEmployeeForm extends javax.swing.JFrame {
 
         // populate combo box
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
-        model.addElement(null); // Default option
+        model.addElement("No Department"); // Default option
 
         for (Department dept : main.departments) {
             model.addElement(dept.getName());
