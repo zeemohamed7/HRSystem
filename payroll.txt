@@ -1,11 +1,3 @@
-Department: Account
------------------------------------
-Employee ID: 10
-Name: mariam haider
-2-Week Pay: BHD 3705.24
-
-Department Total: BHD 3705.24
-
 Department: Finance
 -----------------------------------
 Employee ID: 8
@@ -62,4 +54,4 @@ Name: Jane Smith
 
 Department Total: BHD 5884.62
 
-COMPANY TOTAL: BHD 29955.88
+COMPANY TOTAL: BHD 26250.63
